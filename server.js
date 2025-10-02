@@ -10,6 +10,9 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
+// serve frontend
+app.use(express.static("public"));
+
 // simple contact endpoint
 app.post('/api/contact', (req, res) => {
   const { name, email, message } = req.body || {};
