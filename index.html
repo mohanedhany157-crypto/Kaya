@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Your Site — Professional Template</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <img src="assets/logo.png" alt="Site logo" class="logo" />
+      <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="menu-btn" id="menuBtn" aria-expanded="false">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <!-- large hero image placeholder -->
+      <div class="hero-inner container">
+        <div class="hero-text">
+          <h1>Your main headline here</h1>
+          <p>Short description / tagline that sells or explains your site.</p>
+          <a class="btn primary" href="#contact">Get in touch</a>
+        </div>
+        <div class="hero-image">
+          <img src="assets/hero.jpg" alt="Hero image placeholder" />
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="container section about">
+      <h2>About</h2>
+      <p>Write a short paragraph about the business/owner.</p>
+      <!-- placeholder for a small image -->
+      <div class="about-cards">
+        <article class="card">
+          <img src="assets/placeholder-1.jpg" alt="Placeholder image" />
+          <h3>Feature one</h3>
+          <p>Short text</p>
+        </article>
+        <article class="card">
+          <img src="assets/placeholder-2.jpg" alt="Placeholder image" />
+          <h3>Feature two</h3>
+          <p>Short text</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="services" class="container section">
+      <h2>Services</h2>
+      <div class="grid-3">
+        <div class="service">
+          <h3>Service A</h3>
+          <p>Description of service.</p>
+        </div>
+        <div class="service">
+          <h3>Service B</h3>
+          <p>Description of service.</p>
+        </div>
+        <div class="service">
+          <h3>Service C</h3>
+          <p>Description of service.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gallery" class="container section">
+      <h2>Gallery</h2>
+      <div class="gallery-grid">
+        <!-- replace these with your real images -->
+        <img src="assets/placeholder-3.jpg" alt="gallery 1" />
+        <img src="assets/placeholder-4.jpg" alt="gallery 2" />
+        <img src="assets/placeholder-5.jpg" alt="gallery 3" />
+        <img src="assets/placeholder-6.jpg" alt="gallery 4" />
+      </div>
+    </section>
+
+    <section id="contact" class="container section">
+      <h2>Contact</h2>
+      <form id="contactForm" class="contact-form">
+        <label>
+          Name
+          <input type="text" name="name" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          Message
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+        <button class="btn primary" type="submit">Send Message</button>
+        <p id="formStatus" class="form-status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Your Company — All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
