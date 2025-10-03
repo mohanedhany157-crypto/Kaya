@@ -7,7 +7,7 @@
  --color-primary-accent: #FD4D0A;
  /* Secondary Accent: Yellow (#FFBC00) */
  --color-secondary-accent: #FFBC00; 
-
+ 
  /* Eggshell Background (#FEF6EC) */
  --color-bg-light: #FEF6EC;
  --color-bg-white: #ffffff;
@@ -36,7 +36,7 @@
  --color-logo-k: var(--color-primary-accent); /* Fiery Orange */
  --color-logo-a1: var(--color-secondary-accent); /* Yellow */
  --color-logo-y: var(--color-accent-green); /* Green */
---color-logo-a2: #0094E8; /* Blue */
+ --color-logo-a2: #0094E8; /* Blue */
 }
 
 /* --- Base Styles --- */
