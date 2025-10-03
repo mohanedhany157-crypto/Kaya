@@ -1,115 +1,187 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Your Professional Site</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaya - Fun Games & Learning</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Using a playful yet legible font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Icon library for visuals -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <img src="assets/logo.png" alt="Logo" class="logo">
-      <nav class="main-nav">
-        <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="container nav-content">
+      <!-- Multicolored Logo -->
+      <div class="logo">
+        <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+      </div>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="menu-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+      <nav class="nav-menu">
+        <a href="#about">About Us</a>
+        <a href="#features">Features</a>
         <a href="#gallery">Gallery</a>
-        <a href="#contact">Contact</a>
+        <a href="#contact">Contact Us</a>
       </nav>
-      <button class="menu-btn" id="menuBtn" aria-expanded="false">☰</button>
     </div>
   </header>
 
-  <!-- Hero -->
-  <section id="home" class="hero">
-    <div class="hero-inner container">
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="container hero-content">
       <div class="hero-text">
-        <h1>Professional & Modern Website</h1>
-        <p>High-quality services and solutions designed to help your business grow.</p>
-        <a class="btn primary" href="#contact">Get in Touch</a>
+        <h1>Dive into a World of <span class="accent">Fun</span> and <span class="accent">Adventure!</span></h1>
+        <p class="tagline">Kaya is the exciting new platform where learning meets play for every child.</p>
+        <a href="#features" class="btn btn-primary">Start the Fun!</a>
       </div>
       <div class="hero-image">
-        <img src="assets/hero.jpg" alt="Hero image">
+        <!-- Placeholder for Hero Image (e.g., A screenshot or animated character) -->
+        <div class="placeholder-box">
+
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- About -->
-  <section id="about" class="container section about">
-    <h2>About Us</h2>
-    <p>We provide exceptional digital solutions for businesses looking to thrive in the modern world.</p>
-    <div class="about-cards">
-      <article class="card">
-        <img src="assets/placeholder-1.jpg" alt="Feature 1">
-        <h3>Expert Team</h3>
-        <p>Highly skilled professionals at your service.</p>
-      </article>
-      <article class="card">
-        <img src="assets/placeholder-2.jpg" alt="Feature 2">
-        <h3>Innovative Solutions</h3>
-        <p>Creative approaches to complex problems.</p>
-      </article>
-      <article class="card">
-        <img src="assets/placeholder-3.jpg" alt="Feature 3">
-        <h3>Customer Focus</h3>
-        <p>Your satisfaction is our top priority.</p>
-      </article>
-    </div>
-  </section>
+  <!-- About Us Section -->
+  <section id="about" class="section about-section">
+    <div class="container">
+      <h2 class="title-with-icon"><i class="fas fa-rocket"></i> About Our Adventures</h2>
+      <div class="about-content">
+        <div class="about-image-placeholder">
+          <!-- Placeholder for About Us Image (e.g., Kids cooperating) -->
 
-  <!-- Services -->
-  <section id="services" class="container section">
-    <h2>Our Services</h2>
-    <div class="grid-3">
-      <div class="service">
-        <h3>Web Development</h3>
-        <p>Modern, responsive, and efficient websites.</p>
-      </div>
-      <div class="service">
-        <h3>Design & Branding</h3>
-        <p>Professional branding and visual identity solutions.</p>
-      </div>
-      <div class="service">
-        <h3>Digital Marketing</h3>
-        <p>SEO, social media, and growth strategies that work.</p>
+        </div>
+        <div class="about-text">
+          <p>At Kaya, we believe the best way to learn is through play. Our platform is designed by educators and game
+            developers to offer a safe, engaging environment where children can explore, create, and solve puzzles.</p>
+          <p>We focus on building core skills in a way that feels like pure magic, all while fostering **curiosity,
+            confidence, and critical thinking**.</p>
+          <a href="#" class="btn btn-secondary">Learn More</a>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Gallery -->
-  <section id="gallery" class="container section">
-    <h2>Gallery</h2>
-    <div class="gallery-grid">
-      <img src="assets/gallery1.jpg" alt="Gallery 1">
-      <img src="assets/gallery2.jpg" alt="Gallery 2">
-      <img src="assets/gallery3.jpg" alt="Gallery 3">
-      <img src="assets/gallery4.jpg" alt="Gallery 4">
+  <!-- Game Features Section -->
+  <section id="features" class="section features-section bg-light">
+    <div class="container">
+      <h2 class="title-with-icon"><i class="fas fa-gamepad"></i> Our Amazing Game Features</h2>
+      <div class="feature-grid">
+
+        <!-- Feature 1: Vertical Card -->
+        <div class="feature-card">
+          <div class="feature-icon-circle"><i class="fas fa-puzzle-piece"></i></div>
+          <h3>Mind Puzzles</h3>
+          <p>Unlock new levels by solving challenging, yet fun, puzzles that sharpen problem-solving skills.</p>
+        </div>
+
+        <!-- Feature 2: Vertical Card -->
+        <div class="feature-card">
+          <div class="feature-icon-circle"><i class="fas fa-palette"></i></div>
+          <h3>Creative Worlds</h3>
+          <p>Use our tools to build and design your own colorful worlds and characters. Imagination is the limit!</p>
+        </div>
+
+        <!-- Feature 3: Vertical Card -->
+        <div class="feature-card">
+          <div class="feature-icon-circle"><i class="fas fa-medal"></i></div>
+          <h3>Awesome Rewards</h3>
+          <p>Earn cool badges, unlock virtual pets, and customize your profile as you progress through the game.</p>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <!-- Contact -->
-  <section id="contact" class="container section">
-    <h2>Contact</h2>
-    <form id="contactForm" class="contact-form">
-      <label>Name<input type="text" name="name" required></label>
-      <label>Email<input type="email" name="email" required></label>
-      <label>Message<textarea name="message" rows="6" required></textarea></label>
-      <button class="btn primary" type="submit">Send Message</button>
-      <p id="formStatus" class="form-status" aria-live="polite"></p>
-    </form>
+  <!-- Gallery Section (using original structure, adding image placeholders) -->
+  <section id="gallery" class="section gallery-section">
+    <div class="container">
+      <h2 class="title-with-icon"><i class="fas fa-images"></i> Snapshot Gallery</h2>
+      <div class="gallery-grid">
+        <!-- Gallery Item 1 -->
+        <div class="gallery-item placeholder-box"></div>
+        <!-- Gallery Item 2 -->
+        <div class="gallery-item placeholder-box"></div>
+        <!-- Gallery Item 3 -->
+        <div class="gallery-item placeholder-box"></div>
+        <!-- Gallery Item 4 -->
+        <div class="gallery-item placeholder-box"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section contact-section bg-light">
+    <div class="container contact-content">
+      <h2 class="title-with-icon"><i class="fas fa-envelope"></i> Let's Connect!</h2>
+      <form id="contact-form" class="contact-form">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">Send to Kaya Team</button>
+        <div id="form-status" class="form-status"></div>
+      </form>
+    </div>
   </section>
 
   <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container">
-      <p>© <span id="year"></span> Your Company — All rights reserved.</p>
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-logo">
+        <div class="logo">
+          <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+        </div>
+        <p>Play, Learn, Grow.</p>
+      </div>
+
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <a href="#about">About Us</a>
+        <a href="#features">Game Features</a>
+        <a href="#contact">Support</a>
+      </div>
+
+      <div class="footer-social">
+        <h3>Follow Our Fun!</h3>
+        <!-- Placeholder for Instagram Link -->
+        <a href="https://instagram.com/kayagames" target="_blank" class="social-icon">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+      </div>
+
+      <div class="footer-info">
+        <p>&copy; <span id="current-year"></span> Kaya Games. All Rights Reserved. </p>
+        <p class="copyright-text">The best place for educational adventures!</p>
+      </div>
     </div>
   </footer>
 
-  <script src="js/script.js"></script>
+  <!-- Link to JavaScript file -->
+  <script src="script.js"></script>
 </body>
+
 </html>

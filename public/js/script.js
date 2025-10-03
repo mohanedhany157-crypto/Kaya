@@ -1,45 +1,72 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // Fill current year
-  const yearEl = document.getElementById('year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
+/**
+ * ======================================================
+ * JAVASCRIPT FOR KAYA KIDS LANDING PAGE INTERACTIVITY
+ * ======================================================
+ */
 
-  // Mobile menu toggle
-  const menuBtn = document.getElementById('menuBtn');
-  const nav = document.querySelector('.main-nav');
-  menuBtn?.addEventListener('click', () => {
-    const open = nav.style.display !== 'flex';
-    nav.style.display = open ? 'flex' : 'none';
-    menuBtn.setAttribute('aria-expanded', String(open));
-  });
+// 1. Dynamic Year Update for the Footer
+function setDynamicYear() {
+  const yearElement = document.getElementById('current-year');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+}
 
-  // Contact form submit
-  const form = document.getElementById('contactForm');
-  const status = document.getElementById('formStatus');
+// 2. Mobile Menu Toggle Logic
+function setupMobileMenu() {
+  const menuToggle = document.querySelector('.menu-toggle');
+  const navMenu = document.querySelector('.nav-menu');
 
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    status.textContent = 'Sending...';
+  if (menuToggle && navMenu) {
+    menuToggle.addEventListener('click', () => {
+      // Toggles the 'active' class on the navigation menu
+      navMenu.classList.toggle('active');
+    });
 
-    const data = {
-      name: form.name.value,
-      email: form.email.value,
-      message: form.message.value
-    };
-
-    try {
-      const res = await fetch('https://kaya-xxxx.onrender.com/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
+    // Close menu when a link is clicked (for better mobile UX)
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
       });
+    });
+  }
+}
 
-      if (!res.ok) throw new Error('Network response not ok');
-      const json = await res.json();
-      status.textContent = json.message || 'Message sent — thank you!';
-      form.reset();
-    } catch (err) {
-      status.textContent = 'There was a problem sending the message.';
-      console.error(err);
-    }
-  });
+// 3. Contact Form Submission Simulation
+function setupContactForm() {
+  const contactForm = document.getElementById('contact-form');
+  const formStatus = document.getElementById('form-status');
+
+  if (contactForm && formStatus) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent the default form submission (page reload)
+
+      // Display initial sending message
+      formStatus.textContent = 'Sending your message to our team...';
+      formStatus.style.color = '#6C5CE7'; // Secondary accent color for status
+
+      // Simulate a network delay (1.5 seconds)
+      setTimeout(() => {
+        // Simulate a successful submission
+        const success = true; // For a demo, we'll assume it always succeeds
+
+        if (success) {
+          formStatus.textContent = 'Woohoo! Message sent successfully! We will read it right away.';
+          formStatus.style.color = '#4CAF50'; // Green for success
+          contactForm.reset(); // Clear the form fields
+        } else {
+          // This block would handle API errors in a real app
+          formStatus.textContent = 'Oops! Something went wrong. Please try again.';
+          formStatus.style.color = '#FF6B6B'; // Red for error
+        }
+      }, 1500);
+    });
+  }
+}
+
+// Initialize all functions when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  setDynamicYear();
+  setupMobileMenu();
+  setupContactForm();
 });
