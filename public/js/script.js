@@ -26,6 +26,7 @@ function setupMobileMenu() {
         // Close menu when a link is clicked (for better mobile UX)
         navMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
+                // If a link in the mobile menu is clicked, hide the menu
                 navMenu.classList.remove('active');
             });
         });
