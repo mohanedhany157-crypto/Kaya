@@ -70,12 +70,13 @@ app.get('/api/contacts', async (req, res) => {
 });
 
 // Fallback: serve index.html for SPA routing
-app.get('*', (req, res) => {
+app.use((req, res) => {
   const index = path.join(__dirname, 'public', 'index.html');
   res.sendFile(index, err => {
     if (err) res.status(404).send('Not found');
   });
 });
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
