@@ -1,196 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaya - Financial Literacy Card Game</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- Using a playful yet legible font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <!-- Icon library for visuals -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaya - Financial Literacy Card Game</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Using a playful yet legible font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Icon library for visuals -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
+
 <body>
 
-    <!-- Header & Navigation -->
-    <header class="header">
-        <div class="container nav-content">
-            <!-- Multicolored Logo Link -->
-            <a href="#hero" class="logo-link">
-                <div class="logo">
-                    <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
-                </div>
-            </a>
-            
-            <!-- Mobile Menu Toggle Button -->
-            <button class="menu-toggle" aria-label="Toggle navigation">
+  <!-- Header & Navigation: Reverted to simple structure -->
+  <header class="header">
+    <div class="container nav-content">
+      <!-- Multicolored Logo Link -->
+      <a href="#hero" class="logo-link">
+        <div class="logo">
+          <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+        </div>
+      </a>
+
+      <!-- Mobile Menu Toggle Button (Visible only on small screens) -->
+      <button class="menu-toggle" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
             </button>
-            
-            <nav class="nav-menu">
-                <a href="#about">The Game</a>
-                <a href="#features">Game Mechanics</a>
-                <a href="lunch.html">Launch Gallery</a>
-                <a href="#contact">Contact Us</a>
-            </nav>
-        </div>
-    </header>
-    
-    <!-- New Welcome Banner -->
-    <div class="welcome-banner">
-        <div class="container">
-            <h1 class="big-sign">
-                <span class="sign-text">LET'S </span> 
-                <span class="sign-k">P</span><span class="sign-a1">L</span><span class="sign-y">A</span><span class="sign-a2">Y</span> 
-                <span class="sign-text">KAYA!</span>
-            </h1>
-        </div>
+
+      <!-- Main Navigation Menu (Desktop & Mobile) -->
+      <nav class="nav-menu">
+        <a href="#about">The Game</a>
+        <a href="#features">Game Mechanics</a>
+        <a href="gallery.html">Launch Gallery</a>
+        <a href="#contact">Contact Us</a>
+      </nav>
     </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section id="hero" class="hero">
-        <div class="container hero-content">
-            <div class="hero-text">
-                <h1>Learn to <span class="accent">Save</span> and <span class="accent">Spend</span> Smarter!</h1>
-                <p class="tagline">Kaya is the fun card game that turns financial literacy into an awesome family adventure.</p>
-                <a href="#features" class="btn btn-primary">See the Cards</a>
-            </div>
-            <div class="hero-image">
-                <!-- Placeholder for Hero Image: Card Game Box / Artwork -->
-                <div class="placeholder-box">
-                    
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- New Welcome Banner -->
+  <div class="welcome-banner">
+    <div class="container">
+      <!-- Sign text and colors match the image -->
+      <h1 class="big-sign">
+        <span class="sign-text">Let's play </span>
+        <span class="sign-k">K</span><span class="sign-a1">A</span><span class="sign-y">Y</span><span class="sign-a2">A</span><span class="sign-text">!</span>
+      </h1>
+    </div>
+  </div>
 
-    <!-- About Us Section -->
-    <section id="about" class="section about-section">
-        <div class="container">
-            <h2 class="title-with-icon"><i class="fas fa-wallet"></i> About Our Card Game</h2>
-            <div class="about-content">
-                <div class="about-image-placeholder">
-                    <!-- Placeholder for About Us Image: Close-up of Game Play -->
-                    
-                </div>
-                <div class="about-text">
-                    <p>Kaya teaches kids ages 8+ the basics of budgeting, saving goals, handling expenses, and making smart investment choices—all through fast-paced, engaging card battles! It’s designed to spark important conversations about money in a zero-risk, fun environment.</p>
-                    <p>Every card draw and decision helps build real-world financial skills. It's playtime with a purpose!</p>
-                    <a href="#" class="btn btn-secondary">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Learn to <span class="accent">Save</span> and <span class="accent">Spend</span> Smarter!</h1>
+        <p class="tagline">Kaya is the fun card game that turns financial literacy into an awesome family adventure.</p>
+        <a href="#features" class="btn btn-primary">See the Cards</a>
+      </div>
+      <div class="hero-image">
+        <!-- Placeholder for Hero Image: Card Game Box / Artwork -->
+        <div class="placeholder-box">
 
-    <!-- Game Features Section -->
-    <section id="features" class="section features-section bg-light">
-        <div class="container">
-            <h2 class="title-with-icon"><i class="fas fa-layer-group"></i> Key Game Mechanics</h2>
-            <div class="feature-grid">
-                
-                <!-- Feature 1: Vertical Card -->
-                <div class="feature-card">
-                    <div class="feature-icon-circle"><i class="fas fa-piggy-bank"></i></div>
-                    <h3>Goal Setting</h3>
-                    <p>Players draw 'Goal Cards'—from buying a new bike to saving for college—and strategically manage income to reach them.</p>
-                </div>
-                
-                <!-- Feature 2: Vertical Card -->
-                <div class="feature-card">
-                    <div class="feature-icon-circle"><i class="fas fa-receipt"></i></div>
-                    <h3>Expense Management</h3>
-                    <p>Unexpected 'Bill Cards' (like overdue rent or broken toys) force players to balance their budget and prioritize spending.</p>
-                </div>
-                
-                <!-- Feature 3: Vertical Card -->
-                <div class="feature-icon-circle"><i class="fas fa-chart-line"></i></div>
-                    <h3>Smart Investing</h3>
-                    <p>Use 'Investment Cards' to grow your wealth, learning about compound interest and risk vs. reward in a playful way.</p>
-                </div>
-                
-            </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section id="about" class="section about-section">
+    <div class="container">
+      <h2 class="title-with-icon"><i class="fas fa-wallet"></i> About Our Card Game</h2>
+      <div class="about-content">
+        <div class="about-image-placeholder">
+          <!-- Placeholder for About Us Image: Close-up of Game Play -->
+
+        </div>
+        <div class="about-text">
+          <p>Kaya teaches kids ages 8+ the basics of budgeting, saving goals, handling expenses, and making smart
+            investment choices—all through fast-paced, engaging card battles! It’s designed to spark important
+            conversations about money in a zero-risk, fun environment.</p>
+          <p>Every card draw and decision helps build real-world financial skills. It's playtime with a purpose!</p>
+          <a href="#" class="btn btn-secondary">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Game Features Section -->
+  <section id="features" class="section features-section bg-light">
+    <div class="container">
+      <h2 class="title-with-icon"><i class="fas fa-layer-group"></i> Key Game Mechanics</h2>
+      <div class="feature-grid">
+
+        <!-- Feature 1: Vertical Card -->
+        <div class="feature-card">
+          <div class="feature-icon-circle"><i class="fas fa-piggy-bank"></i></div>
+          <h3>Goal Setting</h3>
+          <p>Players draw 'Goal Cards'—from buying a new bike to saving for college—and strategically manage income to
+            reach them.</p>
+        </div>
+
+        <!-- Feature 2: Vertical Card -->
+        <div class="feature-card">
+          <div class="feature-icon-circle"><i class="fas fa-receipt"></i></div>
+          <h3>Expense Management</h3>
+          <p>Unexpected 'Bill Cards' (like overdue rent or broken toys) force players to balance their budget and
+            prioritize spending.</p>
+        </div>
+
+        <!-- Feature 3: Vertical Card -->
+        <div class="feature-icon-circle"><i class="fas fa-chart-line"></i></div>
+        <h3>Smart Investing</h3>
+        <p>Use 'Investment Cards' to grow your wealth, learning about compound interest and risk vs. reward in a playful
+          way.</p>
+      </div>
+
+    </div>
     
-    <!-- Gallery Preview Section: Linking to new page -->
-    <section id="gallery" class="section gallery-section">
-        <div class="container">
-            <h2 class="title-with-icon"><i class="fas fa-calendar-alt"></i> The Big Launch: Limited Edition Preview!</h2>
-            <div class="gallery-grid-preview">
-                <!-- Gallery Item 1 Preview -->
-                <div class="gallery-item placeholder-box"></div>
-                <!-- Gallery Item 2 Preview -->
-                <div class="gallery-item placeholder-box"></div>
-                <!-- Gallery Item 3 Preview -->
-                <div class="gallery-item placeholder-box"></div>
-            </div>
-            <div class="text-center mt-3">
-                <a href="lunch.html" class="btn btn-secondary load-more-btn">Load More Launch Details</a>
-            </div>
+  </section>
+
+  <!-- Gallery Preview Section: Linking to new page -->
+  <section id="gallery" class="section gallery-section">
+    <div class="container">
+      <h2 class="title-with-icon"><i class="fas fa-calendar-alt"></i> The Big Launch: Limited Edition Preview!</h2>
+      <div class="gallery-grid-preview">
+        <!-- Gallery Item 1 Preview -->
+        <div class="gallery-item placeholder-box"></div>
+        <!-- Gallery Item 2 Preview -->
+        <div class="gallery-item placeholder-box"></div>
+        <!-- Gallery Item 3 Preview -->
+        <div class="gallery-item placeholder-box">
+
+          [Image of the Collector Coin]
         </div>
-    </section>
+      </div>
+      <div class="text-center mt-3">
+        <a href="gallery.html" class="btn btn-secondary load-more-btn">Load More Launch Details</a>
+      </div>
+    </div>
+  </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section contact-section bg-light">
-        <div class="container contact-content">
-            <h2 class="title-with-icon"><i class="fas fa-envelope"></i> Get Your Copy!</h2>
-            <p class="section-tagline">Sign up to be notified the moment the Kaya Card Game goes live and get early-bird discounts!</p>
-            <form id="contact-form" class="contact-form">
-                <div class="form-group">
-                    <label for="name">Your Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Your Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number (Optional)</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                <div class="form-group">
-                    <label for="message">Your Message</label>
-                    <textarea id="message" name="message" rows="4" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-submit">Send to Kaya Team</button>
-                <div id="form-status" class="form-status"></div>
-            </form>
+  <!-- Contact Section -->
+  <section id="contact" class="section contact-section bg-light">
+    <div class="container contact-content">
+      <h2 class="title-with-icon"><i class="fas fa-envelope"></i> Get Your Copy!</h2>
+      <p class="section-tagline">Sign up to be notified the moment the Kaya Card Game goes live and get early-bird
+        discounts!</p>
+      <form id="contact-form" class="contact-form">
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" required>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container footer-content">
-            <div class="footer-logo">
-                <div class="logo">
-                    <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
-                </div>
-                <p>Play, Learn, Grow (Financially).</p>
-            </div>
-            
-            <div class="footer-links">
-                <h3>Quick Links</h3>
-                <a href="#about">The Game</a>
-                <a href="#features">Mechanics</a>
-                <a href="#contact">Pre-Order Now</a>
-            </div>
-
-            <div class="footer-social">
-                <h3>Follow Our Fun!</h3>
-                <!-- Instagram Link -->
-                <a href="https://instagram.com/kayagames" target="_blank" class="social-icon">
-                    <i class="fab fa-instagram"></i> Instagram
-                </a>
-            </div>
-
-            <div class="footer-info">
-                <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
-                <p class="copyright-text">Teaching the world how to manage money, one card at a time!</p>
-            </div>
+        <div class="form-group">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" name="email" required>
         </div>
-    </footer>
+        <div class="form-group">
+          <label for="phone">Phone Number (Optional)</label>
+          <input type="tel" id="phone" name="phone">
+        </div>
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">Send to Kaya Team</button>
+        <div id="form-status" class="form-status"></div>
+      </form>
+    </div>
+  </section>
 
-    <!-- Link to JavaScript file -->
-    <script src="js/script.js"></script>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-logo">
+        <div class="logo">
+          <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+        </div>
+        <p>Play, Learn, Grow (Financially).</p>
+      </div>
+
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <a href="#about">The Game</a>
+        <a href="#features">Mechanics</a>
+        <a href="#contact">Pre-Order Now</a>
+      </div>
+
+      <div class="footer-social">
+        <h3>Follow Our Fun!</h3>
+        <!-- Instagram Link -->
+        <a href="https://instagram.com/kayagames" target="_blank" class="social-icon">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+      </div>
+
+      <div class="footer-info">
+        <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
+        <p class="copyright-text">Teaching the world how to manage money, one card at a time!</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Link to JavaScript file -->
+  <script src="js/script.js"></script>
 </body>
+
 </html>

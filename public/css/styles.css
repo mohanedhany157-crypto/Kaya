@@ -8,6 +8,10 @@
   --color-text-light: #f4f4f4;
   --color-bg-white: #ffffff;
   --color-bg-light: #F8F9FA;
+  --color-bg-cream: #FFFBF5;
+  /* New cream background color from image */
+  --color-search-yellow: #FFCD4D;
+  /* Yellow for search button (kept for now, but not used) */
   --font-family-primary: 'Poppins', sans-serif;
   --spacing-lg: 4rem;
   --spacing-md: 2rem;
@@ -16,14 +20,14 @@
   --border-radius-sm: 8px;
   --shadow-pop: 0 10px 30px rgba(0, 0, 0, 0.15);
 
-  /* Darker Logo Colors */
-  --color-logo-k: #E67E22;
+  /* Darker Logo Colors (Kept) */
+  --color-logo-k: #FD4D0A;
   /* Dark Orange */
-  --color-logo-a1: #F39C12;
+  --color-logo-a1: #FFBC00;
   /* Dark Yellow */
-  --color-logo-y: #27AE60;
+  --color-logo-y: #4D9222;
   /* Dark Green */
-  --color-logo-a2: #2980B9;
+  --color-logo-a2: #0094E8;
   /* Dark Blue */
 }
 
@@ -42,7 +46,8 @@ body {
   font-family: var(--font-family-primary);
   line-height: 1.6;
   color: var(--color-text-dark);
-  background-color: var(--color-bg-white);
+  /* Apply cream background to the body (Kept) */
+  background-color: var(--color-bg-cream);
 }
 
 .container {
@@ -61,7 +66,6 @@ h3 {
 
 h2 {
   font-size: 2.5rem;
-  /* Adjusted for banner presence */
   text-align: center;
   margin-bottom: var(--spacing-lg);
   color: var(--color-secondary-accent);
@@ -87,8 +91,9 @@ h2 {
   padding: var(--spacing-lg) 0;
 }
 
+/* Changed section backgrounds to match the cream/light background feel (Kept) */
 .bg-light {
-  background-color: var(--color-bg-light);
+  background-color: var(--color-bg-cream);
 }
 
 .text-center {
@@ -99,12 +104,13 @@ h2 {
 .logo-link {
   text-decoration: none;
   color: inherit;
+  z-index: 2;
 }
 
 .logo {
-  font-size: 2.5rem;
+  font-size: 1.8rem;
   font-weight: 800;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
   cursor: pointer;
 }
 
@@ -117,41 +123,27 @@ h2 {
   transform: translateY(-3px);
 }
 
-.logo-k {
-  color: var(--color-logo-k);
-}
 
-.logo-a1 {
-  color: var(--color-logo-a1);
-}
-
-.logo-y {
-  color: var(--color-logo-y);
-}
-
-.logo-a2 {
-  color: var(--color-logo-a2);
-}
-
-/* --- New Welcome Banner Styling --- */
+/* --- New Welcome Banner Styling (Kept) --- */
 .welcome-banner {
-  background-color: var(--color-secondary-accent);
-  padding: 20px 0;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  padding: 40px 0;
   text-align: center;
 }
 
 .big-sign {
-  font-size: 3.5rem;
+  font-family: 'Poppins', cursive;
+  font-size: 6vw;
+  max-width: 900px;
+  margin: 0 auto;
   font-weight: 900;
-  color: white;
-  letter-spacing: 5px;
-  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+  color: var(--color-text-dark);
+  letter-spacing: 2px;
   display: inline-block;
 }
 
 .sign-text {
-  color: white;
+  color: var(--color-text-dark);
 }
 
 .sign-k {
@@ -170,26 +162,35 @@ h2 {
   color: var(--color-logo-a2);
 }
 
-/* --- Header & Navigation --- */
+/* --- Header & Navigation (Reverted) --- */
 .header {
-  background-color: var(--color-bg-white);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  background-color: var(--color-bg-cream);
+  /* Cream background for the entire header */
+  box-shadow: none;
   position: sticky;
   top: 0;
   z-index: 1000;
   padding: 15px 0;
 }
 
+/* Header layout: Logo | Nav Links (Reverted to simple setup) */
 .nav-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Navigation Menu (Desktop display) */
+.nav-menu {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
 .nav-menu a {
   text-decoration: none;
   color: var(--color-text-dark);
   font-weight: 600;
+  /* Original weight */
   margin-left: var(--spacing-md);
   transition: color 0.3s;
 }
@@ -198,6 +199,7 @@ h2 {
   color: var(--color-primary-accent);
 }
 
+/* Mobile toggle: hidden on desktop, shown on mobile */
 .menu-toggle {
   display: none;
   background: none;
@@ -207,7 +209,10 @@ h2 {
   color: var(--color-secondary-accent);
 }
 
-/* --- Buttons --- */
+/* Removed styles for .desktop-nav, .header-actions, .search-btn, .log-in-link, .cart-icon, and .cart-count */
+
+
+/* --- Buttons (Remaining standard button styles unchanged) --- */
 .btn {
   display: inline-block;
   padding: 12px 30px;
@@ -240,8 +245,8 @@ h2 {
 
 /* --- Hero Section and Placeholders --- */
 .hero {
-  padding: 6rem 0 4rem;
-  background: linear-gradient(180deg, var(--color-bg-light) 0%, var(--color-bg-white) 100%);
+  padding: 4rem 0;
+  background: transparent;
 }
 
 .hero-content {
@@ -269,7 +274,6 @@ h2 {
   width: 100%;
   height: 100%;
   min-height: 300px;
-  /* Reduced slightly for more space */
   background-color: #e6f7ff;
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-pop);
@@ -461,7 +465,7 @@ h2 {
   font-size: 0.85rem;
 }
 
-/* --- Responsive Adjustments --- */
+/* --- Responsive Adjustments (Reverted for simple nav) --- */
 @media (max-width: 992px) {
 
   .hero-content,
@@ -486,7 +490,7 @@ h2 {
   }
 
   .big-sign {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
 
   .title-with-icon {
@@ -504,21 +508,30 @@ h2 {
 }
 
 @media (max-width: 767px) {
+
+  /* Show mobile menu toggle */
   .menu-toggle {
     display: block;
   }
 
+  /* Adjust nav-content for mobile: Logo on left, Toggle on right */
+  .nav-content {
+    justify-content: space-between;
+  }
+
+  /* Mobile Menu behavior */
   .nav-menu {
     display: none;
     flex-direction: column;
     width: 100%;
     position: absolute;
-    top: 70px;
+    top: 60px;
     left: 0;
     background-color: var(--color-bg-white);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     padding: 10px 0;
+    z-index: 999;
   }
 
   .nav-menu.active {
@@ -526,23 +539,24 @@ h2 {
   }
 
   .nav-menu a {
-    margin: 10px 0;
+    
     padding: 10px 0;
     border-bottom: 1px solid #eee;
     width: 90%;
-   
+    margin: 0 auto;
+    margin-left: 0;
+    /* Clear previous desktop margin */
   }
 
   .nav-menu a:last-child {
     border-bottom: none;
   }
 
-  .hero-text h1 {
-    font-size: 2.2rem;
+  .big-sign {
+    font-size: 8vw;
   }
 
-  .big-sign {
-    font-size: 2rem;
-    letter-spacing: 3px;
+  .hero-text h1 {
+    font-size: 2.2rem;
   }
 }
