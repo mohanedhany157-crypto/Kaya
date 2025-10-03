@@ -1,15 +1,18 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Your Site — Professional Template</title>
-  <link rel="stylesheet" href="css/styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Your Professional Site</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
+  <!-- Header -->
   <header class="site-header">
     <div class="container header-inner">
-      <img src="assets/logo.png" alt="Site logo" class="logo" />
+      <img src="assets/logo.png" alt="Logo" class="logo">
       <nav class="main-nav">
         <a href="#home">Home</a>
         <a href="#about">About</a>
@@ -21,77 +24,86 @@
     </div>
   </header>
 
-  <main>
-    <section id="home" class="hero">
-      <div class="hero-inner container">
-        <div class="hero-text">
-          <h1>Your main headline here</h1>
-          <p>Short description / tagline that sells or explains your site.</p>
-          <a class="btn primary" href="#contact">Get in touch</a>
-        </div>
-        <div class="hero-image">
-          <img src="assets/hero.jpg" alt="Hero image" />
-        </div>
+  <!-- Hero -->
+  <section id="home" class="hero">
+    <div class="hero-inner container">
+      <div class="hero-text">
+        <h1>Professional & Modern Website</h1>
+        <p>High-quality services and solutions designed to help your business grow.</p>
+        <a class="btn primary" href="#contact">Get in Touch</a>
       </div>
-    </section>
-
-    <section id="about" class="container section about">
-      <h2>About</h2>
-      <p>Write a short paragraph about the business/owner.</p>
-      <div class="about-cards">
-        <article class="card">
-          <img src="assets/placeholder-1.jpg" alt="Placeholder image" />
-          <h3>Feature one</h3>
-          <p>Short text</p>
-        </article>
-        <article class="card">
-          <img src="assets/placeholder-2.jpg" alt="Placeholder image" />
-          <h3>Feature two</h3>
-          <p>Short text</p>
-        </article>
+      <div class="hero-image">
+        <img src="assets/hero.jpg" alt="Hero image">
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="services" class="container section">
-      <h2>Services</h2>
-      <div class="grid-3">
-        <div class="service">
-          <h3>Service A</h3>
-          <p>Description of service.</p>
-        </div>
-        <div class="service">
-          <h3>Service B</h3>
-          <p>Description of service.</p>
-        </div>
-        <div class="service">
-          <h3>Service C</h3>
-          <p>Description of service.</p>
-        </div>
+  <!-- About -->
+  <section id="about" class="container section about">
+    <h2>About Us</h2>
+    <p>We provide exceptional digital solutions for businesses looking to thrive in the modern world.</p>
+    <div class="about-cards">
+      <article class="card">
+        <img src="assets/placeholder-1.jpg" alt="Feature 1">
+        <h3>Expert Team</h3>
+        <p>Highly skilled professionals at your service.</p>
+      </article>
+      <article class="card">
+        <img src="assets/placeholder-2.jpg" alt="Feature 2">
+        <h3>Innovative Solutions</h3>
+        <p>Creative approaches to complex problems.</p>
+      </article>
+      <article class="card">
+        <img src="assets/placeholder-3.jpg" alt="Feature 3">
+        <h3>Customer Focus</h3>
+        <p>Your satisfaction is our top priority.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="container section">
+    <h2>Our Services</h2>
+    <div class="grid-3">
+      <div class="service">
+        <h3>Web Development</h3>
+        <p>Modern, responsive, and efficient websites.</p>
       </div>
-    </section>
-
-    <section id="gallery" class="container section">
-      <h2>Gallery</h2>
-      <div class="gallery-grid">
-        <img src="assets/placeholder-3.jpg" alt="gallery 1" />
-        <img src="assets/placeholder-4.jpg" alt="gallery 2" />
-        <img src="assets/placeholder-5.jpg" alt="gallery 3" />
-        <img src="assets/placeholder-6.jpg" alt="gallery 4" />
+      <div class="service">
+        <h3>Design & Branding</h3>
+        <p>Professional branding and visual identity solutions.</p>
       </div>
-    </section>
+      <div class="service">
+        <h3>Digital Marketing</h3>
+        <p>SEO, social media, and growth strategies that work.</p>
+      </div>
+    </div>
+  </section>
 
-    <section id="contact" class="container section">
-      <h2>Contact</h2>
-      <form id="contactForm" class="contact-form">
-        <label>Name <input type="text" name="name" required /></label>
-        <label>Email <input type="email" name="email" required /></label>
-        <label>Message <textarea name="message" rows="6" required></textarea></label>
-        <button class="btn primary" type="submit">Send Message</button>
-        <p id="formStatus" class="form-status" aria-live="polite"></p>
-      </form>
-    </section>
-  </main>
+  <!-- Gallery -->
+  <section id="gallery" class="container section">
+    <h2>Gallery</h2>
+    <div class="gallery-grid">
+      <img src="assets/gallery1.jpg" alt="Gallery 1">
+      <img src="assets/gallery2.jpg" alt="Gallery 2">
+      <img src="assets/gallery3.jpg" alt="Gallery 3">
+      <img src="assets/gallery4.jpg" alt="Gallery 4">
+    </div>
+  </section>
 
+  <!-- Contact -->
+  <section id="contact" class="container section">
+    <h2>Contact</h2>
+    <form id="contactForm" class="contact-form">
+      <label>Name<input type="text" name="name" required></label>
+      <label>Email<input type="email" name="email" required></label>
+      <label>Message<textarea name="message" rows="6" required></textarea></label>
+      <button class="btn primary" type="submit">Send Message</button>
+      <p id="formStatus" class="form-status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
       <p>© <span id="year"></span> Your Company — All rights reserved.</p>

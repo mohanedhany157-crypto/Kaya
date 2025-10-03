@@ -1,10 +1,9 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
-  // fill current year
+  // Fill current year
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // mobile menu toggle
+  // Mobile menu toggle
   const menuBtn = document.getElementById('menuBtn');
   const nav = document.querySelector('.main-nav');
   menuBtn?.addEventListener('click', () => {
@@ -13,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     menuBtn.setAttribute('aria-expanded', String(open));
   });
 
-  // contact form submit
+  // Contact form submit
   const form = document.getElementById('contactForm');
   const status = document.getElementById('formStatus');
 
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const res = await fetch('http://localhost:3000/api/contact', {
+      const res = await fetch('https://kaya-xxxx.onrender.com/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
