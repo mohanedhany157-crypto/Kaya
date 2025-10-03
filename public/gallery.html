@@ -1,100 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaya - Launch Details & Media</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaya - Launch Details & Media</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 
-    <!-- Header & Navigation (Original Simple Structure) -->
-    <header class="header">
-        <div class="container nav-content">
-            <!-- Multicolored Logo Link -->
-            <a href="index.html" class="logo-link">
-                <div class="logo">
-                    <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+  <!-- Header & Navigation -->
+  <header class="header">
+    <div class="container nav-content">
+      <!-- Multicolored Logo Link -->
+      <a href="index.html" class="logo-link">
+        <div class="logo">
+          <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+        </div>
+      </a>
+      
+      <!-- Mobile Menu Toggle Button (Visible only on small screens) -->
+      <button class="menu-toggle" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <!-- Main Navigation Menu (Desktop & Mobile) -->
+      <nav class="nav-menu">
+        <a href="index.html">The Game</a>
+        <a href="more.html">Game Mechanics</a>
+        <a href="#">Launch Gallery</a>
+        <a href="contact.html">Contact Us</a>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Main Video & Gallery Content -->
+  <section class="section">
+    <div class="container">
+      <!-- Main Section Title -->
+      <h2 class="text-center title-with-icon">
+        <i class="fas fa-video"></i>
+        Game Trailer & Media Gallery
+      </h2>
+      <p class="gallery-intro">Welcome to the behind-the-scenes look at the first edition of the Kaya Financial Literacy Card Game. Watch our launch trailer and explore the components, artwork, and collector items below!</p>
+
+            <!-- Official Launch Video (Large) -->
+            <div class="video-section">
+                <!-- Minor heading for context -->
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Official Launch Trailer</h3>
+                <div class="video-container">
+                    <!-- The <video> tag is required to display an MP4 file -->
+                    <video controls muted autoplay playsinline>
+                        <!-- Ensure the src is correct for your file -->
+                        <source src="assests/3.mp4" type="video/mp4">
+                        Sorry, your browser doesn't support embedded videos.
+                    </video>
                 </div>
-            </a>
-            
-            <!-- Mobile Menu Toggle Button (Visible only on small screens) -->
-            <button class="menu-toggle" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <!-- Main Navigation Menu (Desktop & Mobile) -->
-            <nav class="nav-menu">
-                <a href="index.html">The Game</a>
-                <a href="more.html">Game Mechanics</a>
-                <a href="#">Launch Gallery</a>
-                <a href="contact.html">Contact Us</a>
-            </nav>
-        </div>
-    </header>
-    
-    <!-- Main Gallery Content -->
-    <section class="section">
-        <div class="container">
-            <h1 class="text-center big-gallery-title"><source src="assests/3.mp4" type="video/mp4"></h1>
-            <p class="gallery-intro">Welcome to the behind-the-scenes look at the first edition of the Kaya Financial Literacy Card Game. We are so excited to share all the components, artwork, and collector items with you!</p>
-
-            <div class="full-gallery-grid">
-                <!-- Gallery Item 1 -->
-                <div class="gallery-item-full placeholder-box"><source src="assests/4.mp4" type="video/mp4"></div>
-                <p class="caption">**The Core Deck:** Includes Income, Expense, Goal, and Investment cards.</p>
-                
-                <!-- Gallery Item 2 -->
-                <div class="gallery-item-full placeholder-box"><source src="assests/pic.mp4" type="video/mp4"></div>
-                <p class="caption">**Kaya Bucks:** Custom tokens used for tracking money throughout the game.</p>
-                
-                <!-- Gallery Item 3 -->
-                <div class="gallery-item-full placeholder-box"><img src="assests/2.jpg" alt="Player Scoreboard/Dashboard" /></div>
-                <p class="caption">**Player Boards:** Track your net worth, savings, and investment growth with easy-to-read dashboards.</p>
-                
-                <!-- Gallery Item 4 -->
-                <div class="gallery-item-full placeholder-box">[Image: Unboxing the Kaya Game]</div>
-                <p class="caption">**Unboxing Experience:** Everything fits perfectly in our durable, kid-friendly game box.</p>
             </div>
             
-            <div class="text-center mt-3">
-                <a href="index.html#contact" class="btn btn-primary load-more-btn">Pre-Order Your Copy Now!</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer (reused from index.html) -->
-    <footer class="footer">
-        <div class="container footer-content">
-            <div class="footer-logo">
-                <div class="logo">
-                    <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+      <div class="full-gallery-grid">
+        <!-- Gallery Item 1 (Video) -->
+        <div class="gallery-item-full">
+                    <!-- Using video-container for responsiveness, overriding the thick border -->
+                    <div class="video-container" style="border-width: 3px;">
+                        <video controls playsinline>
+                            <source src="assests/4.mp4" type="video/mp4">
+                            Sorry, your browser doesn't support embedded videos.
+                        </video>
+                    </div>
                 </div>
-                <p>Play, Learn, Grow (Financially).</p>
-            </div>
-            
-            <div class="footer-links">
-                <h3>Quick Links</h3>
-                <a href="index.html#about">The Game</a>
-                <a href="index.html#features">Mechanics</a>
-                <a href="index.html#contact">Pre-Order Now</a>
-            </div>
+        <p class="caption">**The Core Deck:** Includes Income, Expense, Goal, and Investment cards shown in action.</p>
+        
+        <!-- Gallery Item 2 (Video) -->
+        <div class="gallery-item-full">
+                    <!-- Using video-container for responsiveness, overriding the thick border -->
+                    <div class="video-container" style="border-width: 3px;">
+                        <video controls playsinline>
+                            <source src="assests/pic.mp4" type="video/mp4">
+                            Sorry, your browser doesn't support embedded videos.
+                        </video>
+                    </div>
+                </div>
+        <p class="caption">**Kaya Bucks:** Custom tokens used for tracking money throughout the game, beautifully displayed.</p>
+        
+        <!-- Gallery Item 3 (Image remains) -->
+        <div class="gallery-item-full placeholder-box">
+                    <img src="assests/2.jpg" alt="Player Scoreboard/Dashboard" />
+                </div>
+        <p class="caption">**Player Boards:** Track your net worth, savings, and investment growth with easy-to-read dashboards.</p>
+        
+        <!-- Gallery Item 4 (Image remains with icon for better placeholder) -->
+        <div class="gallery-item-full placeholder-box">
+                    <i class="fas fa-box-open" style="font-size: 3rem; margin-right: 10px;"></i>
+                    [Image: Unboxing the Kaya Game]
+                </div>
+        <p class="caption">**Unboxing Experience:** Everything fits perfectly in our durable, kid-friendly game box.</p>
+      </div>
+      
+      <div class="text-center" style="margin-top: 50px;">
+        <a href="index.html#contact" class="btn btn-primary">Pre-Order Your Copy Now!</a>
+      </div>
+    </div>
+  </section>
 
-            <div class="footer-social">
-                <h3>Follow Our Fun!</h3>
-                <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
-                    <i class="fab fa-instagram"></i> Instagram
-                </a>
-            </div>
-
-            <div class="footer-info">
-                <p>&copy; 2025 Kaya Financial Games. All Rights Reserved. </p>
-                <p class="copyright-text">Teaching the world how to manage money, one card at a time!</p>
-            </div>
+  <!-- Footer (reused from index.html) -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-logo">
+        <div class="logo">
+          <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
         </div>
-    </footer>
-    <script src="js/script.js"></script>
+        <p>Play, Learn, Grow (Financially).</p>
+      </div>
+      
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <a href="index.html#about">The Game</a>
+        <a href="index.html#features">Mechanics</a>
+        <a href="index.html#contact">Pre-Order Now</a>
+      </div>
+
+      <div class="footer-social">
+        <h3>Follow Our Fun!</h3>
+        <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+      </div>
+
+      <div class="footer-info">
+        <p>&copy; 2025 Kaya Financial Games. All Rights Reserved. </p>
+        <p class="copyright-text">Teaching the world how to manage money, one card at a time!</p>
+      </div>
+    </div>
+  </footer>
+  <script src="js/script.js"></script>
+    <script>
+        // Simple JS to handle mobile menu toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggle = document.querySelector('.menu-toggle');
+            const menu = document.querySelector('.nav-menu');
+
+            if (toggle && menu) {
+                toggle.addEventListener('click', () => {
+                    menu.classList.toggle('active');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
