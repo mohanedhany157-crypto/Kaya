@@ -1,578 +1,574 @@
+/* --- Fonts Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Chelsea+Market&family=Poppins:wght@400;600;700;800&display=swap');
+
 /* --- Variables: Child-Friendly Palette --- */
 :root {
-  --color-primary-accent: #E74C3C;
-  /* Coral Red/Pink for main action */
-  --color-secondary-accent: #8E44AD;
-  /* Playful Purple for secondary */
-  --color-text-dark: #333;
-  --color-text-light: #f4f4f4;
-  --color-bg-white: #ffffff;
-  --color-bg-light: #F8F9FA;
-  --font-family-primary: 'Poppins', sans-serif;
-  --spacing-lg: 4rem;
-  --spacing-md: 2rem;
-  --spacing-sm: 1rem;
-  --border-radius-lg: 16px;
-  --border-radius-sm: 8px;
-  --shadow-pop: 0 10px 30px rgba(0, 0, 0, 0.15);
+ /* Primary Accent: Fiery Orange (#FD4D0A) */
+ --color-primary-accent: #FD4D0A;
+ /* Secondary Accent: Yellow (#FFBC00) */
+ --color-secondary-accent: #FFBC00; 
 
-  /* Original Logo Colors (Brighter and distinct) */
-  --color-logo-k: #E74C3C;
-  /* Red */
-  --color-logo-a1: #F39C12;
-  /* Orange */
-  --color-logo-y: #2ECC71;
-  /* Bright Green */
-  --color-logo-a2: #3498DB;
-  /* Bright Blue */
+ /* Eggshell Background (#FEF6EC) */
+ --color-bg-light: #FEF6EC;
+ --color-bg-white: #ffffff;
+ 
+ /* User specified Green for accent/logo (#4D9222) */
+ --color-accent-green: #4D9222;
+ 
+ /* Standard text color (for readability) */
+ --color-text-dark: #333;
+ --color-text-light: #f4f4f4;
+
+ /* Fonts */
+ --font-family-title: 'Chelsea Market', cursive;
+ --font-family-header: 'Poppins', sans-serif;
+ --font-family-paragraph: 'Poppins', sans-serif;
+ 
+ /* Spacing and other variables remain */
+ --spacing-lg: 4rem;
+ --spacing-md: 2rem;
+ --spacing-sm: 1rem;
+ --border-radius-lg: 16px;
+ --border-radius-sm: 8px;
+ --shadow-pop: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+ /* Logo Colors updated to match new palette */
+ --color-logo-k: var(--color-primary-accent); /* Fiery Orange */
+ --color-logo-a1: var(--color-secondary-accent); /* Yellow */
+ --color-logo-y: var(--color-accent-green); /* Green */
+--color-logo-a2: #0094E8; /* Blue */
 }
 
 /* --- Base Styles --- */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
 }
 
 html {
-  scroll-behavior: smooth;
+ scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-family-primary);
-  line-height: 1.6;
-  color: var(--color-text-dark);
-  /* Reverted: Use light gray background */
-  background-color: var(--color-bg-light);
+ font-family: var(--font-family-paragraph);
+ line-height: 1.6;
+ color: var(--color-text-dark);
+ background-color: var(--color-bg-light); /* Eggshell background */
 }
 
 .container {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-sm);
+ width: 90%;
+ max-width: 1200px;
+ margin: 0 auto;
+ padding: 0 var(--spacing-sm);
 }
 
 h1,
 h2,
 h3 {
-  font-weight: 700;
-  margin-bottom: var(--spacing-sm);
+ font-weight: 700;
+ margin-bottom: var(--spacing-sm);
 }
 
+/* General H2 Styling (used for section titles) */
 h2 {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: var(--spacing-lg);
-  color: var(--color-secondary-accent);
+ font-size: 2.5rem;
+ text-align: center;
+ margin-bottom: var(--spacing-lg);
+ color: var(--color-primary-accent); /* Fiery Orange */
+ font-family: var(--font-family-header); /* Poppins Bold */
 }
 
 .title-with-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+ display: flex;
+ align-items: center;
+ justify-content: center;
 }
 
 .title-with-icon i {
-  margin-right: 15px;
-  font-size: 0.9em;
-  color: var(--color-primary-accent);
+ margin-right: 15px;
+ font-size: 0.9em;
+ color: var(--color-primary-accent);
 }
 
 .accent {
-  color: var(--color-primary-accent);
+ color: var(--color-primary-accent);
 }
 
 .section {
-  padding: var(--spacing-lg) 0;
+ padding: var(--spacing-lg) 0;
 }
 
-/* Reverted: Sections use white background */
+/* Sections use white background by default */
 .bg-light {
-  background-color: var(--color-bg-white);
+ background-color: var(--color-bg-white);
 }
 
 .text-center {
-  text-align: center;
+ text-align: center;
 }
 
 /* --- Multicolored Logo Styling --- */
 .logo-link {
-  text-decoration: none;
-  color: inherit;
-  z-index: 2;
+ text-decoration: none;
+ color: inherit;
+ z-index: 2;
 }
 
 .logo {
-  font-size: 1.8rem;
-  font-weight: 800;
-  letter-spacing: -1px;
-  cursor: pointer;
+ font-size: 1.8rem;
+ font-weight: 800;
+ letter-spacing: -1px;
+ cursor: pointer;
 }
 
 .logo span {
-  transition: transform 0.2s;
-  display: inline-block;
+ transition: transform 0.2s;
+ display: inline-block;
 }
 
 .logo span:hover {
-  transform: translateY(-3px);
+ transform: translateY(-3px);
 }
 
-/* Apply original logo colors */
+/* Apply specific logo colors from variables */
 .logo-k {
-  color: var(--color-logo-k);
+ color: var(--color-logo-k);
 }
 
 .logo-a1 {
-  color: var(--color-logo-a1);
+ color: var(--color-logo-a1);
 }
 
 .logo-y {
-  color: var(--color-logo-y);
+ color: var(--color-logo-y);
 }
 
 .logo-a2 {
-  color: var(--color-logo-a2);
+ color: var(--color-logo-a2);
 }
 
 
-/* --- Reverted Welcome Banner Styling: Purple Background --- */
+/* --- Welcome Banner Styling: Yellow Background --- */
 .welcome-banner {
-  background-color: var(--color-secondary-accent);
-  /* Purple background */
-  padding: 20px 0;
-  text-align: center;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+ background-color: var(--color-secondary-accent);
+ /* Yellow background */
+ padding: 20px 0;
+ text-align: center;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .big-sign {
-  font-family: 'Poppins', cursive;
-  font-size: 6vw;
-  max-width: 900px;
-  margin: 0 auto;
-  font-weight: 800;
-  color: var(--color-text-light);
-  /* Light text on dark background */
-  letter-spacing: 2px;
-  display: inline-block;
+ font-family: var(--font-family-title); /* Chelsea Market */
+ font-size: 6vw;
+ max-width: 900px;
+ margin: 0 auto;
+ font-weight: 800;
+ color: var(--color-text-light);
+ letter-spacing: 2px;
+ display: inline-block;
 }
 
 .sign-text {
-  color: var(--color-text-light);
-  /* White text for 'Let's play' */
+ color: var(--color-text-light); 
 }
 
-/* Use accent color for the KAYA letters in the banner */
-.sign-k {
-  color: var(--color-primary-accent);
+/* Use primary accent color for the KAYA letters in the banner for punch */
+.sign-k, .sign-a1, .sign-y, .sign-a2 {
+ color: var(--color-primary-accent);
 }
 
-.sign-a1 {
-  color: var(--color-primary-accent);
-}
-
-.sign-y {
-  color: var(--color-primary-accent);
-}
-
-.sign-a2 {
-  color: var(--color-primary-accent);
-}
-
-/* --- Header & Navigation (Reverted to simple layout) --- */
+/* --- Header & Navigation --- */
 .header {
-  background-color: var(--color-bg-white);
-  /* Reverted: White background for the header */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  /* Added subtle shadow back */
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  padding: 15px 0;
+ background-color: var(--color-bg-white);
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+ position: sticky;
+ top: 0;
+ z-index: 1000;
+ padding: 15px 0;
 }
 
-/* Header layout: Logo | Nav Links (Reverted to simple setup) */
 .nav-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
 }
 
-/* Navigation Menu (Desktop display) */
 .nav-menu {
-  display: flex;
-  gap: var(--spacing-md);
+ display: flex;
+ gap: var(--spacing-md);
 }
 
 .nav-menu a {
-  text-decoration: none;
-  color: var(--color-text-dark);
-  font-weight: 600;
-  margin-left: var(--spacing-md);
-  transition: color 0.3s;
+ text-decoration: none;
+ color: var(--color-text-dark);
+ font-weight: 600;
+ margin-left: var(--spacing-md);
+ transition: color 0.3s;
 }
 
 .nav-menu a:hover {
-  color: var(--color-primary-accent);
+ color: var(--color-primary-accent);
 }
 
-/* Mobile toggle: hidden on desktop, shown on mobile */
 .menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: var(--color-secondary-accent);
+ display: none;
+ background: none;
+ border: none;
+ font-size: 1.8rem;
+ cursor: pointer;
+ color: var(--color-primary-accent);
 }
 
 
-/* --- Buttons (Remaining standard button styles unchanged) --- */
+/* --- Buttons --- */
 .btn {
-  display: inline-block;
-  padding: 12px 30px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: none;
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+ display: inline-block;
+ padding: 12px 30px;
+ border-radius: 50px;
+ text-decoration: none;
+ font-weight: 600;
+ transition: transform 0.2s, box-shadow 0.2s;
+ border: none;
+ cursor: pointer;
+ text-transform: uppercase;
+ letter-spacing: 1px;
 }
 
 .btn-primary {
-  background-color: var(--color-primary-accent);
-  color: var(--color-text-light);
-  box-shadow: 0 8px 15px rgba(231, 76, 60, 0.4);
+ background-color: var(--color-primary-accent); /* Fiery Orange */
+ color: var(--color-text-light);
+ box-shadow: 0 8px 15px rgba(253, 77, 10, 0.4);
 }
 
 .btn-secondary {
-  background-color: var(--color-secondary-accent);
-  color: var(--color-text-light);
-  box-shadow: 0 8px 15px rgba(142, 68, 173, 0.4);
+ background-color: var(--color-secondary-accent); /* Yellow */
+ color: var(--color-text-dark); /* Dark text for contrast on yellow */
+ box-shadow: 0 8px 15px rgba(255, 188, 0, 0.4);
 }
 
 .btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+ transform: translateY(-4px);
+ box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* --- Hero Section and Placeholders --- */
 .hero {
-  padding: 4rem 0;
-  background: transparent;
+ padding: 4rem 0;
+ background: transparent;
 }
 
 .hero-content {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
+ display: flex;
+ align-items: center;
+ gap: var(--spacing-lg);
 }
 
 .hero-text {
-  flex: 1;
+ flex: 1;
 }
 
 .hero-text h1 {
-  font-size: 3.8rem;
-  line-height: 1.1;
-  margin-bottom: 20px;
+ font-family: var(--font-family-title); /* Chelsea Market */
+ font-size: 3.8rem;
+ line-height: 1.1;
+ margin-bottom: 20px;
 }
 
 .hero-image {
-  flex: 1;
-  min-height: 350px;
+ flex: 1;
+ min-height: 350px;
 }
 
 .placeholder-box {
-  width: 100%;
-  height: 100%;
-  min-height: 300px;
-  background-color: #e6f7ff;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-pop);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-secondary-accent);
-  font-weight: 600;
-  font-size: 1.2rem;
-  padding: 20px;
-  text-align: center;
-  border: 3px dashed #79b3f8;
+ width: 100%;
+ height: 100%;
+ min-height: 300px;
+ background-color: #fff4e0; /* Lighter shade of eggshell */
+ border-radius: var(--border-radius-lg);
+ box-shadow: var(--shadow-pop);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: var(--color-primary-accent);
+ font-weight: 600;
+ font-size: 1.2rem;
+ padding: 20px;
+ text-align: center;
+ border: 3px dashed var(--color-primary-accent);
 }
 
 /* --- About Us Section --- */
 .about-content {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
+ display: flex;
+ align-items: center;
+ gap: var(--spacing-lg);
 }
 
 .about-image-placeholder {
-  flex: 1;
-  min-height: 300px;
+ flex: 1;
+ min-height: 300px;
 }
 
 .about-image-placeholder .placeholder-box {
-  min-height: 300px;
-  background-color: #fceceb;
-  color: var(--color-primary-accent);
-  border: 3px dashed #E74C3C;
+ min-height: 300px;
+ background-color: #fffae8; /* Lighter shade of yellow */
+ color: var(--color-secondary-accent);
+ border: 3px dashed var(--color-secondary-accent);
 }
 
 .about-text {
-  flex: 1;
-  padding: 20px;
-  border-left: 5px solid var(--color-primary-accent);
+ flex: 1;
+ padding: 20px;
+ border-left: 5px solid var(--color-primary-accent);
 }
 
 .about-text p {
-  margin-bottom: var(--spacing-sm);
-  font-size: 1.1rem;
+ margin-bottom: var(--spacing-sm);
+ font-size: 1.1rem;
 }
 
-/* --- Game Features Section (Vertical Cards Side-by-Side) --- */
+/* --- Game Features Section (Keeping styles in case user adds content back) --- */
 .feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-md);
-  text-align: center;
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: var(--spacing-md);
+ text-align: center;
 }
 
 .feature-card {
-  background-color: var(--color-bg-white);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-pop);
-  transition: transform 0.3s, background-color 0.3s;
+ background-color: var(--color-bg-white);
+ padding: var(--spacing-md);
+ border-radius: var(--border-radius-lg);
+ box-shadow: var(--shadow-pop);
+ transition: transform 0.3s, background-color 0.3s;
 }
 
 .feature-card:hover {
-  transform: translateY(-8px);
-  background-color: #f7f3ff;
+ transform: translateY(-8px);
+ background-color: #fffbe6; /* Light hover for card */
 }
 
 .feature-icon-circle {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 15px;
-  background-color: var(--color-secondary-accent);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.2rem;
-  color: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+ width: 80px;
+ height: 80px;
+ margin: 0 auto 15px;
+ background-color: var(--color-primary-accent); /* Fiery Orange */
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 2.2rem;
+ color: white;
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* --- Gallery Preview (index.html) --- */
 .gallery-grid-preview {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: var(--spacing-sm);
+ margin-bottom: var(--spacing-md);
 }
 
 /* --- Full Gallery (gallery.html) --- */
 .big-gallery-title {
-  font-size: 3.5rem;
-  margin-bottom: 10px;
+ font-family: var(--font-family-title); /* Chelsea Market */
+ font-size: 3.5rem;
+ margin-bottom: 10px;
 }
 
 .gallery-intro {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto 50px;
-  font-size: 1.1rem;
-  color: #555;
+ text-align: center;
+ max-width: 800px;
+ margin: 0 auto 50px;
+ font-size: 1.1rem;
+ color: #555;
 }
 
 .full-gallery-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
+ display: grid;
+ grid-template-columns: 1fr;
+ gap: 40px;
 }
 
 .gallery-item-full {
-  min-height: 450px;
+ min-height: 450px;
 }
 
 .full-gallery-grid p.caption {
-  text-align: center;
-  font-size: 1.2rem;
-  font-style: italic;
-  color: #444;
-  margin-top: -20px;
+ text-align: center;
+ font-size: 1.2rem;
+ font-style: italic;
+ color: #444;
+ margin-top: -20px;
 }
 
 
 /* --- Contact Section --- */
 .contact-content {
-  max-width: 700px;
-  margin: 0 auto;
+ max-width: 700px;
+ margin: 0 auto;
 }
 
 .contact-form {
-  background-color: var(--color-bg-white);
-  padding: var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-pop);
+ background-color: var(--color-bg-white);
+ padding: var(--spacing-md);
+ border-radius: var(--border-radius-lg);
+ box-shadow: var(--shadow-pop);
 }
 
 .form-group {
-  margin-bottom: var(--spacing-sm);
+ margin-bottom: var(--spacing-sm);
 }
 
 .form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 5px;
-  color: var(--color-text-dark);
+ display: block;
+ font-weight: 600;
+ margin-bottom: 5px;
+ color: var(--color-text-dark);
 }
 
 .form-group input,
 .form-group textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius-sm);
-  font-family: inherit;
-  transition: border-color 0.3s, box-shadow 0.3s;
+ width: 100%;
+ padding: 12px;
+ border: 1px solid #ddd;
+ border-radius: var(--border-radius-sm);
+ font-family: inherit;
+ transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .btn-submit {
-  width: 100%;
-  margin-top: 15px;
-  font-size: 1.1rem;
+ width: 100%;
+ margin-top: 15px;
+ font-size: 1.1rem;
 }
 
 .form-status {
-  margin-top: var(--spacing-sm);
-  text-align: center;
-  font-weight: 600;
-  min-height: 20px;
+ margin-top: var(--spacing-sm);
+ text-align: center;
+ font-weight: 600;
+ min-height: 20px;
 }
 
 /* --- Footer --- */
 .footer {
-  background-color: #34495E;
-  /* Dark blue/gray */
-  color: #ECF0F1;
-  padding: var(--spacing-md) 0;
-  font-size: 0.9rem;
+ background-color: #34495E;
+ /* Dark blue/gray */
+ color: #ECF0F1;
+ padding: var(--spacing-md) 0;
+ font-size: 0.9rem;
 }
 
 .footer-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--spacing-md);
-  padding-bottom: 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: var(--spacing-md);
+ padding-bottom: 20px;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-info {
-  grid-column: 1 / -1;
-  text-align: center;
-  margin-top: 20px;
-  font-size: 0.85rem;
+ grid-column: 1 / -1;
+ text-align: center;
+ margin-top: 20px;
+ font-size: 0.85rem;
 }
 
 /* --- Responsive Adjustments --- */
 @media (max-width: 992px) {
 
-  .hero-content,
-  .about-content {
-    flex-direction: column;
-    text-align: center;
-  }
+ .hero-content,
+ .about-content {
+  flex-direction: column;
+  text-align: center;
+ }
 
-  .hero-image {
-    order: -1;
-    margin-bottom: var(--spacing-md);
-  }
+ .hero-image {
+  order: -1;
+  margin-bottom: var(--spacing-md);
+ }
 
-  .about-text {
-    border-left: none;
-    border-top: 5px solid var(--color-primary-accent);
-    padding-top: 20px;
-  }
+ .about-text {
+  border-left: none;
+  border-top: 5px solid var(--color-primary-accent);
+  padding-top: 20px;
+ }
 
-  .hero-text h1 {
-    font-size: 3rem;
-  }
+ .hero-text h1 {
+  font-size: 3rem;
+ }
 
-  .big-sign {
-    font-size: 3rem;
-  }
+ .big-sign {
+  font-size: 3rem;
+ }
 
-  .title-with-icon {
-    flex-direction: column;
-  }
+ .title-with-icon {
+  flex-direction: column;
+ }
 
-  .title-with-icon i {
-    margin: 0 0 10px 0;
-    font-size: 2.5rem;
-  }
+ .title-with-icon i {
+  margin: 0 0 10px 0;
+  font-size: 2.5rem;
+ }
 
-  .footer-content {
-    grid-template-columns: repeat(2, 1fr);
-  }
+ .footer-content {
+  grid-template-columns: repeat(2, 1fr);
+ }
 }
 
 @media (max-width: 767px) {
 
-  /* Show mobile menu toggle */
-  .menu-toggle {
-    display: block;
-  }
+ /* Show mobile menu toggle */
+ .menu-toggle {
+  display: block;
+ }
 
-  /* Adjust nav-content for mobile: Logo on left, Toggle on right */
-  .nav-content {
-    justify-content: space-between;
-  }
+ /* Adjust nav-content for mobile: Logo on left, Toggle on right */
+ .nav-content {
+  justify-content: space-between;
+ }
 
-  /* Mobile Menu behavior */
-  .nav-menu {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    background-color: var(--color-bg-white);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 10px 0;
-    z-index: 999;
-  }
+ /* Mobile Menu behavior */
+ .nav-menu {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background-color: var(--color-bg-white);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 10px 0;
+  z-index: 999;
+ }
 
-  .nav-menu.active {
-    display: flex;
-  }
+ .nav-menu.active {
+  display: flex;
+ }
 
-  .nav-menu a {
-    margin: 10px 0;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    width: 90%;
-  
-    margin-left: 0;
-    /* Clear previous desktop margin */
-  }
+ .nav-menu a {
+  margin: 10px 0;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  width: 90%;
+ 
+  margin-left: 0;
+  /* Clear previous desktop margin */
+ }
 
-  .nav-menu a:last-child {
-    border-bottom: none;
-  }
+ .nav-menu a:last-child {
+  border-bottom: none;
+ }
 
-  .big-sign {
-    font-size: 8vw;
-  }
+ .big-sign {
+  font-size: 8vw;
+ }
 
-  .hero-text h1 {
-    font-size: 2.2rem;
-  }
+ .hero-text h1 {
+  font-size: 2.2rem;
+ }
 }
