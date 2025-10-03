@@ -1,17 +1,13 @@
-/* --- Variables: Child-Friendly Palette (Darker) --- */
+/* --- Variables: Child-Friendly Palette --- */
 :root {
   --color-primary-accent: #E74C3C;
-  /* Darker Coral Red/Pink for main action */
+  /* Coral Red/Pink for main action */
   --color-secondary-accent: #8E44AD;
-  /* Darker Playful Purple for secondary */
+  /* Playful Purple for secondary */
   --color-text-dark: #333;
   --color-text-light: #f4f4f4;
   --color-bg-white: #ffffff;
   --color-bg-light: #F8F9FA;
-  --color-bg-cream: #FFFBF5;
-  /* New cream background color from image */
-  --color-search-yellow: #FFCD4D;
-  /* Yellow for search button (kept for now, but not used) */
   --font-family-primary: 'Poppins', sans-serif;
   --spacing-lg: 4rem;
   --spacing-md: 2rem;
@@ -20,15 +16,15 @@
   --border-radius-sm: 8px;
   --shadow-pop: 0 10px 30px rgba(0, 0, 0, 0.15);
 
-  /* Darker Logo Colors (Kept) */
-  --color-logo-k: #FD4D0A;
-  /* Dark Orange */
-  --color-logo-a1: #FFBC00;
-  /* Dark Yellow */
-  --color-logo-y: #4D9222;
-  /* Dark Green */
-  --color-logo-a2: #0094E8;
-  /* Dark Blue */
+  /* Original Logo Colors (Brighter and distinct) */
+  --color-logo-k: #E74C3C;
+  /* Red */
+  --color-logo-a1: #F39C12;
+  /* Orange */
+  --color-logo-y: #2ECC71;
+  /* Bright Green */
+  --color-logo-a2: #3498DB;
+  /* Bright Blue */
 }
 
 /* --- Base Styles --- */
@@ -46,8 +42,8 @@ body {
   font-family: var(--font-family-primary);
   line-height: 1.6;
   color: var(--color-text-dark);
-  /* Apply cream background to the body (Kept) */
-  background-color: var(--color-bg-cream);
+  /* Reverted: Use light gray background */
+  background-color: var(--color-bg-light);
 }
 
 .container {
@@ -91,9 +87,9 @@ h2 {
   padding: var(--spacing-lg) 0;
 }
 
-/* Changed section backgrounds to match the cream/light background feel (Kept) */
+/* Reverted: Sections use white background */
 .bg-light {
-  background-color: var(--color-bg-cream);
+  background-color: var(--color-bg-white);
 }
 
 .text-center {
@@ -123,12 +119,31 @@ h2 {
   transform: translateY(-3px);
 }
 
+/* Apply original logo colors */
+.logo-k {
+  color: var(--color-logo-k);
+}
 
-/* --- New Welcome Banner Styling (Kept) --- */
+.logo-a1 {
+  color: var(--color-logo-a1);
+}
+
+.logo-y {
+  color: var(--color-logo-y);
+}
+
+.logo-a2 {
+  color: var(--color-logo-a2);
+}
+
+
+/* --- Reverted Welcome Banner Styling: Purple Background --- */
 .welcome-banner {
-  background-color: transparent;
-  padding: 40px 0;
+  background-color: var(--color-secondary-accent);
+  /* Purple background */
+  padding: 20px 0;
   text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .big-sign {
@@ -136,37 +151,41 @@ h2 {
   font-size: 6vw;
   max-width: 900px;
   margin: 0 auto;
-  font-weight: 900;
-  color: var(--color-text-dark);
+  font-weight: 800;
+  color: var(--color-text-light);
+  /* Light text on dark background */
   letter-spacing: 2px;
   display: inline-block;
 }
 
 .sign-text {
-  color: var(--color-text-dark);
+  color: var(--color-text-light);
+  /* White text for 'Let's play' */
 }
 
+/* Use accent color for the KAYA letters in the banner */
 .sign-k {
-  color: var(--color-logo-k);
+  color: var(--color-primary-accent);
 }
 
 .sign-a1 {
-  color: var(--color-logo-a1);
+  color: var(--color-primary-accent);
 }
 
 .sign-y {
-  color: var(--color-logo-y);
+  color: var(--color-primary-accent);
 }
 
 .sign-a2 {
-  color: var(--color-logo-a2);
+  color: var(--color-primary-accent);
 }
 
-/* --- Header & Navigation (Reverted) --- */
+/* --- Header & Navigation (Reverted to simple layout) --- */
 .header {
-  background-color: var(--color-bg-cream);
-  /* Cream background for the entire header */
-  box-shadow: none;
+  background-color: var(--color-bg-white);
+  /* Reverted: White background for the header */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  /* Added subtle shadow back */
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -190,7 +209,6 @@ h2 {
   text-decoration: none;
   color: var(--color-text-dark);
   font-weight: 600;
-  /* Original weight */
   margin-left: var(--spacing-md);
   transition: color 0.3s;
 }
@@ -208,8 +226,6 @@ h2 {
   cursor: pointer;
   color: var(--color-secondary-accent);
 }
-
-/* Removed styles for .desktop-nav, .header-actions, .search-btn, .log-in-link, .cart-icon, and .cart-count */
 
 
 /* --- Buttons (Remaining standard button styles unchanged) --- */
@@ -465,7 +481,7 @@ h2 {
   font-size: 0.85rem;
 }
 
-/* --- Responsive Adjustments (Reverted for simple nav) --- */
+/* --- Responsive Adjustments --- */
 @media (max-width: 992px) {
 
   .hero-content,
@@ -539,11 +555,11 @@ h2 {
   }
 
   .nav-menu a {
-    
+    margin: 10px 0;
     padding: 10px 0;
     border-bottom: 1px solid #eee;
     width: 90%;
-    margin: 0 auto;
+  
     margin-left: 0;
     /* Clear previous desktop margin */
   }
