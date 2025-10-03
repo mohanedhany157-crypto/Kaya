@@ -298,6 +298,14 @@ h2 {
  text-align: center;
  border: 3px dashed var(--color-primary-accent);
 }
+    /* New rule to control image size within the placeholder */
+        .content-placeholder img {
+            max-width: 80%; /* Limits the image to 80% of the container width */
+            height: auto; /* Maintains the aspect ratio */
+            display: block; 
+            object-fit: contain; /* Ensures the whole image is visible */
+            margin: 0 auto; /* Centers the image */
+        }
 
 /* --- About Us Section --- */
 .about-content {
