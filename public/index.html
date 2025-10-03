@@ -23,7 +23,6 @@
 
   <main>
     <section id="home" class="hero">
-      <!-- large hero image placeholder -->
       <div class="hero-inner container">
         <div class="hero-text">
           <h1>Your main headline here</h1>
@@ -31,7 +30,7 @@
           <a class="btn primary" href="#contact">Get in touch</a>
         </div>
         <div class="hero-image">
-          <img src="assets/hero.jpg" alt="Hero image placeholder" />
+          <img src="assets/hero.jpg" alt="Hero image" />
         </div>
       </div>
     </section>
@@ -39,7 +38,6 @@
     <section id="about" class="container section about">
       <h2>About</h2>
       <p>Write a short paragraph about the business/owner.</p>
-      <!-- placeholder for a small image -->
       <div class="about-cards">
         <article class="card">
           <img src="assets/placeholder-1.jpg" alt="Placeholder image" />
@@ -75,7 +73,6 @@
     <section id="gallery" class="container section">
       <h2>Gallery</h2>
       <div class="gallery-grid">
-        <!-- replace these with your real images -->
         <img src="assets/placeholder-3.jpg" alt="gallery 1" />
         <img src="assets/placeholder-4.jpg" alt="gallery 2" />
         <img src="assets/placeholder-5.jpg" alt="gallery 3" />
@@ -86,18 +83,9 @@
     <section id="contact" class="container section">
       <h2>Contact</h2>
       <form id="contactForm" class="contact-form">
-        <label>
-          Name
-          <input type="text" name="name" required />
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" required />
-        </label>
-        <label>
-          Message
-          <textarea name="message" rows="6" required></textarea>
-        </label>
+        <label>Name <input type="text" name="name" required /></label>
+        <label>Email <input type="email" name="email" required /></label>
+        <label>Message <textarea name="message" rows="6" required></textarea></label>
         <button class="btn primary" type="submit">Send Message</button>
         <p id="formStatus" class="form-status" aria-live="polite"></p>
       </form>
