@@ -453,6 +453,20 @@ max-width: 700px;
 margin: 0 auto;
 }
 
+a:link {
+  color: white;       /* Normal unvisited link */
+}
+a:visited {
+  color: purple;     /* Visited link */
+}
+a:hover {
+  color: white;        /* When mouse is over the link */
+}
+a:active {
+  color: orange;     /* When link is being clicked */
+}
+
+
 .contact-form {
 background-color: var(--color-bg-white);
 padding: var(--spacing-md);
