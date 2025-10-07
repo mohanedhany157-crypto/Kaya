@@ -457,10 +457,10 @@ a:link {
   color: white;       /* Normal unvisited link */
 }
 a:visited {
-  color: greenyellow;     /* Visited link */
+  color: white;     /* Visited link */
 }
 a:hover {
-  color: blueviolet;        /* When mouse is over the link */
+  color: greenyellow;        /* When mouse is over the link */
 }
 a:active {
   color: orange;     /* When link is being clicked */
