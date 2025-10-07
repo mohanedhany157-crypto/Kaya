@@ -453,19 +453,6 @@ max-width: 700px;
 margin: 0 auto;
 }
 
-a:link {
-  color: white;       /* Normal unvisited link */
-}
-a:visited {
-  color: white;     /* Visited link */
-}
-a:hover {
-  color: greenyellow;        /* When mouse is over the link */
-}
-a:active {
-  color: orange;     /* When link is being clicked */
-}
-
 
 .contact-form {
 background-color: var(--color-bg-white);
@@ -530,6 +517,32 @@ grid-column: 1 / -1;
 text-align: center;
 margin-top: 20px;
 font-size: 0.85rem;
+}
+
+
+.footer a {
+    color: var(--color-text-light); 
+    text-decoration: none; 
+    transition: color 0.3s;
+}
+
+/* Hover State: Change to Green */
+.footer a:hover {
+    color: var(--color-accent-green); 
+}
+
+/* Visited State: Change to Green-Yellow */
+.footer a:visited {
+    
+    color: #ADFF2F; 
+}
+
+
+.footer-link-group {
+   
+    
+    list-style: none;
+    padding: 0;
 }
 
 /* --- Responsive Adjustments --- */
