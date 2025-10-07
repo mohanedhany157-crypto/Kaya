@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaya - Deep Dive into the Game & Pitch</title>
-    <!-- Font Awesome is kept as a link for icon support -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
     
 </head>
 <body>
@@ -170,27 +171,7 @@
         </div>
     </footer>
     
-    <script>
-        // Simple JS to handle mobile menu toggle
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggle = document.querySelector('.menu-toggle');
-            const menu = document.querySelector('.nav-menu');
+    <script src="js/script.js"></script>
 
-            if (toggle && menu) {
-                toggle.addEventListener('click', () => {
-                    menu.classList.toggle('active');
-                    // Toggle the icon between bars and times
-                    const icon = toggle.querySelector('i');
-                    if (menu.classList.contains('active')) {
-                        icon.classList.remove('fa-bars');
-                        icon.classList.add('fa-times');
-                    } else {
-                        icon.classList.remove('fa-times');
-                        icon.classList.add('fa-bars');
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 </html>
