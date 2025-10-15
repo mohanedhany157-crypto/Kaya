@@ -179,12 +179,29 @@ color: var(--color-text-light);
 color: var(--color-primary-accent);
 }
 
+/* NEW: Multi-color Exclamation Mark for Welcome Banner */
+.sign-exclamation {
+    /* Apply a conic gradient for a mixed color effect */
+    background: conic-gradient(
+        var(--color-logo-k) 0% 25%,
+        var(--color-logo-a1) 25% 50%,
+        var(--color-logo-y) 50% 75%,
+        var(--color-logo-a2) 75% 100%
+    );
+    /* Clip gradient to the text shape and make text transparent */
+    -webkit-background-clip: text; 
+    background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    color: transparent; 
+}
+
+
 /* New: Tagline for Rules Page */
 .tagline-rules {
-    font-size: 1.2rem;
-    color: var(--color-text-dark);
-    font-weight: 600;
-    margin-top: 10px;
+ font-size: 1.2rem;
+ color: var(--color-text-dark);
+ font-weight: 600;
+ margin-top: 10px;
 }
 
 /* --- Header & Navigation --- */
@@ -262,7 +279,7 @@ transform: translateY(-4px);
 box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
 }
 .mt-3 {
-    margin-top: 1rem;
+ margin-top: 1rem;
 }
 
 /* --- Hero Section and Placeholders --- */
@@ -353,19 +370,19 @@ border: 0;
 
 /* New: Style for the video placeholder box */
 .video-placeholder {
-    height: auto;
-    padding-bottom: 0; /* Override 16:9 padding for text content */
-    min-height: 350px;
+ height: auto;
+ padding-bottom: 0; /* Override 16:9 padding for text content */
+ min-height: 350px;
 }
 .video-box-text {
-    flex-direction: column;
-    padding: 30px;
+ flex-direction: column;
+ padding: 30px;
 }
 .video-box-text p {
-    margin-top: 15px;
-    font-size: 1.1rem;
-    max-width: 500px;
-    line-height: 1.5;
+ margin-top: 15px;
+ font-size: 1.1rem;
+ max-width: 500px;
+ line-height: 1.5;
 }
 
 
@@ -441,42 +458,6 @@ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 gap: var(--spacing-sm);
 margin-bottom: var(--spacing-md);
 }
-
-/* --- Full Gallery (gallery.html) - OLD styles */
-/*
-.big-gallery-title {
-font-family: var(--font-family-title); 
-font-size: 3.5rem;
-margin-bottom: 10px;
-color: var(--color-primary-accent);
-}
-
-.gallery-intro {
-font-size: 1.2rem;
-color: var(--color-text-dark);
-max-width: 800px;
-margin: 0 auto 40px auto;
-text-align: center;
-}
-
-.full-gallery-grid {
-display: grid;
-grid-template-columns: 1fr;
-gap: 40px;
-}
-
-.gallery-item-full {
-min-height: 450px;
-}
-
-.full-gallery-grid p.caption {
-text-align: center;
-font-size: 1.2rem;
-font-style: italic;
-color: #444;
-margin-top: -20px;
-}
-*/
 
 
 /* --- Contact Section --- */
@@ -829,52 +810,52 @@ flex-direction: column;
 
 /* Ensures the full gallery uses a grid layout with distinct columns */
 .full-gallery-grid {
-    display: grid;
-    /* Two columns for desktop, responsive wrap */
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
-    gap: 40px;
-    margin-top: var(--spacing-lg);
+ display: grid;
+ /* Two columns for desktop, responsive wrap */
+ grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+ gap: 40px;
+ margin-top: var(--spacing-lg);
 }
 
 /* Individual gallery items */
 .gallery-item-full {
-    min-height: auto; /* Remove fixed height for video content */
-    display: flex;
-    flex-direction: column;
+ min-height: auto; /* Remove fixed height for video content */
+ display: flex;
+ flex-direction: column;
 }
 
 /* Enhances the video container style for smaller items */
 .gallery-item-full .video-container {
-    padding-bottom: 56.25%; /* Maintain 16:9 aspect ratio */
-    height: 0;
-    margin: 0;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
-    border: 3px solid var(--color-accent-green) !important; /* Green border for variety */
+ padding-bottom: 56.25%; /* Maintain 16:9 aspect ratio */
+ height: 0;
+ margin: 0;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+ border: 3px solid var(--color-accent-green) !important; /* Green border for variety */
 }
 
 /* Custom Caption Styling */
 .full-gallery-grid p.caption {
-    text-align: center;
-    font-size: 1.1rem;
-    font-style: italic;
-    color: var(--color-text-dark);
-    margin-top: 15px; /* Increase space below video */
-    padding: 0 10px;
+ text-align: center;
+ font-size: 1.1rem;
+ font-style: italic;
+ color: var(--color-text-dark);
+ margin-top: 15px; /* Increase space below video */
+ padding: 0 10px;
 }
 
 /* Adjust title for gallery page */
 .gallery-intro {
-    font-size: 1.2rem;
-    color: var(--color-text-dark);
-    max-width: 800px;
-    margin: 0 auto 40px auto;
-    text-align: center;
+ font-size: 1.2rem;
+ color: var(--color-text-dark);
+ max-width: 800px;
+ margin: 0 auto 40px auto;
+ text-align: center;
 }
 
 /* Responsive adjustment for gallery grid */
 @media (max-width: 900px) {
-    .full-gallery-grid {
-        grid-template-columns: 1fr; /* Single column on smaller screens */
-        gap: 30px;
-    }
+ .full-gallery-grid {
+ grid-template-columns: 1fr; /* Single column on smaller screens */
+ gap: 30px;
+ }
 }
