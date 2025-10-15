@@ -179,25 +179,6 @@ color: var(--color-text-light);
 color: var(--color-primary-accent);
 }
 
-/* NEW: Multi-color Exclamation Mark for Welcome Banner */
-.sign-exclamation {
-    /* Apply a conic gradient for a mixed color effect */
-    background: conic-gradient(
-        var(--color-logo-k) 0% 25%,
-        var(--color-logo-a1) 25% 50%,
-        var(--color-logo-y) 50% 75%,
-        var(--color-logo-a2) 75% 100%
-    );
-    /* Clip gradient to the text shape and make text transparent */
-    -webkit-background-clip: text; 
-    background-clip: text; 
-    -webkit-text-fill-color: transparent;
-    color: transparent; 
-}
-
-/* New: Tagline for Rules Page */
-.tagline-rules {
-/* ... existing styles ... */
 /* New: Tagline for Rules Page */
 .tagline-rules {
     font-size: 1.2rem;
@@ -896,4 +877,4 @@ flex-direction: column;
         grid-template-columns: 1fr; /* Single column on smaller screens */
         gap: 30px;
     }
-  }
+}
