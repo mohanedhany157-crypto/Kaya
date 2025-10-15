@@ -179,6 +179,14 @@ color: var(--color-text-light);
 color: var(--color-primary-accent);
 }
 
+/* New: Tagline for Rules Page */
+.tagline-rules {
+    font-size: 1.2rem;
+    color: var(--color-text-dark);
+    font-weight: 600;
+    margin-top: 10px;
+}
+
 /* --- Header & Navigation --- */
 .header {
 background-color: var(--color-bg-white);
@@ -208,7 +216,8 @@ margin-left: var(--spacing-md);
 transition: color 0.3s;
 }
 
-.nav-menu a:hover {
+.nav-menu a:hover,
+.nav-menu a.active-link { /* Active link style for the current page */
 color: var(--color-primary-accent);
 }
 
@@ -251,6 +260,9 @@ box-shadow: 0 8px 15px rgba(255, 188, 0, 0.4);
 .btn:hover {
 transform: translateY(-4px);
 box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+.mt-3 {
+    margin-top: 1rem;
 }
 
 /* --- Hero Section and Placeholders --- */
@@ -302,41 +314,58 @@ overflow: hidden;
 
 /* UNIVERSAL RULE: Ensures all images inside a placeholder box fit the smaller container */
 .placeholder-box img {
-  max-width: 100%; 
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain; /* Scales image down to fit without cropping */
-  display: block;
+max-width: 100%; 
+max-height: 100%;
+width: auto;
+height: auto;
+object-fit: contain; /* Scales image down to fit without cropping */
+display: block;
 }
 
 /* --- Video Integration Styles (New) --- */
 .video-section {
-  padding: var(--spacing-lg) 0;
-  text-align: center;
+padding: var(--spacing-lg) 0;
+text-align: center;
 }
 
 .video-container {
-  max-width: 900px;
-  margin: var(--spacing-md) auto;
-  /* Aspect Ratio Box (16:9) for responsive video sizing */
-  position: relative;
-  padding-bottom: 56.25%; /* 16:9 Aspect Ratio (9 / 16 * 100) */
-  height: 0;
-  overflow: hidden;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-pop);
-  border: 5px solid var(--color-primary-accent); /* Fun border matching theme */
+max-width: 900px;
+margin: var(--spacing-md) auto;
+/* Aspect Ratio Box (16:9) for responsive video sizing */
+position: relative;
+padding-bottom: 56.25%; /* 16:9 Aspect Ratio (9 / 16 * 100) */
+height: 0;
+overflow: hidden;
+border-radius: var(--border-radius-lg);
+box-shadow: var(--shadow-pop);
+border: 5px solid var(--color-primary-accent); /* Fun border matching theme */
 }
 
 .video-container iframe,
 .video-container video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+border: 0;
+}
+
+/* New: Style for the video placeholder box */
+.video-placeholder {
+    height: auto;
+    padding-bottom: 0; /* Override 16:9 padding for text content */
+    min-height: 350px;
+}
+.video-box-text {
+    flex-direction: column;
+    padding: 30px;
+}
+.video-box-text p {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    max-width: 500px;
+    line-height: 1.5;
 }
 
 
@@ -413,9 +442,10 @@ gap: var(--spacing-sm);
 margin-bottom: var(--spacing-md);
 }
 
-/* --- Full Gallery (gallery.html) --- */
+/* --- Full Gallery (gallery.html) - OLD styles */
+/*
 .big-gallery-title {
-font-family: var(--font-family-title); /* Chelsea Market */
+font-family: var(--font-family-title); 
 font-size: 3.5rem;
 margin-bottom: 10px;
 color: var(--color-primary-accent);
@@ -446,6 +476,7 @@ font-style: italic;
 color: #444;
 margin-top: -20px;
 }
+*/
 
 
 /* --- Contact Section --- */
@@ -496,127 +527,150 @@ font-weight: 600;
 min-height: 20px;
 }
 
-/* --- Page Specific Styles for Deep Dive Content --- */
+/* --- Page Specific Styles for Deep Dive Content & Rules Page --- */
 
 /* Content Blocks (Pitch Block) */
 .pitch-block {
-  background-color: var(--color-bg-white);
-  padding: 40px;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-pop);
-  margin-bottom: 30px;
-  /* Use Fiery Orange as the main block accent */
-  border-left: 5px solid var(--color-logo-k); 
+background-color: var(--color-bg-white);
+padding: 40px;
+border-radius: var(--border-radius-lg);
+box-shadow: var(--shadow-pop);
+margin-bottom: 30px;
+/* Use Fiery Orange as the main block accent */
+border-left: 5px solid var(--color-logo-k); 
 }
 
 .pitch-block h2 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--color-logo-k); /* Fiery Orange */
-  margin-top: 0;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-  text-align: left; /* Override general h2 center for block titles */
+font-size: 2.2rem;
+font-weight: 700;
+color: var(--color-logo-k); /* Fiery Orange */
+margin-top: 0;
+border-bottom: 2px solid #ddd;
+padding-bottom: 10px;
+margin-bottom: 20px;
+text-align: left; /* Override general h2 center for block titles */
 }
 
 .pitch-block h3 {
-  font-size: 1.6rem;
-  color: var(--color-accent-green); /* Green subheadings */
-  margin-top: 25px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
+font-size: 1.6rem;
+color: var(--color-accent-green); /* Green subheadings */
+margin-top: 25px;
+margin-bottom: 10px;
+display: flex;
+align-items: center;
 }
 .pitch-block h3 i {
-  margin-right: 10px;
-  color: var(--color-logo-k); /* Orange icon color */
+margin-right: 10px;
+color: var(--color-logo-k); /* Orange icon color */
 }
 
-.pitch-block p, .pitch-block ul {
-  color: var(--color-text-dark);
-  font-size: 1.05rem;
+.pitch-block p, .pitch-block ul, .pitch-block ol {
+color: var(--color-text-dark);
+font-size: 1.05rem;
 }
 
-.pitch-block ul {
-  list-style: none;
-  padding-left: 0;
-  margin-bottom: 20px;
+.pitch-block ul, .pitch-block ol {
+padding-left: 20px;
+margin-bottom: 20px;
 }
 
+/* Default unordered list style */
 .pitch-block ul li {
-  margin-bottom: 10px;
-  padding-left: 1.5rem;
-  position: relative;
+margin-bottom: 10px;
+padding-left: 0;
+position: relative;
+list-style: disc; /* Use default disc */
 }
 
 .pitch-block ul li::before {
-  content: "\2022"; /* Bullet point */
-  color: var(--color-secondary-accent); /* Yellow bullets */
-  font-weight: bold;
-  display: inline-block;
-  width: 1em;
-  margin-left: -1em;
-  position: absolute;
-  left: 0;
+content: none; /* Remove custom bullet for general list */
+}
+
+/* Custom list style for Card Effects */
+.card-effect-list {
+list-style: none;
+padding-left: 0;
+}
+.card-effect-list li {
+margin-bottom: 15px;
+padding-left: 1.5rem;
+position: relative;
+font-weight: 600;
+}
+.card-effect-list li::before {
+content: "\f058"; /* Check-circle icon */
+font-family: 'Font Awesome 6 Free';
+font-weight: 900;
+color: var(--color-secondary-accent); /* Yellow checkmark */
+display: inline-block;
+width: 1em;
+margin-left: -1.5em;
+position: absolute;
+left: 0;
 }
 
 /* Stat Boxes */
 .stat-box {
-  display: flex;
-  justify-content: space-around;
-  gap: 20px;
-  margin: 30px 0;
-  text-align: center;
+display: flex;
+justify-content: space-around;
+gap: 20px;
+margin: 30px 0;
+text-align: center;
 }
 .stat-item {
-  padding: 20px;
-  background-color: #fff8e8; /* Very light yellow/orange background for stats */
-  border-radius: 8px;
-  flex: 1;
-  border: 2px solid var(--color-secondary-accent); /* Yellow border */
-  transition: all 0.3s ease;
+padding: 20px;
+background-color: #fff8e8; /* Very light yellow/orange background for stats */
+border-radius: 8px;
+flex: 1;
+border: 2px solid var(--color-secondary-accent); /* Yellow border */
+transition: all 0.3s ease;
 }
 .stat-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(253, 77, 10, 0.15);
+transform: translateY(-5px);
+box-shadow: 0 10px 20px rgba(253, 77, 10, 0.15);
 }
 .stat-item .value {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--color-logo-k); /* Fiery Orange */
-  line-height: 1.1;
+font-size: 2.5rem;
+font-weight: 800;
+color: var(--color-logo-k); /* Fiery Orange */
+line-height: 1.1;
 }
 .stat-item .label {
-  font-size: 1rem;
-  color: var(--color-text-dark);
-  margin-top: 5px;
+font-size: 1rem;
+color: var(--color-text-dark);
+margin-top: 5px;
 }
 
-/* Investment List Specific Styling */
-.investment-list li::before {
-  content: "\f0d7"; /* Solid caret down icon */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  color: var(--color-accent-green); /* Green carets */
-}
-
-/* Quote Block Styling */
+/* Quote Block Styling (used for Special Rule) */
 blockquote {
-  border-left: 5px solid var(--color-accent-green) !important; /* Green border for quotes */
-  background-color: #f7fff5; /* Very light green background */
-  padding: 15px 25px;
-  margin: 30px 0;
-  font-style: italic;
-  border-radius: var(--border-radius-sm);
+border-left: 5px solid var(--color-accent-green) !important; /* Green border for quotes */
+background-color: #f7fff5; /* Very light green background */
+padding: 15px 25px;
+margin: 30px 0;
+font-style: italic;
+border-radius: var(--border-radius-sm);
 }
 blockquote i {
-  color: var(--color-accent-green) !important; /* Green quote marks */
+color: var(--color-accent-green) !important; /* Green quote marks */
+}
+blockquote.special-rule {
+text-align: center;
+font-style: normal;
+}
+blockquote.special-rule p {
+margin: 0;
+font-size: 1.1rem;
+font-style: italic;
+}
+blockquote.special-rule strong {
+font-size: 1.3rem;
+display: block;
+margin-bottom: 5px;
 }
 
 /* Final Pitch Block Accent (using Yellow for variety/secondary accent) */
 .pitch-block.text-center {
-  border-left: 5px solid var(--color-secondary-accent) !important; 
+border-left: 5px solid var(--color-secondary-accent) !important; 
 }
 
 /* --- Footer --- */
@@ -768,4 +822,59 @@ padding: 20px;
 .stat-box {
 flex-direction: column;
 }
+}
+
+
+/* --- START OF NEW GALLERY STYLES (gallery.html) --- */
+
+/* Ensures the full gallery uses a grid layout with distinct columns */
+.full-gallery-grid {
+    display: grid;
+    /* Two columns for desktop, responsive wrap */
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+    gap: 40px;
+    margin-top: var(--spacing-lg);
+}
+
+/* Individual gallery items */
+.gallery-item-full {
+    min-height: auto; /* Remove fixed height for video content */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Enhances the video container style for smaller items */
+.gallery-item-full .video-container {
+    padding-bottom: 56.25%; /* Maintain 16:9 aspect ratio */
+    height: 0;
+    margin: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Lighter shadow */
+    border: 3px solid var(--color-accent-green) !important; /* Green border for variety */
+}
+
+/* Custom Caption Styling */
+.full-gallery-grid p.caption {
+    text-align: center;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--color-text-dark);
+    margin-top: 15px; /* Increase space below video */
+    padding: 0 10px;
+}
+
+/* Adjust title for gallery page */
+.gallery-intro {
+    font-size: 1.2rem;
+    color: var(--color-text-dark);
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    text-align: center;
+}
+
+/* Responsive adjustment for gallery grid */
+@media (max-width: 900px) {
+    .full-gallery-grid {
+        grid-template-columns: 1fr; /* Single column on smaller screens */
+        gap: 30px;
+    }
 }
