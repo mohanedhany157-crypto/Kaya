@@ -152,12 +152,13 @@ color: var(--color-logo-a2);
 
 /* --- Welcome Banner Styling: Yellow Background --- */
 .welcome-banner {
-background-color: var(--color-secondary-accent);
-/* Yellow background */
+/* CHANGE THIS LINE to use the dark footer color for maximum contrast */
+background-color: #34495E; 
 padding: 20px 0;
 text-align: center;
 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
+
 
 .big-sign {
 font-family: var(--font-family-title); /* Chelsea Market */
