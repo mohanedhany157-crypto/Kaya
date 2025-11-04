@@ -1019,3 +1019,28 @@ flex-direction: column;
   color: var(--color-logo-a2);
   font-weight: 600;
 }
+
+/* --- Homepage Feature Section Tweaks --- */
+
+#why-kaya, .feature-section {
+  padding: var(--spacing-lg) 0;
+}
+
+.feature-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: var(--color-primary-accent);
+}
+
+.feature-card p {
+  font-size: 1.05rem;
+  color: var(--color-text-dark);
+}
+
+.feature-icon-circle {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 10px;
+  font-size: 1.8rem;
+}
