@@ -1045,40 +1045,36 @@ flex-direction: column;
   font-size: 1.8rem;
 }
 
-/* Media Page 2 top + 1 centered layout */
-.media-grid-2x1 {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  justify-items: center;
-}
-
-/* Media Page 2x1 center grid → all videos same size */
+/* Make all media videos same size and 2x1 layout */
 .media-grid-2x1 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 25px;
+  justify-items: center;
+}
+
+.media-grid-2x1 .gallery-item-full {
+  width: 100%;
+  max-width: 420px; /* same width for all videos */
 }
 
 .media-grid-2x1 .gallery-item-full video {
   width: 100%;
   height: auto;
+  display: block;
+  border-radius: 12px;
 }
 
-/* Third video centered below same size */
+/* 3rd video centered same size */
 .media-grid-2x1 .gallery-item-full:nth-child(3) {
   grid-column: 1 / span 2;
   justify-self: center;
-  width: 50%; /* SAME SIZE as others */
 }
 
-/* Mobile: stack all normally */
+/* Mobile responsive */
 @media (max-width: 768px) {
   .media-grid-2x1 {
     grid-template-columns: 1fr;
-  }
-  .media-grid-2x1 .gallery-item-full:nth-child(3) {
-    width: 100%;
   }
 }
 
