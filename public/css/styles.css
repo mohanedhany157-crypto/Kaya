@@ -1044,3 +1044,28 @@ flex-direction: column;
   margin: 0 auto 10px;
   font-size: 1.8rem;
 }
+
+/* Media Page 2 top + 1 centered layout */
+.media-grid-2x1 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  justify-items: center;
+}
+
+.media-grid-2x1 .gallery-item-full:nth-child(3) {
+  grid-column: 1 / span 2;  /* makes 3rd item span both columns */
+  justify-self: center;     /* center it */
+  width: 70%;               /* optional: makes it smaller & centered */
+}
+
+/* Mobile responsive behavior */
+@media (max-width: 768px) {
+  .media-grid-2x1 {
+    grid-template-columns: 1fr; /* stack videos on mobile */
+  }
+
+  .media-grid-2x1 .gallery-item-full:nth-child(3) {
+    width: 100%;
+  }
+}
