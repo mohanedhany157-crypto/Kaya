@@ -1,77 +1,80 @@
-/* --- script.js --- */
+/**
+ * ======================================================
+ * JAVASCRIPT FOR KAYA STORE & SITE INTERACTIVITY
+ * ======================================================
+ */
 
-/* --- MOBILE MENU TOGGLE --- */
-document.addEventListener('DOMContentLoaded', function() {
+// 1. Dynamic Year Update
+function setDynamicYear() {
+  const yearElement = document.getElementById('current-year');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+}
+
+// 2. Mobile Menu Toggle
+function setupMobileMenu() {
   const menuToggle = document.querySelector('.menu-toggle');
   const navMenu = document.querySelector('.nav-menu');
 
-  if(menuToggle && navMenu) {
+  if (menuToggle && navMenu) {
+    // Toggle menu on hamburger click
     menuToggle.addEventListener('click', () => {
       navMenu.classList.toggle('active');
+      
+      // Optional: Switch icon between bars and X
+      const icon = menuToggle.querySelector('i');
+      if (icon) {
+        if (navMenu.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+      }
+    });
+
+    // Close menu when a link is clicked (better user experience)
+    navMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        // Reset icon
+        const icon = menuToggle.querySelector('i');
+        if (icon) {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+      });
     });
   }
+}
+
+// 3. Store Interaction Placeholders (New for Store Design)
+function setupStoreInteractions() {
+  // Handle "Add to Cart" Button Clicks
+  const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+  
+  addToCartButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault(); // Stops page jump if it's an anchor tag
+      // Simple feedback for the user
+      alert('Great choice! Item added to your cart. 🛒');
+    });
+  });
+
+  // Handle Main Cart Icon Click
+  const cartIcon = document.querySelector('.cart-icon');
+  if (cartIcon) {
+    cartIcon.addEventListener('click', () => {
+      alert('Your cart is currently empty. Start shopping! 🛍️');
+    });
+  }
+}
+
+// Initialize All Functions when DOM is Ready
+document.addEventListener('DOMContentLoaded', () => {
+  setDynamicYear();
+  setupMobileMenu();
+  setupStoreInteractions();
 });
-
-/* --- SMOOTH SCROLL FOR ANCHOR LINKS --- */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if(target) {
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-
-    // Close mobile menu after click
-    const navMenu = document.querySelector('.nav-menu');
-    if(navMenu.classList.contains('active')) {
-      navMenu.classList.remove('active');
-    }
-  });
-});
-
-/* --- OPTIONAL: ADD HOVER ANIMATION TO LINKTREE BUTTONS --- */
-const links = document.querySelectorAll('.link-btn, .order-btn, .btn');
-
-links.forEach(link => {
-  link.addEventListener('mouseenter', () => {
-    link.style.transform = 'translateY(-4px)';
-    link.style.transition = 'transform 0.25s ease';
-  });
-
-  link.addEventListener('mouseleave', () => {
-    link.style.transform = 'translateY(0)';
-  });
-});
-
-/* --- OPTIONAL: ADD SCROLL REVEAL EFFECT FOR GALLERY ITEMS --- */
-const galleryItems = document.querySelectorAll('.gallery-item-full, .feature-card, .pitch-block');
-
-const revealOnScroll = () => {
-  const windowHeight = window.innerHeight;
-  galleryItems.forEach(item => {
-    const elementTop = item.getBoundingClientRect().top;
-    const revealPoint = 150; // distance from bottom of screen
-    if(elementTop < windowHeight - revealPoint) {
-      item.classList.add('active');
-    }
-  });
-};
-
-window.addEventListener('scroll', revealOnScroll);
-window.addEventListener('load', revealOnScroll);
-
-/* Add CSS for .active if not in CSS yet:
-   .gallery-item-full.active, .feature-card.active, .pitch-block.active {
-       opacity: 1;
-       transform: translateY(0);
-       transition: all 0.6s ease-out;
-   }
-   Initial CSS:
-   .gallery-item-full, .feature-card, .pitch-block {
-       opacity: 0;
-       transform: translateY(50px);
-   }
-*/
