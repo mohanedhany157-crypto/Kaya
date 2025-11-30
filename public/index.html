@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaya - Official Store | Learn Financial Literacy through Play</title>
-    <link rel="icon" type="image/x-icon" href="assests/logo.ico">
-    
-    <!-- EXTERNAL CSS LINKS -->
+    <title>Kaya - Official Store</title>
+    <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
@@ -28,10 +26,14 @@
         <nav class="nav-menu">
             <a href="index.html" class="active-link">Store</a>
             <a href="learn.html">How to Play</a>
-            <a href="gallery.html">Media</a>
+
             <a href="links.html">Contact/Links</a>
-            <!-- Cart Icon -->
-            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+            
+            <!-- Cart Icon Wrapper (New structure for Badge) -->
+            <div class="cart-wrapper">
+                <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+                <span class="cart-badge">0</span>
+            </div>
         </nav>
     </div>
 </header>
@@ -46,7 +48,6 @@
     </div>
 </div>
 
-<!-- Main Product Grid (Store Page) -->
 <section id="store" class="section">
     <div class="container">
         <h2 class="title-with-icon"><i class="fas fa-box"></i> Featured Products</h2>
@@ -54,81 +55,87 @@
 
         <div class="product-grid">
 
-            <!-- Product 1: The Core Game -->
+            <!-- Product 1 -->
             <div class="product-card">
                 <div class="product-image-container">
-                    <!-- Placeholder image with fallback -->
                     <img src="assests/hero1.jpg" alt="Kaya Card Game Box" onerror="this.onerror=null; this.src='https://placehold.co/400x350/FFBC00/333?text=KAYA+CORE+GAME';">
                     <span class="product-badge">Best Seller</span>
                 </div>
                 <div class="product-details">
-                    <h3>KAYA: The Financial Journey (Core Game)</h3>
-                    <p>The essential game set to learn budgeting, saving, and smart spending habits.</p>
+                    <h3>KAYA: The Financial Journey</h3>
+                    <p>The essential game set to learn budgeting, saving, and smart spending.</p>
                     <p class="price">RM 89.90</p>
-                    <button class="btn btn-primary add-to-cart-btn">
+                    <!-- DATA ATTRIBUTES ADDED HERE -->
+                    <button class="btn btn-primary add-to-cart-btn" 
+                        data-id="1" 
+                        data-name="KAYA Core Game" 
+                        data-price="89.90">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                 </div>
             </div>
 
-            <!-- Product 2: The Investment Expansion (Example) -->
+            <!-- Product 2 -->
             <div class="product-card">
                 <div class="product-image-container">
-                    <!-- Placeholder image with fallback -->
-                    <img src="assests/expansion.jpg" alt="Kaya Expansion Pack: Stocks & Bonds" onerror="this.onerror=null; this.src='https://placehold.co/400x350/4D9222/FFF?text=INVESTMENT+EXPANSION';">
+                    <img src="assests/expansion.jpg" alt="Kaya Expansion Pack" onerror="this.onerror=null; this.src='https://placehold.co/400x350/4D9222/FFF?text=INVESTMENT+EXPANSION';">
                     <span class="product-badge" style="background-color: var(--color-accent-green);">New!</span>
                 </div>
                 <div class="product-details">
-                    <h3>The Investment Challenge (Expansion)</h3>
-                    <p>Introduces advanced concepts: stocks, bonds, and passive income strategies.</p>
+                    <h3>The Investment Challenge</h3>
+                    <p>Introduces advanced concepts: stocks, bonds, and passive income.</p>
                     <p class="price">RM 45.00</p>
-                    <button class="btn btn-secondary add-to-cart-btn">
+                    <!-- DATA ATTRIBUTES ADDED HERE -->
+                    <button class="btn btn-secondary add-to-cart-btn" 
+                        data-id="2" 
+                        data-name="Investment Expansion" 
+                        data-price="45.00">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                 </div>
             </div>
             
-            <!-- Product 3: The Board Game Mat (Accessory) -->
+            <!-- Product 3 -->
             <div class="product-card">
                 <div class="product-image-container">
-                    <!-- Placeholder image with fallback -->
                     <img src="assests/playmat.jpg" alt="Kaya Play Mat" onerror="this.onerror=null; this.src='https://placehold.co/400x350/0094E8/FFF?text=KAYA+GAME+MAT';">
                     <span class="product-badge" style="background-color: var(--color-logo-a2);">Accessory</span>
                 </div>
                 <div class="product-details">
                     <h3>KAYA Premium Play Mat</h3>
-                    <p>Durable, non-slip mat defining clear zones for income, savings, and discard piles.</p>
+                    <p>Durable, non-slip mat defining clear zones for gameplay.</p>
                     <p class="price">RM 35.00</p>
-                    <button class="btn btn-secondary add-to-cart-btn">
+                    <!-- DATA ATTRIBUTES ADDED HERE -->
+                    <button class="btn btn-secondary add-to-cart-btn" 
+                        data-id="3" 
+                        data-name="Premium Play Mat" 
+                        data-price="35.00">
                         <i class="fas fa-cart-plus"></i> Add to Cart
                     </button>
                 </div>
             </div>
 
         </div>
-        
-        <!-- Value Proposition Section (Inspired by Nuukk's trust/delivery info) -->
+
         <div class="value-prop-grid">
             <div class="value-prop-item">
                 <i class="fas fa-shield-alt"></i>
                 <h4>Quality Guaranteed</h4>
-                <p>Designed by educators, play-tested by families. High-quality, durable cards.</p>
+                <p>Designed by educators, play-tested by families.</p>
             </div>
             <div class="value-prop-item">
                 <i class="fas fa-truck-fast"></i>
                 <h4>Fast & Reliable Shipping</h4>
-                <p>Orders processed within 1-2 business days. Tracked delivery worldwide.</p>
+
             </div>
             <div class="value-prop-item">
                 <i class="fas fa-smile"></i>
                 <h4>100% Fun Promise</h4>
-                <p>If your family isn't learning or having fun, we offer a full refund!</p>
             </div>
         </div>
 
     </div>
 </section>
-
 
 <footer class="footer">
     <div class="container footer-content">
@@ -138,30 +145,24 @@
             </div>
             <p>Play, Learn, Grow (Financially).</p>
         </div>
-
         <div class="footer-links">
             <h3>Quick Links</h3>
             <a href="index.html">Store Home</a>
             <a href="learn.html">How to Play</a>
-            <a href="gallery.html">Media</a>
             <a href="links.html">Contact Us</a>
         </div>
-
         <div class="footer-social">
             <h3>Follow Our Fun!</h3>
             <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
                 <i class="fab fa-instagram"></i> Instagram
             </a>
         </div>
-
         <div class="footer-info">
             <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
-            <p class="copyright-text">Teaching the world how to manage money, one card at a time!</p>
         </div>
     </div>
 </footer>
 
-<!-- EXTERNAL JS LINK -->
 <script src="js/script.js"></script>
 </body>
 </html>
