@@ -1,5 +1,5 @@
 // server.js
-/*const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
@@ -134,4 +134,3 @@ if (err) res.status(404).send('Not found');
 app.listen(port, () => {
 console.log(`Server running on port ${port}`);
 });
-*/
