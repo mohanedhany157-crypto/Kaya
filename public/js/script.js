@@ -26,10 +26,8 @@ function updateCartCount() {
 }
 
 function addToCart(id, name, price) {
-    // Add item to cart array
     cart.push({ id, name, price });
     saveCart();
-    // Open cart to show user
     openCart();
 }
 
@@ -48,15 +46,14 @@ function injectCartModal() {
                 <button class="close-cart"><i class="fas fa-times"></i></button>
             </div>
             <div class="cart-items">
-                <!-- Items injected here -->
                 <p style="text-align:center; color:#999; margin-top:20px;">Your cart is empty.</p>
             </div>
             <div class="cart-footer">
                 <div class="cart-total">
-                    <span>Total:</span>
+                    <span>Total (Rounded):</span>
                     <span class="total-price">USD 0.00</span>
                 </div>
-                <button class="btn btn-primary checkout-btn">Checkout Now</button>
+                <button class="btn btn-primary checkout-btn">Checkout on WhatsApp</button>
             </div>
         </div>
     </div>
@@ -72,15 +69,9 @@ function injectCartModal() {
         if (e.target === overlay) closeCart();
     });
     
-    // Bind Checkout
+    // Bind Checkout Function
     const checkoutBtn = document.querySelector('.checkout-btn');
-    if(checkoutBtn) checkoutBtn.addEventListener('click', () => {
-        if(cart.length === 0) {
-            alert("Cart is empty!");
-        } else {
-            alert("Proceeding to checkout... (This is a demo)");
-        }
-    });
+    if(checkoutBtn) checkoutBtn.addEventListener('click', processCheckout);
 }
 
 function openCart() {
@@ -107,12 +98,11 @@ function renderCartItems() {
     }
 
     let html = '';
-    let total = 0;
+    let exactTotal = 0;
 
     cart.forEach((item, index) => {
-        // Ensure price is treated as a float
         let priceVal = parseFloat(item.price);
-        total += priceVal;
+        exactTotal += priceVal;
         
         html += `
         <div class="cart-item">
@@ -125,11 +115,47 @@ function renderCartItems() {
         `;
     });
 
+    // --- ROUNDING LOGIC ---
+    // Rounds to the nearest whole number (e.g., 16.98 -> 17.00)
+    let roundedTotal = Math.round(exactTotal);
+
     container.innerHTML = html;
-    totalEl.textContent = 'USD ' + total.toFixed(2);
+    totalEl.textContent = 'USD ' + roundedTotal.toFixed(2);
 }
 
-// 3. Page Initialization
+// 3. Functional Checkout (WhatsApp Integration)
+function processCheckout() {
+    if(cart.length === 0) {
+        alert("Your cart is empty! Add some items first.");
+        return;
+    }
+
+    // 1. Calculate final rounded total again
+    let exactTotal = 0;
+    let messageItems = "";
+    
+    cart.forEach(item => {
+        exactTotal += parseFloat(item.price);
+        messageItems += `- ${item.name} (USD ${item.price})\n`;
+    });
+
+    let roundedTotal = Math.round(exactTotal);
+
+    // 2. Construct WhatsApp Message
+    // %0a creates a new line in the URL
+    let message = `Hi Kaya Team! 👋%0aI would like to place an order:%0a%0a${encodeURIComponent(messageItems)}%0a*Total Price (Rounded): USD ${roundedTotal.toFixed(2)}*`;
+
+    // 3. Open WhatsApp with your number (from links.html)
+    // Using number: 601116898234
+    window.open(`https://wa.me/601116898234?text=${message}`, '_blank');
+
+    // 4. Clear Cart and Close
+    cart = [];
+    saveCart();
+    closeCart();
+}
+
+// 4. Page Initialization
 document.addEventListener('DOMContentLoaded', () => {
     // Dynamic Year
     const yearElement = document.getElementById('current-year');
@@ -151,15 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
     addBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            // Get data from the clicked button
             const id = btn.getAttribute('data-id');
             const name = btn.getAttribute('data-name');
             const price = btn.getAttribute('data-price');
             
             if(id && name && price) {
                 addToCart(id, name, price);
-            } else {
-                console.error("Missing data attributes on button", btn);
             }
         });
     });
