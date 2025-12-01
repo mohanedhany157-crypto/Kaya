@@ -27,13 +27,13 @@
             <a href="index.html" class="active-link">Store</a>
             <a href="learn.html">How to Play</a>
             <a href="links.html">Contact/Links</a>
-            
-            <!-- Cart Icon Wrapper -->
-            <div class="cart-wrapper">
-                <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
-                <span class="cart-badge">0</span>
-            </div>
         </nav>
+
+        <!-- Cart Icon Wrapper (Moved OUTSIDE nav-menu for mobile visibility) -->
+        <div class="cart-wrapper">
+            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+            <span class="cart-badge">0</span>
+        </div>
     </div>
 </header>
 
@@ -62,7 +62,6 @@
                 <div class="product-details">
                     <h3>KAYA: CARD GAME</h3>
                     <p class="price">USD 12.99</p>
-                    <!-- CHANGED TO btn-primary -->
                     <button class="btn btn-primary add-to-cart-btn" 
                         data-id="1" 
                         data-name="KAYA Core Game" 
@@ -81,7 +80,6 @@
                 <div class="product-details">
                     <h3>Stickers</h3>
                     <p class="price">USD 3.99</p>
-                    <!-- CHANGED TO btn-primary -->
                     <button class="btn btn-primary add-to-cart-btn" 
                         data-id="2" 
                         data-name="Stickers" 
@@ -95,12 +93,11 @@
             <div class="product-card">
                 <div class="product-image-container">
                     <img src="pic/POST CARD.PNG" alt="Kaya Post Card" onerror="this.onerror=null; this.src='https://placehold.co/400x350/0094E8/FFF?text=POST+CARD';">
-                    <span class="product-badge" style="background-color: var(-color-accent-green);">Accessory</span>
+                    <span class="product-badge" style="background-color: var(---color-accent-green);">Accessory</span>
                 </div>
                 <div class="product-details">
                     <h3>Post Card</h3>
                     <p class="price">USD 2.99</p>
-                    <!-- CHANGED TO btn-primary -->
                     <button class="btn btn-primary add-to-cart-btn" 
                         data-id="3" 
                         data-name="Post card" 
