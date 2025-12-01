@@ -236,7 +236,7 @@ h2 {
     margin-bottom: 15px;
 }
 
-/* --- Content Blocks (Pitch Block) --- */
+/* --- Content Blocks (Pitch Block) - RESTORED FOR LEARN PAGE --- */
 .pitch-block {
     background-color: var(--color-bg-white);
     padding: 40px;
@@ -265,9 +265,10 @@ h2 {
 }
 .pitch-block ul li {
     margin-bottom: 10px;
+    list-style: disc; /* Ensure bullets show */
 }
 
-/* --- Stat Boxes --- */
+/* --- Stat Boxes (RESTORED) --- */
 .stat-box {
     display: flex;
     justify-content: space-around;
@@ -311,7 +312,7 @@ blockquote i {
     color: var(--color-accent-green) !important;
 }
 
-/* --- LEARN PAGE SPECIFIC STYLES (RESTORED) --- */
+/* --- LEARN PAGE SPECIFIC LAYOUT (RESTORED) --- */
 .rules-main-content {
     display: grid;
     grid-template-columns: 1fr;

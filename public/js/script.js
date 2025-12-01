@@ -39,7 +39,6 @@ function removeFromCart(index) {
 }
 
 // 2. Inject Cart Modal HTML
-// We do this via JS so you don't have to edit every HTML file
 function injectCartModal() {
     const modalHTML = `
     <div class="cart-modal-overlay">
@@ -55,7 +54,7 @@ function injectCartModal() {
             <div class="cart-footer">
                 <div class="cart-total">
                     <span>Total:</span>
-                    <span class="total-price">RM 0.00</span>
+                    <span class="total-price">USD 0.00</span>
                 </div>
                 <button class="btn btn-primary checkout-btn">Checkout Now</button>
             </div>
@@ -65,13 +64,17 @@ function injectCartModal() {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
     // Bind Close Events
-    document.querySelector('.close-cart').addEventListener('click', closeCart);
-    document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => {
-        if (e.target === document.querySelector('.cart-modal-overlay')) closeCart();
+    const closeBtn = document.querySelector('.close-cart');
+    if(closeBtn) closeBtn.addEventListener('click', closeCart);
+    
+    const overlay = document.querySelector('.cart-modal-overlay');
+    if(overlay) overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeCart();
     });
     
     // Bind Checkout
-    document.querySelector('.checkout-btn').addEventListener('click', () => {
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    if(checkoutBtn) checkoutBtn.addEventListener('click', () => {
         if(cart.length === 0) {
             alert("Cart is empty!");
         } else {
@@ -99,7 +102,7 @@ function renderCartItems() {
     
     if (cart.length === 0) {
         container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Your cart is empty.</p>';
-        totalEl.textContent = 'RM 0.00';
+        totalEl.textContent = 'USD 0.00';
         return;
     }
 
@@ -107,12 +110,15 @@ function renderCartItems() {
     let total = 0;
 
     cart.forEach((item, index) => {
-        total += parseFloat(item.price);
+        // Ensure price is treated as a float
+        let priceVal = parseFloat(item.price);
+        total += priceVal;
+        
         html += `
         <div class="cart-item">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
-                <span class="cart-item-price">RM ${parseFloat(item.price).toFixed(2)}</span>
+                <span class="cart-item-price">USD ${priceVal.toFixed(2)}</span>
             </div>
             <i class="fas fa-trash remove-item" onclick="removeFromCart(${index})"></i>
         </div>
@@ -120,7 +126,7 @@ function renderCartItems() {
     });
 
     container.innerHTML = html;
-    totalEl.textContent = 'RM ' + total.toFixed(2);
+    totalEl.textContent = 'USD ' + total.toFixed(2);
 }
 
 // 3. Page Initialization
@@ -145,19 +151,24 @@ document.addEventListener('DOMContentLoaded', () => {
     addBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
+            // Get data from the clicked button
             const id = btn.getAttribute('data-id');
             const name = btn.getAttribute('data-name');
             const price = btn.getAttribute('data-price');
-            addToCart(id, name, price);
+            
+            if(id && name && price) {
+                addToCart(id, name, price);
+            } else {
+                console.error("Missing data attributes on button", btn);
+            }
         });
     });
 
     // Bind Cart Icon Open
-    const cartIcon = document.querySelector('.cart-wrapper'); // We will change html to wrap icon
-    if(cartIcon) {
-        cartIcon.addEventListener('click', openCart);
+    const cartWrapper = document.querySelector('.cart-wrapper');
+    if(cartWrapper) {
+        cartWrapper.addEventListener('click', openCart);
     } else {
-        // Fallback if wrapper not found, try raw icon
         const rawIcon = document.querySelector('.cart-icon');
         if(rawIcon) rawIcon.addEventListener('click', openCart);
     }
