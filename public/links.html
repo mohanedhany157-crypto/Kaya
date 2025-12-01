@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaya - Connect & Links</title>
-    <link rel="icon" type="image/x-icon" href="assests/logo.ico">
+    <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
     
     <!-- EXTERNAL CSS LINKS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -28,9 +28,13 @@
             <a href="index.html">Store</a>
             <a href="learn.html">How to Play</a> 
             <a href="links.html" class="active-link">Contact/Links</a> 
-            <!-- Cart Icon -->
-            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
         </nav>
+
+        <!-- Cart Icon Wrapper (Moved OUTSIDE nav-menu so it is always visible on mobile) -->
+        <div class="cart-wrapper">
+            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+            <span class="cart-badge">0</span>
+        </div>
     </div>
 </header>
 
@@ -46,11 +50,17 @@
 
 <section id="contact-page" class="section contact-section">
     <div class="container contact-content">
-        <h2 class="title-with-icon"><i class="fas fa-link"></i> Quick Links</h2>
-        <p class="section-tagline text-center">Follow us, chat with us, or shop the game!</p>
-
+        
         <div class="linktree">
             
+            <!-- KAYA PROFILE PICTURE (Added Here) -->
+            <div class="profile-container">
+                <img src="pic/icon.PNG" alt="Kaya Logo" class="profile-pic">
+            </div>
+
+            <h2 class="title-with-icon" style="margin-bottom: 20px;">Quick Links</h2>
+            <p class="section-tagline text-center" style="margin-bottom: 30px;">Follow us, chat with us, or shop the game!</p>
+
             <!-- Link 1: Store (High Priority) -->
             <a href="index.html" class="link-btn btn-primary" style="background-color: var(--color-primary-accent);">
                 <i class="fas fa-shopping-bag"></i> Buy the Game
@@ -100,7 +110,6 @@
 
         <div class="footer-info">
             <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
-            <p class="copyright-text">Teaching the world how to manage money, one card at a time!</p>
         </div>
     </div>
 </footer>
