@@ -36,7 +36,7 @@ function removeFromCart(index) {
     saveCart();
 }
 
-// 2. Inject Cart & Checkout Modal HTML
+// 2. Inject Cart & Professional Checkout Modal HTML
 function injectCartModal() {
     const modalHTML = `
     <div class="cart-modal-overlay">
@@ -50,7 +50,7 @@ function injectCartModal() {
                 </div>
                 <div class="cart-body">
                     <div class="cart-items">
-                        <p style="text-align:center; color:#999; margin-top:20px;">Your cart is empty.</p>
+                        <p style="text-align:center; color:#666; margin-top:20px;">Your cart is empty.</p>
                     </div>
                 </div>
                 <div class="cart-footer">
@@ -62,48 +62,62 @@ function injectCartModal() {
                 </div>
             </div>
 
-            <!-- CHECKOUT FORM VIEW (Hidden initially) -->
-            <div id="checkout-view" style="display:none;">
+            <!-- CHECKOUT FORM VIEW -->
+            <div id="checkout-view" style="display:none; height: 100%; display: flex; flex-direction: column;">
                 <div class="cart-header">
                     <button class="back-to-cart"><i class="fas fa-arrow-left"></i> Back</button>
-                    <h3>Checkout</h3>
+                    <h3>Secure Checkout</h3>
                     <button class="close-cart"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="cart-body checkout-form-container active">
+                <div class="cart-body">
                     <form id="order-form">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Shipping Address</label>
-                            <input type="text" id="address" placeholder="123 Kaya Street" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="city">City & Zip Code</label>
-                            <input type="text" id="city" placeholder="Kuala Lumpur, 50000" required>
-                        </div>
                         
-                        <div class="form-group">
-                            <label>Payment Method</label>
-                            <div class="payment-options">
-                                <div class="payment-option selected" onclick="selectPayment(this, 'card')">
-                                    <i class="fas fa-credit-card"></i>
-                                    Card
-                                </div>
-                                <div class="payment-option" onclick="selectPayment(this, 'transfer')">
-                                    <i class="fas fa-university"></i>
-                                    Transfer
-                                </div>
+                        <h4 class="checkout-section-title"><i class="fas fa-shipping-fast"></i> Shipping Details</h4>
+                        <div class="checkout-grid">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" placeholder="e.g. John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" placeholder="e.g. +60 12-345 6789" required>
                             </div>
                         </div>
 
-                        <div class="cart-total">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="e.g. john@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Shipping Address</label>
+                            <input type="text" id="address" placeholder="Street, City, Zip Code" required>
+                        </div>
+                        
+                        <h4 class="checkout-section-title" style="margin-top: 25px;"><i class="fas fa-credit-card"></i> Payment Method</h4>
+                        <div class="payment-options">
+                            <div class="payment-option selected" onclick="selectPayment(this, 'credit-card')">
+                                <i class="fab fa-cc-visa"></i>
+                                <span>Credit Card</span>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this, 'paypal')">
+                                <i class="fab fa-paypal"></i>
+                                <span>PayPal</span>
+                            </div>
+                            <div class="payment-option" onclick="selectPayment(this, 'transfer')">
+                                <i class="fas fa-university"></i>
+                                <span>Bank Transfer</span>
+                            </div>
+                        </div>
+
+                        <div class="cart-total" style="font-size: 1.2rem; border-top: 1px solid #ddd; padding-top: 15px;">
                             <span>Total to Pay:</span>
                             <span class="checkout-total-price">USD 0.00</span>
                         </div>
 
-                        <button type="submit" class="btn btn-primary" style="width:100%">Place Order</button>
+                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 15px; font-size: 1.1rem;">
+                            <i class="fas fa-lock"></i> Place Secure Order
+                        </button>
                     </form>
                 </div>
             </div>
@@ -112,6 +126,9 @@ function injectCartModal() {
     </div>
     `;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    // Initial view state management manually to ensure it's hidden correctly
+    document.getElementById('checkout-view').style.display = 'none';
 
     // Bind Event Listeners
     document.querySelectorAll('.close-cart').forEach(btn => btn.addEventListener('click', closeCart));
@@ -129,7 +146,8 @@ function injectCartModal() {
     document.getElementById('order-form').addEventListener('submit', handlePlaceOrder);
 }
 
-function selectPayment(element, method) {
+// Global function for payment selection
+window.selectPayment = function(element, method) {
     document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
     element.classList.add('selected');
 }
@@ -140,7 +158,7 @@ function showCheckout() {
         return;
     }
     document.getElementById('cart-view').style.display = 'none';
-    document.getElementById('checkout-view').style.display = 'block';
+    document.getElementById('checkout-view').style.display = 'flex'; // Use flex to maintain layout
     
     // Update total in checkout view
     const totalEl = document.querySelector('.total-price').textContent;
@@ -156,23 +174,24 @@ function handlePlaceOrder(e) {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const address = document.getElementById('address').value;
+    const email = document.getElementById('email').value;
     
-    if(name && address) {
+    if(name && address && email) {
         // Simulate Processing
         const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = "Processing...";
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
         submitBtn.disabled = true;
 
         setTimeout(() => {
-            alert(`🎉 Success! Thank you, ${name}. Your order has been placed.\nWe will ship to: ${address}`);
+            alert(`🎉 Order Success!\n\nThank you, ${name}.\nA confirmation email has been sent to ${email}.\nYour order will ship to: ${address}`);
             cart = [];
             saveCart();
             closeCart();
-            submitBtn.textContent = originalText;
+            submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
             showCartView(); // Reset view for next time
-        }, 1500);
+        }, 2000);
     }
 }
 
@@ -181,6 +200,7 @@ function openCart() {
     if (modal) {
         renderCartItems();
         modal.classList.add('open');
+        showCartView(); // Always start on cart view
     }
 }
 
@@ -194,7 +214,7 @@ function renderCartItems() {
     const totalEl = document.querySelector('.total-price');
     
     if (cart.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Your cart is empty.</p>';
+        container.innerHTML = '<p style="text-align:center; color:#666; margin-top:20px;">Your cart is empty.</p>';
         totalEl.textContent = 'USD 0.00';
         return;
     }
