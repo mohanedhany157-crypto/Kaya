@@ -140,11 +140,9 @@ h2 {
     border-radius: var(--border-radius-lg);
     box-shadow: 0 25px 60px rgba(0,0,0,0.4);
     position: relative;
-    
-    /* SCROLL FIX: Set explicit height constraints */
-    height: auto;
-    max-height: 90vh; 
-    
+    /* IMPORTANT FIX FOR SCROLLING */
+    height: 90vh; /* Fixed height on desktop */
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -156,7 +154,7 @@ h2 {
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 0; /* Crucial for scrolling to work inside flex containers */
+    min-height: 0; 
     flex: 1;
     overflow: hidden;
 }
@@ -180,24 +178,15 @@ h2 {
     flex: 1; 
     overflow-y: auto; /* Activates scrollbar */
     padding: 25px; 
-    min-height: 0; /* CRITICAL FIX for Flexbox scrolling on PC */
+    min-height: 0;
     -webkit-overflow-scrolling: touch;
 }
 
 /* Custom Scrollbar Styling */
-.cart-body::-webkit-scrollbar {
-    width: 8px;
-}
-.cart-body::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
-.cart-body::-webkit-scrollbar-thumb {
-    background: #ccc; 
-    border-radius: 4px;
-}
-.cart-body::-webkit-scrollbar-thumb:hover {
-    background: var(--color-primary-accent); 
-}
+.cart-body::-webkit-scrollbar { width: 8px; }
+.cart-body::-webkit-scrollbar-track { background: #f1f1f1; }
+.cart-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+.cart-body::-webkit-scrollbar-thumb:hover { background: var(--color-primary-accent); }
 
 .cart-items { margin-bottom: 20px; }
 .cart-item { 
@@ -218,7 +207,7 @@ h2 {
     padding: 20px 25px; 
     background-color: white; 
     border-top: 2px solid #eee;
-    flex-shrink: 0; /* Ensures footer never shrinks */
+    flex-shrink: 0; 
 }
 .cart-total { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; color: var(--color-text-dark); }
 .checkout-btn { width: 100%; text-align: center; font-size: 1.1rem; padding: 15px; }
@@ -248,27 +237,15 @@ h2 {
 .form-group input:focus, .form-group select:focus { border-color: var(--color-primary-accent); outline: none; }
 
 /* Side-by-Side Form Layout */
-.form-row {
-    display: flex;
-    gap: 15px;
-}
-.form-row .form-group {
-    flex: 1;
-}
+.form-row { display: flex; gap: 15px; }
+.form-row .form-group { flex: 1; }
 
 /* Phone Input Group */
-.phone-group {
-    display: flex;
-    gap: 10px;
-}
-.phone-group select {
-    width: 35%;
-    min-width: 100px;
-}
-.phone-group input {
-    flex: 1;
-}
+.phone-group { display: flex; gap: 10px; }
+.phone-group select { width: 35%; min-width: 100px; }
+.phone-group input { flex: 1; }
 
+/* Payment Options */
 .payment-options {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -305,6 +282,26 @@ h2 {
 .payment-option .fa-cc-visa { color: #1A1F71; }
 .payment-option .fa-cc-mastercard { color: #EB001B; }
 .payment-option .fa-paypal { color: #003087; }
+
+/* --- CREDIT CARD FORM STYLES --- */
+.credit-card-form {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    margin-top: -10px;
+    display: none; /* Hidden unless selected */
+}
+.credit-card-form.active { display: block; }
+
+.card-icons {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+    font-size: 1.5rem;
+    color: #666;
+}
 
 /* --- Buttons --- */
 .btn { display: inline-block; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }

@@ -7,6 +7,11 @@
     <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- FIREBASE BRAIN (The Backend Connection) -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
 </head>
 
 <body>
@@ -29,7 +34,6 @@
             <a href="links.html">Contact/Links</a>
         </nav>
 
-        <!-- Cart Icon Wrapper (Moved OUTSIDE nav-menu for mobile visibility) -->
         <div class="cart-wrapper">
             <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
             <span class="cart-badge">0</span>
@@ -52,7 +56,6 @@
         <h2 class="title-with-icon"><i class="fas fa-box"></i> Featured Products</h2>
 
         <div class="product-grid">
-
             <!-- Product 1 -->
             <div class="product-card">
                 <div class="product-image-container">
@@ -93,7 +96,7 @@
             <div class="product-card">
                 <div class="product-image-container">
                     <img src="pic/POST CARD.PNG" alt="Kaya Post Card" onerror="this.onerror=null; this.src='https://placehold.co/400x350/0094E8/FFF?text=POST+CARD';">
-                    <span class="product-badge" style="background-color: var(--color-accent-green);">Accessory</span>
+                    <span class="product-badge" style="background-color: var(--color-logo-a2);">Accessory</span>
                 </div>
                 <div class="product-details">
                     <h3>Post Card</h3>
@@ -106,7 +109,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
 
         <div class="value-prop-grid">
@@ -123,7 +125,6 @@
                 <h4>100% Fun Promise</h4>
             </div>
         </div>
-
     </div>
 </section>
 
@@ -153,6 +154,6 @@
     </div>
 </footer>
 
-<script src="js/script.js"></script>
+<script type="module" src="js/script.js"></script>
 </body>
 </html>

@@ -1,11 +1,36 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE
+ * JAVASCRIPT FOR KAYA STORE (FIREBASE BACKEND)
  * ======================================================
  */
 
-// 1. Setup Cart Logic
+// 1. IMPORT FIREBASE
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// 2. CONFIGURE FIREBASE
+const firebaseConfig = JSON.parse(__firebase_config);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+// 3. CART STATE
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
+let user = null;
+
+// 4. AUTHENTICATE
+signInAnonymously(auth)
+    .then((userCredential) => {
+        user = userCredential.user;
+        console.log("Connected to Backend as:", user.uid);
+    })
+    .catch((error) => {
+        console.error("Backend Error:", error);
+    });
+
+// --- CORE FUNCTIONS ---
 
 function saveCart() {
     localStorage.setItem('kayaCart', JSON.stringify(cart));
@@ -36,7 +61,8 @@ function removeFromCart(index) {
     saveCart();
 }
 
-// 2. Inject Cart & Granular Checkout Modal HTML
+// --- MODAL & UI ---
+
 function injectCartModal() {
     const modalHTML = `
     <div class="cart-modal-overlay">
@@ -63,7 +89,7 @@ function injectCartModal() {
             </div>
 
             <!-- CHECKOUT FORM VIEW -->
-            <div id="checkout-view" style="display:none; height: 100%; display: flex; flex-direction: column;">
+            <div id="checkout-view" style="display:none;">
                 <div class="cart-header">
                     <button class="back-to-cart"><i class="fas fa-arrow-left"></i> Back</button>
                     <h3>Secure Checkout</h3>
@@ -87,16 +113,11 @@ function injectCartModal() {
                             <label>Phone Number</label>
                             <div class="phone-group">
                                 <select id="country-code" required>
-                                    <option value="+1">🇺🇸 +1 (US)</option>
-                                    <option value="+60" selected>🇲🇾 +60 (MY)</option>
-                                    <option value="+65">🇸🇬 +65 (SG)</option>
-                                    <option value="+44">🇬🇧 +44 (UK)</option>
-                                    <option value="+61">🇦🇺 +61 (AU)</option>
-                                    <option value="+62">🇮🇩 +62 (ID)</option>
-                                    <option value="+63">🇵🇭 +63 (PH)</option>
-                                    <option value="+66">🇹🇭 +66 (TH)</option>
-                                    <option value="+81">🇯🇵 +81 (JP)</option>
-                                    <option value="+86">🇨🇳 +86 (CN)</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                    <option value="+60" selected>🇲🇾 +60</option>
+                                    <option value="+65">🇸🇬 +65</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                    <option value="+61">🇦🇺 +61</option>
                                     <option value="">Other</option>
                                 </select>
                                 <input type="tel" id="phone" placeholder="12-345 6789" required>
@@ -105,19 +126,17 @@ function injectCartModal() {
 
                         <h4 class="checkout-section-title" style="margin-top: 25px;"><i class="fas fa-map-marker-alt"></i> Shipping Address</h4>
                         
-                        <!-- Row 1: Street & House No -->
                         <div class="form-row">
                             <div class="form-group" style="flex: 2;">
                                 <label for="street">Street Name</label>
                                 <input type="text" id="street" placeholder="e.g. Jalan Kaya" required>
                             </div>
                             <div class="form-group" style="flex: 1;">
-                                <label for="house-number">House/Unit No.</label>
+                                <label for="house-number">Unit No.</label>
                                 <input type="text" id="house-number" placeholder="e.g. No. 8" required>
                             </div>
                         </div>
 
-                        <!-- Row 2: Zip & City -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="zip">Zip Code</label>
@@ -145,13 +164,36 @@ function injectCartModal() {
                             </div>
                         </div>
 
+                        <!-- CREDIT CARD FORM (Only Shows if Card Selected) -->
+                        <div id="credit-card-form" class="credit-card-form active">
+                            <div class="form-group">
+                                <label>Card Number</label>
+                                <div style="position: relative;">
+                                    <input type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19">
+                                    <div class="card-icons" style="position: absolute; right: 10px; top: 10px;">
+                                        <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Expiry Date</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="text" id="card-cvv" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="cart-total" style="font-size: 1.2rem; border-top: 1px solid #ddd; padding-top: 15px;">
                             <span>Total to Pay:</span>
                             <span class="checkout-total-price">USD 0.00</span>
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 15px; font-size: 1.1rem;">
-                            <i class="fas fa-lock"></i> Pay Securely
+                            <i class="fas fa-lock"></i> Place Secure Order
                         </button>
                     </form>
                 </div>
@@ -162,87 +204,99 @@ function injectCartModal() {
     `;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    // Initial View
     document.getElementById('checkout-view').style.display = 'none';
 
-    // Bind Event Listeners
+    // Event Listeners
     document.querySelectorAll('.close-cart').forEach(btn => btn.addEventListener('click', closeCart));
-    
     const overlay = document.querySelector('.cart-modal-overlay');
-    if(overlay) overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeCart();
-    });
+    if(overlay) overlay.addEventListener('click', (e) => { if(e.target === overlay) closeCart(); });
     
-    // View Switching
     document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
     document.querySelector('.back-to-cart').addEventListener('click', showCartView);
-
-    // Form Submission
     document.getElementById('order-form').addEventListener('submit', handlePlaceOrder);
 }
 
-// Global payment selection helper
+// Global Payment Selector
 window.selectPayment = function(element, method) {
     document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
     element.classList.add('selected');
+    
+    // Toggle Card Form
+    const cardForm = document.getElementById('credit-card-form');
+    if(method === 'credit-card') {
+        cardForm.classList.add('active');
+        // Require fields
+        document.getElementById('card-number').required = true;
+    } else {
+        cardForm.classList.remove('active');
+        document.getElementById('card-number').required = false;
+    }
 }
 
 function showCheckout() {
-    if(cart.length === 0) {
-        alert("Your cart is empty!");
-        return;
-    }
+    if(cart.length === 0) return alert("Cart empty");
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
-    
-    // Sync total
-    const totalEl = document.querySelector('.total-price').textContent;
-    document.querySelector('.checkout-total-price').textContent = totalEl;
+    document.querySelector('.checkout-total-price').textContent = document.querySelector('.total-price').textContent;
 }
 
 function showCartView() {
     document.getElementById('checkout-view').style.display = 'none';
-    document.getElementById('cart-view').style.display = 'block';
+    document.getElementById('cart-view').style.display = 'flex';
 }
 
-function handlePlaceOrder(e) {
+async function handlePlaceOrder(e) {
     e.preventDefault();
-    
-    // Gather Granular Data
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const countryCode = document.getElementById('country-code').value;
-    const phone = document.getElementById('phone').value;
-    
-    const street = document.getElementById('street').value;
-    const houseNo = document.getElementById('house-number').value;
-    const zip = document.getElementById('zip').value;
-    const city = document.getElementById('city').value;
-    
-    // Construct full details string for the alert
-    const fullAddress = `${houseNo}, ${street}, ${zip} ${city}`;
-    const fullPhone = `${countryCode} ${phone}`;
+    if(!user) return alert("Connecting to server... please wait.");
 
-    // Simulate Processing
     const submitBtn = e.target.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
     submitBtn.disabled = true;
 
-    setTimeout(() => {
-        alert(`🎉 Payment Successful!\n\nThank you, ${name}.\n\nConfirmation sent to: ${email}\nMobile: ${fullPhone}\n\nShipping to:\n${fullAddress}`);
-        
-        // Reset Cart
-        cart = [];
-        saveCart();
-        closeCart();
-        
-        // Reset Form
+    // Collect Data
+    const orderData = {
+        customer: {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('country-code').value + " " + document.getElementById('phone').value,
+            address: {
+                street: document.getElementById('street').value,
+                unit: document.getElementById('house-number').value,
+                zip: document.getElementById('zip').value,
+                city: document.getElementById('city').value
+            }
+        },
+        items: cart,
+        total: document.querySelector('.checkout-total-price').textContent,
+        status: "PAID",
+        paymentMethod: document.querySelector('.payment-option.selected').textContent.trim(),
+        timestamp: serverTimestamp()
+    };
+
+    try {
+        // SAVE TO FIREBASE BACKEND
+        const orderRef = collection(db, 'artifacts', appId, 'public', 'data', 'orders');
+        await addDoc(orderRef, orderData);
+
+        // Success
+        setTimeout(() => {
+            alert(`🎉 Payment Approved!\n\nOrder ID: #${Math.floor(Math.random()*10000)}\n\nThank you, ${orderData.customer.name}. We will ship to ${orderData.customer.address.city}.`);
+            cart = [];
+            saveCart();
+            closeCart();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            e.target.reset();
+            showCartView();
+        }, 1500);
+
+    } catch (error) {
+        console.error("Order Failed", error);
+        alert("Transaction Failed. Please try again.");
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
-        e.target.reset();
-        showCartView(); 
-    }, 2000);
+    }
 }
 
 function openCart() {
@@ -250,7 +304,7 @@ function openCart() {
     if (modal) {
         renderCartItems();
         modal.classList.add('open');
-        showCartView(); // Default to cart view
+        showCartView();
     }
 }
 
@@ -287,14 +341,12 @@ function renderCartItems() {
         `;
     });
 
-    // Rounding Logic
     let roundedTotal = Math.round(exactTotal);
-
     container.innerHTML = html;
     totalEl.textContent = 'USD ' + roundedTotal.toFixed(2);
 }
 
-// 3. Page Initialization
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     const yearElement = document.getElementById('current-year');
     if (yearElement) yearElement.textContent = new Date().getFullYear();
@@ -315,18 +367,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = btn.getAttribute('data-id');
             const name = btn.getAttribute('data-name');
             const price = btn.getAttribute('data-price');
-            
-            if(id && name && price) {
-                addToCart(id, name, price);
-            }
+            if(id) addToCart(id, name, price);
         });
     });
 
     const cartWrapper = document.querySelector('.cart-wrapper');
-    if(cartWrapper) {
-        cartWrapper.addEventListener('click', openCart);
-    } else {
-        const rawIcon = document.querySelector('.cart-icon');
-        if(rawIcon) rawIcon.addEventListener('click', openCart);
-    }
+    if(cartWrapper) cartWrapper.addEventListener('click', openCart);
 });
