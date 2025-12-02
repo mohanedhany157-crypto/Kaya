@@ -120,7 +120,7 @@ h2 {
 }
 .cart-badge.show { opacity: 1; }
 
-/* --- CART MODAL STYLES --- */
+/* --- CART MODAL STYLES (SCROLL FIXED) --- */
 .cart-modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -140,7 +140,11 @@ h2 {
     border-radius: var(--border-radius-lg);
     box-shadow: 0 25px 60px rgba(0,0,0,0.4);
     position: relative;
-    max-height: 90vh;
+    
+    /* SCROLL FIX: Set explicit height constraints */
+    height: auto;
+    max-height: 90vh; 
+    
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -154,18 +158,35 @@ h2 {
     background-color: var(--color-primary-accent);
     padding: 15px 25px;
     color: white;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Ensures header never shrinks */
 }
 .cart-header h3 { margin: 0; color: white; font-size: 1.5rem; }
 .close-cart, .back-to-cart { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: white; transition: transform 0.2s; }
 .close-cart:hover, .back-to-cart:hover { transform: scale(1.1); }
 .back-to-cart { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
+/* SCROLLING MAGIC HERE */
 .cart-body { 
     flex: 1; 
-    overflow-y: auto; 
+    overflow-y: auto; /* Activates scrollbar */
     padding: 25px; 
+    min-height: 0; /* CRITICAL FIX for Flexbox scrolling on PC */
     -webkit-overflow-scrolling: touch;
+}
+
+/* Custom Scrollbar Styling */
+.cart-body::-webkit-scrollbar {
+    width: 8px;
+}
+.cart-body::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+.cart-body::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 4px;
+}
+.cart-body::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-accent); 
 }
 
 .cart-items { margin-bottom: 20px; }
@@ -187,12 +208,12 @@ h2 {
     padding: 20px 25px; 
     background-color: white; 
     border-top: 2px solid #eee;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Ensures footer never shrinks */
 }
 .cart-total { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; color: var(--color-text-dark); }
 .checkout-btn { width: 100%; text-align: center; font-size: 1.1rem; padding: 15px; }
 
-/* --- CHECKOUT FORM STYLES (UPDATED WITH FORM ROWS) --- */
+/* --- CHECKOUT FORM STYLES --- */
 .checkout-section-title {
     font-size: 1.2rem;
     color: var(--color-primary-accent);
@@ -212,7 +233,7 @@ h2 {
     font-family: inherit;
     font-size: 1rem;
     transition: border-color 0.3s;
-    background-color: white; /* Ensure white input bg */
+    background-color: white;
 }
 .form-group input:focus, .form-group select:focus { border-color: var(--color-primary-accent); outline: none; }
 
@@ -222,7 +243,7 @@ h2 {
     gap: 15px;
 }
 .form-row .form-group {
-    flex: 1; /* Makes items take equal width */
+    flex: 1;
 }
 
 /* Phone Input Group */
@@ -231,11 +252,11 @@ h2 {
     gap: 10px;
 }
 .phone-group select {
-    width: 35%; /* Country code takes smaller width */
+    width: 35%;
     min-width: 100px;
 }
 .phone-group input {
-    flex: 1; /* Phone number takes remaining space */
+    flex: 1;
 }
 
 .payment-options {
