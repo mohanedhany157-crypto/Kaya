@@ -8,10 +8,14 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <!-- FIREBASE BRAIN (The Backend Connection) -->
+    <!-- FIREBASE (The Database) -->
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
+
+    <!-- PAYPAL SDK (REAL PAYMENT PROCESSOR) -->
+    <!-- IMPORTANT: Replace 'test' with your LIVE Client ID from developer.paypal.com -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script>
 </head>
 
 <body>
@@ -135,18 +139,6 @@
                 <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
             </div>
             <p>Play, Learn, Grow (Financially).</p>
-        </div>
-        <div class="footer-links">
-            <h3>Quick Links</h3>
-            <a href="index.html">Store Home</a>
-            <a href="learn.html">How to Play</a>
-            <a href="links.html">Contact Us</a>
-        </div>
-        <div class="footer-social">
-            <h3>Follow Our Fun!</h3>
-            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
         </div>
         <div class="footer-info">
             <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>

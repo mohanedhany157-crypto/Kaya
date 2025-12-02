@@ -1,37 +1,23 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (FIREBASE BACKEND)
+ * JAVASCRIPT FOR KAYA STORE (PAYPAL + MANUAL + FIREBASE)
  * ======================================================
  */
 
-// 1. IMPORT FIREBASE
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// 2. CONFIGURE FIREBASE
 const firebaseConfig = JSON.parse(__firebase_config);
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-// 3. CART STATE
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
-let user = null;
+signInAnonymously(auth);
 
-// 4. AUTHENTICATE
-signInAnonymously(auth)
-    .then((userCredential) => {
-        user = userCredential.user;
-        console.log("Connected to Backend as:", user.uid);
-    })
-    .catch((error) => {
-        console.error("Backend Error:", error);
-    });
-
-// --- CORE FUNCTIONS ---
-
+// --- CART FUNCTIONS ---
 function saveCart() {
     localStorage.setItem('kayaCart', JSON.stringify(cart));
     updateCartCount();
@@ -40,14 +26,9 @@ function saveCart() {
 
 function updateCartCount() {
     const badge = document.querySelector('.cart-badge');
-    if (badge) {
-        badge.textContent = cart.length;
-        if (cart.length > 0) {
-            badge.classList.add('show');
-        } else {
-            badge.classList.remove('show');
-        }
-    }
+    if(badge) badge.textContent = cart.length;
+    if(badge && cart.length > 0) badge.classList.add('show');
+    else if(badge) badge.classList.remove('show');
 }
 
 function addToCart(id, name, price) {
@@ -61,35 +42,38 @@ function removeFromCart(index) {
     saveCart();
 }
 
-// --- MODAL & UI ---
+function getCartTotal() {
+    let total = 0;
+    cart.forEach(item => total += parseFloat(item.price));
+    return Math.round(total).toFixed(2);
+}
 
+// --- MODAL & UI ---
 function injectCartModal() {
     const modalHTML = `
     <div class="cart-modal-overlay">
         <div class="cart-modal">
             
-            <!-- CART VIEW -->
+            <!-- VIEW 1: CART -->
             <div id="cart-view">
                 <div class="cart-header">
-                    <h3>Your Shopping Cart</h3>
+                    <h3>Your Cart</h3>
                     <button class="close-cart"><i class="fas fa-times"></i></button>
                 </div>
                 <div class="cart-body">
-                    <div class="cart-items">
-                        <p style="text-align:center; color:#666; margin-top:20px;">Your cart is empty.</p>
-                    </div>
+                    <div class="cart-items"></div>
                 </div>
                 <div class="cart-footer">
                     <div class="cart-total">
-                        <span>Total (Rounded):</span>
+                        <span>Total:</span>
                         <span class="total-price">USD 0.00</span>
                     </div>
-                    <button class="btn btn-primary checkout-btn" style="width:100%">Proceed to Checkout</button>
+                    <button class="btn btn-primary checkout-btn" style="width:100%">Checkout</button>
                 </div>
             </div>
 
-            <!-- CHECKOUT FORM VIEW -->
-            <div id="checkout-view" style="display:none;">
+            <!-- VIEW 2: CHECKOUT FORM -->
+            <div id="checkout-view" style="display:none; height:100%; flex-direction:column;">
                 <div class="cart-header">
                     <button class="back-to-cart"><i class="fas fa-arrow-left"></i> Back</button>
                     <h3>Secure Checkout</h3>
@@ -97,147 +81,174 @@ function injectCartModal() {
                 </div>
                 <div class="cart-body">
                     <form id="order-form">
-                        
-                        <h4 class="checkout-section-title"><i class="fas fa-user-circle"></i> Contact Info</h4>
+                        <h4 class="checkout-section-title"><i class="fas fa-user"></i> Details</h4>
                         <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" placeholder="e.g. John Doe" required>
+                            <label>Full Name</label>
+                            <input type="text" id="name" required>
                         </div>
-                        
                         <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" placeholder="e.g. john@example.com" required>
+                            <label>Email</label>
+                            <input type="email" id="email" required>
                         </div>
-
                         <div class="form-group">
-                            <label>Phone Number</label>
+                            <label>Phone</label>
                             <div class="phone-group">
-                                <select id="country-code" required>
-                                    <option value="+1">🇺🇸 +1</option>
-                                    <option value="+60" selected>🇲🇾 +60</option>
-                                    <option value="+65">🇸🇬 +65</option>
-                                    <option value="+44">🇬🇧 +44</option>
-                                    <option value="+61">🇦🇺 +61</option>
-                                    <option value="">Other</option>
+                                <select id="country-code">
+                                    <option value="+1">+1 (US)</option>
+                                    <option value="+60" selected>+60 (MY)</option>
+                                    <option value="+44">+44 (UK)</option>
                                 </select>
-                                <input type="tel" id="phone" placeholder="12-345 6789" required>
+                                <input type="tel" id="phone" required>
                             </div>
                         </div>
 
-                        <h4 class="checkout-section-title" style="margin-top: 25px;"><i class="fas fa-map-marker-alt"></i> Shipping Address</h4>
-                        
+                        <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-map-marker-alt"></i> Address</h4>
                         <div class="form-row">
-                            <div class="form-group" style="flex: 2;">
-                                <label for="street">Street Name</label>
-                                <input type="text" id="street" placeholder="e.g. Jalan Kaya" required>
-                            </div>
-                            <div class="form-group" style="flex: 1;">
-                                <label for="house-number">Unit No.</label>
-                                <input type="text" id="house-number" placeholder="e.g. No. 8" required>
-                            </div>
+                            <div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street" required></div>
+                            <div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit" required></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><input type="text" id="zip" placeholder="Zip" required></div>
+                            <div class="form-group"><input type="text" id="city" placeholder="City" required></div>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="zip">Zip Code</label>
-                                <input type="text" id="zip" placeholder="e.g. 50000" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <input type="text" id="city" placeholder="e.g. Kuala Lumpur" required>
-                            </div>
-                        </div>
+                        <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment Method</h4>
                         
-                        <h4 class="checkout-section-title" style="margin-top: 25px;"><i class="fas fa-credit-card"></i> Payment Method</h4>
                         <div class="payment-options">
-                            <div class="payment-option selected" onclick="selectPayment(this, 'credit-card')">
-                                <i class="fab fa-cc-visa"></i>
-                                <span>Card</span>
+                            <div class="payment-option selected" onclick="selectPayment('paypal')">
+                                <i class="fab fa-paypal"></i> <span>Card / PayPal</span>
                             </div>
-                            <div class="payment-option" onclick="selectPayment(this, 'paypal')">
-                                <i class="fab fa-paypal"></i>
-                                <span>PayPal</span>
-                            </div>
-                            <div class="payment-option" onclick="selectPayment(this, 'transfer')">
-                                <i class="fas fa-university"></i>
-                                <span>Transfer</span>
+                            <div class="payment-option" onclick="selectPayment('transfer')">
+                                <i class="fas fa-university"></i> <span>Bank Transfer</span>
                             </div>
                         </div>
 
-                        <!-- CREDIT CARD FORM (Only Shows if Card Selected) -->
-                        <div id="credit-card-form" class="credit-card-form active">
-                            <div class="form-group">
-                                <label>Card Number</label>
-                                <div style="position: relative;">
-                                    <input type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19">
-                                    <div class="card-icons" style="position: absolute; right: 10px; top: 10px;">
-                                        <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Expiry Date</label>
-                                    <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5">
-                                </div>
-                                <div class="form-group">
-                                    <label>CVV</label>
-                                    <input type="text" id="card-cvv" placeholder="123" maxlength="3">
-                                </div>
-                            </div>
+                        <!-- PAYPAL CONTAINER -->
+                        <div id="paypal-section">
+                            <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         </div>
 
-                        <div class="cart-total" style="font-size: 1.2rem; border-top: 1px solid #ddd; padding-top: 15px;">
-                            <span>Total to Pay:</span>
-                            <span class="checkout-total-price">USD 0.00</span>
+                        <!-- MANUAL TRANSFER INSTRUCTIONS -->
+                        <div id="transfer-section" style="display:none; text-align:center; padding:15px; background:#f9f9f9; border-radius:8px;">
+                            <p style="margin:0 0 10px 0;">Please transfer <strong>USD <span class="final-total"></span></strong> to:</p>
+                            <p><strong>Bank:</strong> Maybank<br><strong>Acc:</strong> 1234567890<br><strong>Name:</strong> Kaya Games</p>
+                            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">I Have Transferred</button>
                         </div>
-
-                        <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 15px; font-size: 1.1rem;">
-                            <i class="fas fa-lock"></i> Place Secure Order
-                        </button>
+                        
                     </form>
                 </div>
             </div>
 
         </div>
-    </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-
-    document.getElementById('checkout-view').style.display = 'none';
-
-    // Event Listeners
-    document.querySelectorAll('.close-cart').forEach(btn => btn.addEventListener('click', closeCart));
-    const overlay = document.querySelector('.cart-modal-overlay');
-    if(overlay) overlay.addEventListener('click', (e) => { if(e.target === overlay) closeCart(); });
+    </div>`;
     
-    document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
-    document.querySelector('.back-to-cart').addEventListener('click', showCartView);
-    document.getElementById('order-form').addEventListener('submit', handlePlaceOrder);
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    setupEventListeners();
 }
 
-// Global Payment Selector
-window.selectPayment = function(element, method) {
+// Payment Switcher
+window.selectPayment = function(method) {
     document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
-    element.classList.add('selected');
     
-    // Toggle Card Form
-    const cardForm = document.getElementById('credit-card-form');
-    if(method === 'credit-card') {
-        cardForm.classList.add('active');
-        // Require fields
-        document.getElementById('card-number').required = true;
+    if(method === 'paypal') {
+        document.querySelectorAll('.payment-option')[0].classList.add('selected');
+        document.getElementById('paypal-section').style.display = 'block';
+        document.getElementById('transfer-section').style.display = 'none';
     } else {
-        cardForm.classList.remove('active');
-        document.getElementById('card-number').required = false;
+        document.querySelectorAll('.payment-option')[1].classList.add('selected');
+        document.getElementById('paypal-section').style.display = 'none';
+        document.getElementById('transfer-section').style.display = 'block';
+        document.querySelector('.final-total').textContent = getCartTotal();
     }
 }
 
+function setupEventListeners() {
+    document.querySelectorAll('.close-cart').forEach(b => b.addEventListener('click', closeCart));
+    document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
+    document.querySelector('.back-to-cart').addEventListener('click', showCartView);
+    document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => {
+        if(e.target === document.querySelector('.cart-modal-overlay')) closeCart();
+    });
+    
+    // Manual Form Submit
+    document.getElementById('order-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Manual Transfer Flow
+        const name = document.getElementById('name').value;
+        if(!name) return alert("Please fill in details");
+        
+        saveOrderToFirebase({
+            id: "MANUAL-" + Math.floor(Math.random()*10000),
+            payer: { name: { given_name: name } },
+            method: "Bank Transfer"
+        });
+    });
+}
+
 function showCheckout() {
-    if(cart.length === 0) return alert("Cart empty");
+    if(cart.length === 0) return alert("Cart is empty");
+    
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
-    document.querySelector('.checkout-total-price').textContent = document.querySelector('.total-price').textContent;
+    
+    // Initial Render of PayPal
+    document.getElementById('paypal-button-container').innerHTML = ''; 
+    
+    if (window.paypal) {
+        window.paypal.Buttons({
+            createOrder: function(data, actions) {
+                const name = document.getElementById('name').value;
+                if(!name) {
+                    alert("Please fill in Name and Email first!");
+                    return actions.reject();
+                }
+                return actions.order.create({
+                    purchase_units: [{ amount: { value: getCartTotal() } }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    details.method = "PayPal/Card";
+                    saveOrderToFirebase(details);
+                });
+            }
+        }).render('#paypal-button-container');
+    }
+}
+
+async function saveOrderToFirebase(paymentDetails) {
+    const orderData = {
+        customer: {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('country-code').value + document.getElementById('phone').value,
+            address: {
+                street: document.getElementById('street').value,
+                unit: document.getElementById('unit').value,
+                zip: document.getElementById('zip').value,
+                city: document.getElementById('city').value
+            }
+        },
+        items: cart,
+        total: getCartTotal(),
+        status: paymentDetails.method === "Bank Transfer" ? "PENDING (Verify)" : "PAID",
+        paymentId: paymentDetails.id,
+        paymentMethod: paymentDetails.method,
+        timestamp: serverTimestamp()
+    };
+
+    try {
+        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'orders'), orderData);
+        alert(`Order Placed! Thank you, ${paymentDetails.payer.name.given_name}.`);
+        cart = [];
+        saveCart();
+        closeCart();
+        showCartView();
+        document.getElementById('order-form').reset();
+    } catch(e) {
+        console.error("DB Error", e);
+        alert("Error saving order. Please screenshot this.");
+    }
 }
 
 function showCartView() {
@@ -245,123 +256,55 @@ function showCartView() {
     document.getElementById('cart-view').style.display = 'flex';
 }
 
-async function handlePlaceOrder(e) {
-    e.preventDefault();
-    if(!user) return alert("Connecting to server... please wait.");
-
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
-    submitBtn.disabled = true;
-
-    // Collect Data
-    const orderData = {
-        customer: {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            phone: document.getElementById('country-code').value + " " + document.getElementById('phone').value,
-            address: {
-                street: document.getElementById('street').value,
-                unit: document.getElementById('house-number').value,
-                zip: document.getElementById('zip').value,
-                city: document.getElementById('city').value
-            }
-        },
-        items: cart,
-        total: document.querySelector('.checkout-total-price').textContent,
-        status: "PAID",
-        paymentMethod: document.querySelector('.payment-option.selected').textContent.trim(),
-        timestamp: serverTimestamp()
-    };
-
-    try {
-        // SAVE TO FIREBASE BACKEND
-        const orderRef = collection(db, 'artifacts', appId, 'public', 'data', 'orders');
-        await addDoc(orderRef, orderData);
-
-        // Success
-        setTimeout(() => {
-            alert(`🎉 Payment Approved!\n\nOrder ID: #${Math.floor(Math.random()*10000)}\n\nThank you, ${orderData.customer.name}. We will ship to ${orderData.customer.address.city}.`);
-            cart = [];
-            saveCart();
-            closeCart();
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            e.target.reset();
-            showCartView();
-        }, 1500);
-
-    } catch (error) {
-        console.error("Order Failed", error);
-        alert("Transaction Failed. Please try again.");
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-    }
-}
-
 function openCart() {
-    const modal = document.querySelector('.cart-modal-overlay');
-    if (modal) {
-        renderCartItems();
-        modal.classList.add('open');
-        showCartView();
-    }
+    renderCartItems();
+    document.querySelector('.cart-modal-overlay').classList.add('open');
+    showCartView();
 }
 
 function closeCart() {
-    const modal = document.querySelector('.cart-modal-overlay');
-    if (modal) modal.classList.remove('open');
+    document.querySelector('.cart-modal-overlay').classList.remove('open');
 }
 
 function renderCartItems() {
     const container = document.querySelector('.cart-items');
-    const totalEl = document.querySelector('.total-price');
-    
-    if (cart.length === 0) {
-        container.innerHTML = '<p style="text-align:center; color:#666; margin-top:20px;">Your cart is empty.</p>';
-        totalEl.textContent = 'USD 0.00';
+    if(cart.length === 0) {
+        container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Empty</p>';
+        document.querySelector('.total-price').textContent = 'USD 0.00';
         return;
     }
-
+    
     let html = '';
-    let exactTotal = 0;
-
-    cart.forEach((item, index) => {
-        let priceVal = parseFloat(item.price);
-        exactTotal += priceVal;
-        
+    cart.forEach((item, i) => {
         html += `
         <div class="cart-item">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
-                <span class="cart-item-price">USD ${priceVal.toFixed(2)}</span>
+                <span>USD ${item.price}</span>
             </div>
-            <i class="fas fa-trash remove-item" onclick="removeFromCart(${index})"></i>
-        </div>
-        `;
+            <i class="fas fa-trash remove-item" onclick="removeFromCart(${i})"></i>
+        </div>`;
     });
-
-    let roundedTotal = Math.round(exactTotal);
     container.innerHTML = html;
-    totalEl.textContent = 'USD ' + roundedTotal.toFixed(2);
+    document.querySelector('.total-price').textContent = 'USD ' + getCartTotal();
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    const yearElement = document.getElementById('current-year');
-    if (yearElement) yearElement.textContent = new Date().getFullYear();
+window.removeFromCart = removeFromCart;
 
+document.addEventListener('DOMContentLoaded', () => {
+    const yearEl = document.getElementById('current-year');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+    
     const menuToggle = document.querySelector('.menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
-    if (menuToggle && navMenu) {
+    if(menuToggle && navMenu) {
         menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
     }
 
     injectCartModal();
     updateCartCount();
 
-    const addBtns = document.querySelectorAll('.add-to-cart-btn');
-    addBtns.forEach(btn => {
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             const id = btn.getAttribute('data-id');
