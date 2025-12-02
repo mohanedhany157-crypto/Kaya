@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (ROBUST & LOCAL-SAFE)
+ * JAVASCRIPT FOR KAYA STORE (FIREBASE CONNECTED)
  * ======================================================
  */
 
@@ -8,25 +8,32 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. SAFE CONFIGURATION ---
-let db, auth;
-let appId = 'default-app-id';
+// --- 1. FIREBASE CONFIGURATION ---
+// 🔴 ACTION REQUIRED: PASTE YOUR FIREBASE CONFIG INSIDE THESE BRACKETS 🔴
+const MANUAL_FIREBASE_CONFIG = {
+     apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+  authDomain: "kaya-store-31083.firebaseapp.com",
+  projectId: "kaya-store-31083",
+  storageBucket: "kaya-store-31083.firebasestorage.app",
+  messagingSenderId: "935048383330",
+  appId: "1:935048383330:web:7d7444406aefa975677a3b",
+  measurementId: "G-Q05ZZFHSM3"
+};
 
+let db, auth;
+// We try to connect. If you pasted the config above, it will work!
 try {
-    if (typeof __firebase_config !== 'undefined') {
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        if (typeof __app_id !== 'undefined') appId = __app_id;
-        
-        // Only try to sign in if config existed
-        signInAnonymously(auth).catch(e => console.warn("Auth failed:", e));
-    } else {
-        console.warn("Running in Local Mode (No Database Connection)");
-    }
+    const app = initializeApp(MANUAL_FIREBASE_CONFIG);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    
+    // Connect Anonymously to allow writing to DB
+    signInAnonymously(auth)
+        .then(() => console.log("🔥 Firebase Connected Successfully"))
+        .catch(e => console.error("Auth Failed:", e));
+
 } catch (e) {
-    console.error("Firebase Init Error:", e);
+    console.error("Firebase Connection Failed. Did you paste the config?", e);
 }
 
 // --- 2. CART STATE ---
@@ -65,7 +72,6 @@ function getCartTotal() {
 
 // --- 4. MODAL & UI ---
 function injectCartModal() {
-    // Only inject if not already there
     if(document.querySelector('.cart-modal-overlay')) return;
 
     const modalHTML = `
@@ -135,8 +141,11 @@ function injectCartModal() {
                         <!-- PAYPAL CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         
-                        <!-- Manual Button (Fallback) -->
-                        <button type="submit" id="manual-order-btn" class="btn btn-primary" style="width:100%; display:none; margin-top:10px;">Confirm (Manual)</button>
+                        <!-- Manual Button (Always visible if PayPal fails or for testing) -->
+                        <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
+                            <p style="font-size:0.9rem; color:#666; margin-bottom:10px; text-align:center;">Having trouble with PayPal? Use Manual Transfer.</p>
+                            <button type="submit" id="manual-order-btn" class="btn btn-secondary" style="width:100%;">Place Order (Manual Transfer)</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -159,14 +168,18 @@ function setupEventListeners() {
     
     const overlay = document.querySelector('.cart-modal-overlay');
     if(overlay) overlay.addEventListener('click', (e) => {
-        if(e.target === overlay) closeCart();
+        if(e.target === document.querySelector('.cart-modal-overlay')) closeCart();
     });
 
     // Manual fallback submit
     const form = document.getElementById('order-form');
     if(form) form.addEventListener('submit', (e) => {
         e.preventDefault();
-        saveOrderToFirebase({ id: "MANUAL-" + Date.now(), method: "Manual/Local" });
+        saveOrderToFirebase({ 
+            id: "MANUAL-" + Math.floor(Math.random() * 100000), 
+            method: "Manual/Local",
+            payer: { name: { given_name: document.getElementById('name').value } }
+        });
     });
 }
 
@@ -197,22 +210,18 @@ function showCheckout() {
                     details.method = "PayPal";
                     saveOrderToFirebase(details);
                 });
+            },
+            onError: function(err) {
+                console.error("PayPal Error:", err);
+                alert("PayPal failed to load. Please use Manual Transfer below.");
             }
         }).render('#paypal-button-container');
-    } else {
-        // Show manual button if PayPal fails (e.g. bad client ID or no internet)
-        document.getElementById('manual-order-btn').style.display = 'block';
     }
 }
 
 async function saveOrderToFirebase(paymentDetails) {
-    // If DB is missing (Local mode), just alert success
     if (!db) {
-        alert("🎉 Order Success (Local Mode)!\n\nSince you are running locally without a database, the order was NOT saved to the cloud.\n\nBut the UI works!");
-        cart = [];
-        saveCart();
-        closeCart();
-        showCartView();
+        alert("⚠️ DATABASE NOT CONNECTED!\n\nPlease paste your Firebase Config into script.js (lines 13-19) to save orders.");
         return;
     }
 
@@ -230,15 +239,15 @@ async function saveOrderToFirebase(paymentDetails) {
         },
         items: cart,
         total: getCartTotal(),
-        status: "PAID",
+        status: paymentDetails.method === "PayPal" ? "PAID" : "PENDING (Manual)",
         paymentId: paymentDetails.id,
-        paymentMethod: paymentDetails.method || "PayPal",
+        paymentMethod: paymentDetails.method,
         timestamp: serverTimestamp()
     };
 
     try {
-        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'orders'), orderData);
-        alert(`Order Placed! Thank you.`);
+        await addDoc(collection(db, 'kaya_orders'), orderData);
+        alert(`🎉 Order Placed Successfully!\n\nThank you, ${orderData.customer.name}.\nOrder ID: ${paymentDetails.id}`);
         cart = [];
         saveCart();
         closeCart();
@@ -246,7 +255,12 @@ async function saveOrderToFirebase(paymentDetails) {
         document.getElementById('order-form').reset();
     } catch(e) {
         console.error("DB Error", e);
-        alert("Payment successful but failed to save order to database.");
+        // Fallback for permission errors
+        if (e.code === 'permission-denied') {
+            alert("Error: Database permission denied. \n\nGo to Firebase Console -> Firestore Database -> Rules -> Change 'allow read, write: if false;' to 'allow read, write: if true;'");
+        } else {
+            alert("Payment successful but failed to save order to database.");
+        }
     }
 }
 
