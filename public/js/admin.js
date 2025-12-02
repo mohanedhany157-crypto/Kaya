@@ -19,6 +19,9 @@ const firebaseConfig = {
   measurementId: "G-Q05ZZFHSM3"
 };
 
+// DEBUG: Verify keys are loading
+console.log("✅ Config Loaded:", firebaseConfig.apiKey);
+
 // --- 2. INITIALIZE FIREBASE DIRECTLY ---
 // We removed the try/catch logic to force it to use the keys above.
 const app = initializeApp(firebaseConfig);
