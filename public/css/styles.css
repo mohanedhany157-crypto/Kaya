@@ -151,6 +151,16 @@ h2 {
     border: 3px solid var(--color-secondary-accent);
 }
 
+/* FIX: Ensure views inside modal can shrink properly */
+#cart-view, #checkout-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0; /* Crucial for scrolling to work inside flex containers */
+    flex: 1;
+    overflow: hidden;
+}
+
 .cart-header {
     display: flex;
     justify-content: space-between;
