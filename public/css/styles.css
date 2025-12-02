@@ -120,7 +120,7 @@ h2 {
 }
 .cart-badge.show { opacity: 1; }
 
-/* --- CART MODAL STYLES (SCROLL FIXED) --- */
+/* --- CART MODAL STYLES --- */
 .cart-modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -140,7 +140,7 @@ h2 {
     border-radius: var(--border-radius-lg);
     box-shadow: 0 25px 60px rgba(0,0,0,0.4);
     position: relative;
-    max-height: 90vh; /* Limits height on desktop */
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -154,22 +154,20 @@ h2 {
     background-color: var(--color-primary-accent);
     padding: 15px 25px;
     color: white;
-    flex-shrink: 0; /* Prevents header from shrinking */
+    flex-shrink: 0;
 }
 .cart-header h3 { margin: 0; color: white; font-size: 1.5rem; }
 .close-cart, .back-to-cart { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: white; transition: transform 0.2s; }
 .close-cart:hover, .back-to-cart:hover { transform: scale(1.1); }
 .back-to-cart { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
-/* SCROLLING MAGIC HERE */
 .cart-body { 
     flex: 1; 
-    overflow-y: auto; /* Allows scrolling */
+    overflow-y: auto; 
     padding: 25px; 
-    -webkit-overflow-scrolling: touch; /* Smooth scroll on iPhone */
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Cart Items */
 .cart-items { margin-bottom: 20px; }
 .cart-item { 
     display: flex; 
@@ -189,12 +187,12 @@ h2 {
     padding: 20px 25px; 
     background-color: white; 
     border-top: 2px solid #eee;
-    flex-shrink: 0; /* Prevents footer from disappearing */
+    flex-shrink: 0;
 }
 .cart-total { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; color: var(--color-text-dark); }
 .checkout-btn { width: 100%; text-align: center; font-size: 1.1rem; padding: 15px; }
 
-/* --- CHECKOUT FORM STYLES --- */
+/* --- CHECKOUT FORM STYLES (UPDATED WITH FORM ROWS) --- */
 .checkout-section-title {
     font-size: 1.2rem;
     color: var(--color-primary-accent);
@@ -202,12 +200,6 @@ h2 {
     border-bottom: 2px solid var(--color-secondary-accent);
     padding-bottom: 5px;
     margin-top: 10px;
-}
-
-.checkout-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
 }
 
 .form-group { margin-bottom: 15px; }
@@ -220,8 +212,31 @@ h2 {
     font-family: inherit;
     font-size: 1rem;
     transition: border-color 0.3s;
+    background-color: white; /* Ensure white input bg */
 }
-.form-group input:focus { border-color: var(--color-primary-accent); outline: none; }
+.form-group input:focus, .form-group select:focus { border-color: var(--color-primary-accent); outline: none; }
+
+/* Side-by-Side Form Layout */
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+.form-row .form-group {
+    flex: 1; /* Makes items take equal width */
+}
+
+/* Phone Input Group */
+.phone-group {
+    display: flex;
+    gap: 10px;
+}
+.phone-group select {
+    width: 35%; /* Country code takes smaller width */
+    min-width: 100px;
+}
+.phone-group input {
+    flex: 1; /* Phone number takes remaining space */
+}
 
 .payment-options {
     display: grid;
@@ -335,17 +350,8 @@ h2 {
     .rules-effects { grid-column: 2 / 3; grid-row: 1 / span 3; }
 }
 @media (max-width: 768px) {
-    /* MOBILE MODAL FIX */
-    .cart-modal {
-        width: 100%;
-        height: 100%;
-        max-height: 100%; /* Forces full screen */
-        border-radius: 0; /* Remove corners on mobile */
-        border: none;
-    }
-    .cart-body {
-        padding-bottom: 80px; /* Extra padding so scrolling hits the bottom safely */
-    }
+    .cart-modal { width: 100%; height: 100%; max-height: 100%; border-radius: 0; border: none; }
+    .cart-body { padding-bottom: 80px; }
     
     .menu-toggle { display: block; }
     .nav-menu { display: none; flex-direction: column; width: 100%; position: absolute; top: 60px; left: 0; background-color: var(--color-bg-white); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center; padding: 10px 0; z-index: 999; }
@@ -353,6 +359,6 @@ h2 {
     .nav-menu a { margin: 10px 0; border-bottom: 1px solid #eee; width: 90%; margin-left: 0; }
     .product-grid, .value-prop-grid, .rules-main-content { grid-template-columns: 1fr; }
     
-    .checkout-grid { grid-template-columns: 1fr; }
+    .form-row { flex-direction: column; gap: 15px; }
     .payment-options { grid-template-columns: 1fr; }
 }

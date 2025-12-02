@@ -36,7 +36,7 @@ function removeFromCart(index) {
     saveCart();
 }
 
-// 2. Inject Cart & Professional Checkout Modal HTML
+// 2. Inject Cart & Granular Checkout Modal HTML
 function injectCartModal() {
     const modalHTML = `
     <div class="cart-modal-overlay">
@@ -72,33 +72,68 @@ function injectCartModal() {
                 <div class="cart-body">
                     <form id="order-form">
                         
-                        <h4 class="checkout-section-title"><i class="fas fa-shipping-fast"></i> Shipping Details</h4>
-                        <div class="checkout-grid">
-                            <div class="form-group">
-                                <label for="name">Full Name</label>
-                                <input type="text" id="name" placeholder="e.g. John Doe" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" placeholder="e.g. +60 12-345 6789" required>
-                            </div>
+                        <h4 class="checkout-section-title"><i class="fas fa-user-circle"></i> Contact Info</h4>
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" placeholder="e.g. John Doe" required>
                         </div>
-
+                        
                         <div class="form-group">
                             <label for="email">Email Address</label>
                             <input type="email" id="email" placeholder="e.g. john@example.com" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="address">Shipping Address</label>
-                            <input type="text" id="address" placeholder="Street, City, Zip Code" required>
+                            <label>Phone Number</label>
+                            <div class="phone-group">
+                                <select id="country-code" required>
+                                    <option value="+1">🇺🇸 +1 (US)</option>
+                                    <option value="+60" selected>🇲🇾 +60 (MY)</option>
+                                    <option value="+65">🇸🇬 +65 (SG)</option>
+                                    <option value="+44">🇬🇧 +44 (UK)</option>
+                                    <option value="+61">🇦🇺 +61 (AU)</option>
+                                    <option value="+62">🇮🇩 +62 (ID)</option>
+                                    <option value="+63">🇵🇭 +63 (PH)</option>
+                                    <option value="+66">🇹🇭 +66 (TH)</option>
+                                    <option value="+81">🇯🇵 +81 (JP)</option>
+                                    <option value="+86">🇨🇳 +86 (CN)</option>
+                                    <option value="">Other</option>
+                                </select>
+                                <input type="tel" id="phone" placeholder="12-345 6789" required>
+                            </div>
+                        </div>
+
+                        <h4 class="checkout-section-title" style="margin-top: 25px;"><i class="fas fa-map-marker-alt"></i> Shipping Address</h4>
+                        
+                        <!-- Row 1: Street & House No -->
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label for="street">Street Name</label>
+                                <input type="text" id="street" placeholder="e.g. Jalan Kaya" required>
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="house-number">House/Unit No.</label>
+                                <input type="text" id="house-number" placeholder="e.g. No. 8" required>
+                            </div>
+                        </div>
+
+                        <!-- Row 2: Zip & City -->
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zip">Zip Code</label>
+                                <input type="text" id="zip" placeholder="e.g. 50000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city" placeholder="e.g. Kuala Lumpur" required>
+                            </div>
                         </div>
                         
                         <h4 class="checkout-section-title" style="margin-top: 25px;"><i class="fas fa-credit-card"></i> Payment Method</h4>
                         <div class="payment-options">
                             <div class="payment-option selected" onclick="selectPayment(this, 'credit-card')">
                                 <i class="fab fa-cc-visa"></i>
-                                <span>Credit Card</span>
+                                <span>Card</span>
                             </div>
                             <div class="payment-option" onclick="selectPayment(this, 'paypal')">
                                 <i class="fab fa-paypal"></i>
@@ -106,7 +141,7 @@ function injectCartModal() {
                             </div>
                             <div class="payment-option" onclick="selectPayment(this, 'transfer')">
                                 <i class="fas fa-university"></i>
-                                <span>Bank Transfer</span>
+                                <span>Transfer</span>
                             </div>
                         </div>
 
@@ -116,7 +151,7 @@ function injectCartModal() {
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="width:100%; margin-top: 15px; font-size: 1.1rem;">
-                            <i class="fas fa-lock"></i> Place Secure Order
+                            <i class="fas fa-lock"></i> Pay Securely
                         </button>
                     </form>
                 </div>
@@ -127,7 +162,7 @@ function injectCartModal() {
     `;
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    // Initial view state management manually to ensure it's hidden correctly
+    // Initial View
     document.getElementById('checkout-view').style.display = 'none';
 
     // Bind Event Listeners
@@ -138,15 +173,15 @@ function injectCartModal() {
         if (e.target === overlay) closeCart();
     });
     
-    // Switch between Cart and Checkout
+    // View Switching
     document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
     document.querySelector('.back-to-cart').addEventListener('click', showCartView);
 
-    // Handle Form Submission
+    // Form Submission
     document.getElementById('order-form').addEventListener('submit', handlePlaceOrder);
 }
 
-// Global function for payment selection
+// Global payment selection helper
 window.selectPayment = function(element, method) {
     document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
     element.classList.add('selected');
@@ -158,9 +193,9 @@ function showCheckout() {
         return;
     }
     document.getElementById('cart-view').style.display = 'none';
-    document.getElementById('checkout-view').style.display = 'flex'; // Use flex to maintain layout
+    document.getElementById('checkout-view').style.display = 'flex';
     
-    // Update total in checkout view
+    // Sync total
     const totalEl = document.querySelector('.total-price').textContent;
     document.querySelector('.checkout-total-price').textContent = totalEl;
 }
@@ -172,27 +207,42 @@ function showCartView() {
 
 function handlePlaceOrder(e) {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const address = document.getElementById('address').value;
-    const email = document.getElementById('email').value;
     
-    if(name && address && email) {
-        // Simulate Processing
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
-        submitBtn.disabled = true;
+    // Gather Granular Data
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const countryCode = document.getElementById('country-code').value;
+    const phone = document.getElementById('phone').value;
+    
+    const street = document.getElementById('street').value;
+    const houseNo = document.getElementById('house-number').value;
+    const zip = document.getElementById('zip').value;
+    const city = document.getElementById('city').value;
+    
+    // Construct full details string for the alert
+    const fullAddress = `${houseNo}, ${street}, ${zip} ${city}`;
+    const fullPhone = `${countryCode} ${phone}`;
 
-        setTimeout(() => {
-            alert(`🎉 Order Success!\n\nThank you, ${name}.\nA confirmation email has been sent to ${email}.\nYour order will ship to: ${address}`);
-            cart = [];
-            saveCart();
-            closeCart();
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            showCartView(); // Reset view for next time
-        }, 2000);
-    }
+    // Simulate Processing
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    submitBtn.disabled = true;
+
+    setTimeout(() => {
+        alert(`🎉 Payment Successful!\n\nThank you, ${name}.\n\nConfirmation sent to: ${email}\nMobile: ${fullPhone}\n\nShipping to:\n${fullAddress}`);
+        
+        // Reset Cart
+        cart = [];
+        saveCart();
+        closeCart();
+        
+        // Reset Form
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        e.target.reset();
+        showCartView(); 
+    }, 2000);
 }
 
 function openCart() {
@@ -200,7 +250,7 @@ function openCart() {
     if (modal) {
         renderCartItems();
         modal.classList.add('open');
-        showCartView(); // Always start on cart view
+        showCartView(); // Default to cart view
     }
 }
 
