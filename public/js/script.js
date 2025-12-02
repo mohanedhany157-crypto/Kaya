@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (PAYPAL + MANUAL + FIREBASE)
+ * JAVASCRIPT FOR KAYA STORE (ROBUST & LOCAL-SAFE)
  * ======================================================
  */
 
@@ -8,16 +8,31 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-const firebaseConfig = JSON.parse(__firebase_config);
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+// --- 1. SAFE CONFIGURATION ---
+let db, auth;
+let appId = 'default-app-id';
 
+try {
+    if (typeof __firebase_config !== 'undefined') {
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        if (typeof __app_id !== 'undefined') appId = __app_id;
+        
+        // Only try to sign in if config existed
+        signInAnonymously(auth).catch(e => console.warn("Auth failed:", e));
+    } else {
+        console.warn("Running in Local Mode (No Database Connection)");
+    }
+} catch (e) {
+    console.error("Firebase Init Error:", e);
+}
+
+// --- 2. CART STATE ---
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
-signInAnonymously(auth);
 
-// --- CART FUNCTIONS ---
+// --- 3. CART FUNCTIONS ---
 function saveCart() {
     localStorage.setItem('kayaCart', JSON.stringify(cart));
     updateCartCount();
@@ -48,8 +63,11 @@ function getCartTotal() {
     return Math.round(total).toFixed(2);
 }
 
-// --- MODAL & UI ---
+// --- 4. MODAL & UI ---
 function injectCartModal() {
+    // Only inject if not already there
+    if(document.querySelector('.cart-modal-overlay')) return;
+
     const modalHTML = `
     <div class="cart-modal-overlay">
         <div class="cart-modal">
@@ -112,29 +130,13 @@ function injectCartModal() {
                             <div class="form-group"><input type="text" id="city" placeholder="City" required></div>
                         </div>
 
-                        <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment Method</h4>
+                        <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
                         
-                        <div class="payment-options">
-                            <div class="payment-option selected" onclick="selectPayment('paypal')">
-                                <i class="fab fa-paypal"></i> <span>Card / PayPal</span>
-                            </div>
-                            <div class="payment-option" onclick="selectPayment('transfer')">
-                                <i class="fas fa-university"></i> <span>Bank Transfer</span>
-                            </div>
-                        </div>
-
                         <!-- PAYPAL CONTAINER -->
-                        <div id="paypal-section">
-                            <div id="paypal-button-container" style="margin-top: 10px;"></div>
-                        </div>
-
-                        <!-- MANUAL TRANSFER INSTRUCTIONS -->
-                        <div id="transfer-section" style="display:none; text-align:center; padding:15px; background:#f9f9f9; border-radius:8px;">
-                            <p style="margin:0 0 10px 0;">Please transfer <strong>USD <span class="final-total"></span></strong> to:</p>
-                            <p><strong>Bank:</strong> Maybank<br><strong>Acc:</strong> 1234567890<br><strong>Name:</strong> Kaya Games</p>
-                            <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">I Have Transferred</button>
-                        </div>
+                        <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         
+                        <!-- Manual Button (Fallback) -->
+                        <button type="submit" id="manual-order-btn" class="btn btn-primary" style="width:100%; display:none; margin-top:10px;">Confirm (Manual)</button>
                     </form>
                 </div>
             </div>
@@ -146,42 +148,25 @@ function injectCartModal() {
     setupEventListeners();
 }
 
-// Payment Switcher
-window.selectPayment = function(method) {
-    document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
-    
-    if(method === 'paypal') {
-        document.querySelectorAll('.payment-option')[0].classList.add('selected');
-        document.getElementById('paypal-section').style.display = 'block';
-        document.getElementById('transfer-section').style.display = 'none';
-    } else {
-        document.querySelectorAll('.payment-option')[1].classList.add('selected');
-        document.getElementById('paypal-section').style.display = 'none';
-        document.getElementById('transfer-section').style.display = 'block';
-        document.querySelector('.final-total').textContent = getCartTotal();
-    }
-}
-
 function setupEventListeners() {
     document.querySelectorAll('.close-cart').forEach(b => b.addEventListener('click', closeCart));
-    document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
-    document.querySelector('.back-to-cart').addEventListener('click', showCartView);
-    document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => {
-        if(e.target === document.querySelector('.cart-modal-overlay')) closeCart();
-    });
     
-    // Manual Form Submit
-    document.getElementById('order-form').addEventListener('submit', (e) => {
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    if(checkoutBtn) checkoutBtn.addEventListener('click', showCheckout);
+    
+    const backBtn = document.querySelector('.back-to-cart');
+    if(backBtn) backBtn.addEventListener('click', showCartView);
+    
+    const overlay = document.querySelector('.cart-modal-overlay');
+    if(overlay) overlay.addEventListener('click', (e) => {
+        if(e.target === overlay) closeCart();
+    });
+
+    // Manual fallback submit
+    const form = document.getElementById('order-form');
+    if(form) form.addEventListener('submit', (e) => {
         e.preventDefault();
-        // Manual Transfer Flow
-        const name = document.getElementById('name').value;
-        if(!name) return alert("Please fill in details");
-        
-        saveOrderToFirebase({
-            id: "MANUAL-" + Math.floor(Math.random()*10000),
-            payer: { name: { given_name: name } },
-            method: "Bank Transfer"
-        });
+        saveOrderToFirebase({ id: "MANUAL-" + Date.now(), method: "Manual/Local" });
     });
 }
 
@@ -191,15 +176,16 @@ function showCheckout() {
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
     
-    // Initial Render of PayPal
-    document.getElementById('paypal-button-container').innerHTML = ''; 
+    const container = document.getElementById('paypal-button-container');
+    container.innerHTML = ''; 
     
+    // Check if PayPal loaded
     if (window.paypal) {
         window.paypal.Buttons({
             createOrder: function(data, actions) {
                 const name = document.getElementById('name').value;
                 if(!name) {
-                    alert("Please fill in Name and Email first!");
+                    alert("Please fill in your Name first!");
                     return actions.reject();
                 }
                 return actions.order.create({
@@ -208,15 +194,28 @@ function showCheckout() {
             },
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
-                    details.method = "PayPal/Card";
+                    details.method = "PayPal";
                     saveOrderToFirebase(details);
                 });
             }
         }).render('#paypal-button-container');
+    } else {
+        // Show manual button if PayPal fails (e.g. bad client ID or no internet)
+        document.getElementById('manual-order-btn').style.display = 'block';
     }
 }
 
 async function saveOrderToFirebase(paymentDetails) {
+    // If DB is missing (Local mode), just alert success
+    if (!db) {
+        alert("🎉 Order Success (Local Mode)!\n\nSince you are running locally without a database, the order was NOT saved to the cloud.\n\nBut the UI works!");
+        cart = [];
+        saveCart();
+        closeCart();
+        showCartView();
+        return;
+    }
+
     const orderData = {
         customer: {
             name: document.getElementById('name').value,
@@ -231,15 +230,15 @@ async function saveOrderToFirebase(paymentDetails) {
         },
         items: cart,
         total: getCartTotal(),
-        status: paymentDetails.method === "Bank Transfer" ? "PENDING (Verify)" : "PAID",
+        status: "PAID",
         paymentId: paymentDetails.id,
-        paymentMethod: paymentDetails.method,
+        paymentMethod: paymentDetails.method || "PayPal",
         timestamp: serverTimestamp()
     };
 
     try {
         await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'orders'), orderData);
-        alert(`Order Placed! Thank you, ${paymentDetails.payer.name.given_name}.`);
+        alert(`Order Placed! Thank you.`);
         cart = [];
         saveCart();
         closeCart();
@@ -247,7 +246,7 @@ async function saveOrderToFirebase(paymentDetails) {
         document.getElementById('order-form').reset();
     } catch(e) {
         console.error("DB Error", e);
-        alert("Error saving order. Please screenshot this.");
+        alert("Payment successful but failed to save order to database.");
     }
 }
 
@@ -268,6 +267,8 @@ function closeCart() {
 
 function renderCartItems() {
     const container = document.querySelector('.cart-items');
+    if(!container) return;
+
     if(cart.length === 0) {
         container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Empty</p>';
         document.querySelector('.total-price').textContent = 'USD 0.00';
@@ -289,6 +290,7 @@ function renderCartItems() {
     document.querySelector('.total-price').textContent = 'USD ' + getCartTotal();
 }
 
+// Global Exports
 window.removeFromCart = removeFromCart;
 
 document.addEventListener('DOMContentLoaded', () => {

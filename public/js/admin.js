@@ -2,19 +2,49 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-const firebaseConfig = JSON.parse(__firebase_config);
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+// --- 1. SAFE CONFIGURATION ---
+// We wrap this in a try-catch so the page doesn't crash if run locally
+let db, auth;
+let appId = 'default-app-id';
+
+try {
+    if (typeof __firebase_config !== 'undefined') {
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        if (typeof __app_id !== 'undefined') appId = __app_id;
+    } else {
+        console.warn("⚠️ No Firebase Config found. Are you running this locally?");
+    }
+} catch (e) {
+    console.error("Firebase Init Error:", e);
+}
 
 // PASSWORD
 const ADMIN_PASSWORD = "admin"; 
 
 // START
-injectLoginScreen();
+// Wait for DOM to be ready to handle the hiding/showing correctly
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAdmin);
+} else {
+    initAdmin();
+}
 
-function injectLoginScreen() {
+function initAdmin() {
+    // 1. Force Body Visible (Overrides CSS display:none)
+    document.body.style.display = 'block';
+
+    // 2. Hide Dashboard Content (So we only see login first)
+    const dashboardContent = document.querySelectorAll('.admin-header, .container');
+    dashboardContent.forEach(el => el.style.display = 'none');
+
+    // 3. Inject Login Screen
+    injectLoginScreen(dashboardContent);
+}
+
+function injectLoginScreen(dashboardContent) {
     if(document.getElementById('login-overlay')) return;
 
     const loginHTML = `
@@ -35,16 +65,18 @@ function injectLoginScreen() {
                 border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem;
             ">Login</button>
             <p id="login-error" style="color: red; display: none; margin-top: 10px;">Incorrect Password</p>
+            ${!db ? '<p style="color:orange; font-size:0.8rem; margin-top:10px;">⚠️ Running Locally: Database not connected.</p>' : ''}
         </div>
     </div>
     `;
-    document.documentElement.insertAdjacentHTML('beforeend', loginHTML);
+    document.body.insertAdjacentHTML('beforeend', loginHTML);
 
     const check = () => {
         const val = document.getElementById('admin-pass').value;
         if(val === ADMIN_PASSWORD) {
             document.getElementById('login-overlay').remove();
-            document.body.style.display = 'block'; // UNHIDE BODY
+            // Show Dashboard Content
+            dashboardContent.forEach(el => el.style.display = '');
             loadOrders();
         } else {
             document.getElementById('login-error').style.display = 'block';
@@ -59,6 +91,17 @@ async function loadOrders() {
     const container = document.getElementById('orders-container');
     if(!container) return;
     
+    // Safety check for local running
+    if (!db || !auth) {
+        container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; background: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; border: 1px solid #ffeeba;">
+                <h3>⚠️ Database Not Connected</h3>
+                <p>It looks like you are opening this file locally (file://).<br>
+                For the Admin Dashboard to read orders, this site needs to be hosted on a server or Firebase Hosting.</p>
+            </div>`;
+        return;
+    }
+
     container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Loading...</p>';
 
     try {
