@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA ADMIN DASHBOARD (FORCED CONFIG)
+ * JAVASCRIPT FOR KAYA ADMIN DASHBOARD (CRASH-PROOF)
  * ======================================================
  */
 
@@ -8,7 +8,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. YOUR REAL KEYS (HARDCODED) ---
+// --- 1. YOUR REAL KEYS ---
 const firebaseConfig = {
   apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
@@ -19,19 +19,12 @@ const firebaseConfig = {
   measurementId: "G-Q05ZZFHSM3"
 };
 
-// DEBUG: Verify keys are loading
-console.log("✅ Config Loaded:", firebaseConfig.apiKey);
-
-// --- 2. INITIALIZE FIREBASE DIRECTLY ---
-// We removed the try/catch logic to force it to use the keys above.
+// --- 2. INITIALIZE FIREBASE ---
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Use your specific collection name
 const COLLECTION_NAME = 'kaya_orders'; 
-
-// PASSWORD
 const ADMIN_PASSWORD = "admin"; 
 
 // START
@@ -87,7 +80,6 @@ async function loadOrders() {
     try {
         await signInAnonymously(auth);
         
-        // Fetch from 'kaya_orders'
         const snapshot = await getDocs(collection(db, COLLECTION_NAME));
 
         if (snapshot.empty) {
@@ -102,40 +94,71 @@ async function loadOrders() {
         orders.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
 
         container.innerHTML = '';
+        
         orders.forEach(order => {
-            let itemsHtml = '';
-            if(order.items) {
-                itemsHtml = order.items.map(i => `<li>${i.name} (${i.price})</li>`).join('');
+            // --- SAFETY CHECK START ---
+            // If order data is broken, skip rendering it or fill with placeholders
+            // This prevents the "undefined reading name" error
+            const cust = order.customer || {};
+            const addr = cust.address || {};
+            const items = order.items || [];
+            
+            const name = cust.name || "Unknown Customer";
+            const email = cust.email || "No Email";
+            const phone = cust.phone || "No Phone";
+            const total = order.total || "0.00";
+            const status = order.status || "UNKNOWN";
+            const method = order.paymentMethod || "Unknown";
+            
+            // Format Address Safely
+            const addressStr = addr.city 
+                ? `${addr.unit || ''} ${addr.street || ''}<br>${addr.zip || ''} ${addr.city || ''}`
+                : "No Address Provided";
+
+            // Format Date Safely
+            let dateStr = "Unknown Date";
+            if(order.timestamp) {
+                dateStr = new Date(order.timestamp.seconds * 1000).toLocaleString();
             }
             
-            let dateStr = "Unknown Date";
-            if(order.timestamp) dateStr = new Date(order.timestamp.seconds * 1000).toLocaleString();
+            // Format Items Safely
+            let itemsHtml = items.map(i => `<li><span>${i.name || 'Item'}</span> <span>${i.price || '0'}</span></li>`).join('');
+            // --- SAFETY CHECK END ---
 
             container.innerHTML += `
             <div class="order-card">
                 <div class="order-header">
                     <span class="order-id">#${order.id.slice(0,6)}</span>
-                    <span class="status-badge">${order.status}</span>
+                    <span class="status-badge">${status}</span>
                 </div>
                 <div class="customer-section">
-                    <div class="customer-name">${order.customer.name}</div>
-                    <div class="customer-contact">${order.customer.email}</div>
-                    <div class="customer-contact">${order.customer.phone}</div>
+                    <div class="customer-name">${name}</div>
+                    <div class="customer-contact">${email}</div>
+                    <div class="customer-contact">${phone}</div>
+                    
                     <div class="customer-address">
-                        ${order.customer.address.unit}, ${order.customer.address.street}<br>
-                        ${order.customer.address.zip} ${order.customer.address.city}
+                        <strong><i class="fas fa-shipping-fast"></i> Ship To:</strong><br>
+                        ${addressStr}
                     </div>
                 </div>
+
+                <div style="font-size: 0.85rem; color: #888; margin-bottom: 5px;">Payment: ${method}</div>
                 <div class="order-time">${dateStr}</div>
-                <ul class="items-list">${itemsHtml}</ul>
-                <div class="order-total">USD ${order.total}</div>
-                <div style="font-size:0.8rem; color:#666; margin-top:5px;">Method: ${order.paymentMethod}</div>
-            </div>`;
+
+                <ul class="items-list">
+                    ${itemsHtml}
+                </ul>
+
+                <div class="order-total">
+                    USD ${total}
+                </div>
+            </div>
+            `;
         });
 
     } catch (error) {
         console.error(error);
-        container.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        container.innerHTML = `<p style="color: red; grid-column: 1/-1;">Error loading data: ${error.message}<br>Check Console for details.</p>`;
     }
 }
 
