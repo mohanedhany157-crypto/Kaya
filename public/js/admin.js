@@ -2,49 +2,37 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. SAFE CONFIGURATION ---
-// We wrap this in a try-catch so the page doesn't crash if run locally
-let db, auth;
-let appId = 'default-app-id';
+// --- 1. FIREBASE CONFIGURATION ---
+// 🔴 PASTE YOUR KEYS HERE FROM FIREBASE CONSOLE 🔴
+const MANUAL_FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+  authDomain: "kaya-store-31083.firebaseapp.com",
+  projectId: "kaya-store-31083",
+  storageBucket: "kaya-store-31083.firebasestorage.app",
+  messagingSenderId: "935048383330",
+  appId: "1:935048383330:web:7d7444406aefa975677a3b",
+  measurementId: "G-Q05ZZFHSM3"
+};
 
+let db, auth;
+let appId = 'kaya-store-live';
+
+// Initialize Firebase
 try {
-    if (typeof __firebase_config !== 'undefined') {
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        if (typeof __app_id !== 'undefined') appId = __app_id;
-    } else {
-        console.warn("⚠️ No Firebase Config found. Are you running this locally?");
-    }
+    const app = initializeApp(MANUAL_FIREBASE_CONFIG);
+    auth = getAuth(app);
+    db = getFirestore(app);
 } catch (e) {
-    console.error("Firebase Init Error:", e);
+    console.error("Firebase Connection Error:", e);
 }
 
 // PASSWORD
 const ADMIN_PASSWORD = "admin"; 
 
 // START
-// Wait for DOM to be ready to handle the hiding/showing correctly
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAdmin);
-} else {
-    initAdmin();
-}
+injectLoginScreen();
 
-function initAdmin() {
-    // 1. Force Body Visible (Overrides CSS display:none)
-    document.body.style.display = 'block';
-
-    // 2. Hide Dashboard Content (So we only see login first)
-    const dashboardContent = document.querySelectorAll('.admin-header, .container');
-    dashboardContent.forEach(el => el.style.display = 'none');
-
-    // 3. Inject Login Screen
-    injectLoginScreen(dashboardContent);
-}
-
-function injectLoginScreen(dashboardContent) {
+function injectLoginScreen() {
     if(document.getElementById('login-overlay')) return;
 
     const loginHTML = `
@@ -65,18 +53,17 @@ function injectLoginScreen(dashboardContent) {
                 border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem;
             ">Login</button>
             <p id="login-error" style="color: red; display: none; margin-top: 10px;">Incorrect Password</p>
-            ${!db ? '<p style="color:orange; font-size:0.8rem; margin-top:10px;">⚠️ Running Locally: Database not connected.</p>' : ''}
+            ${!db ? '<p style="color:orange; font-size:0.8rem; margin-top:10px;">⚠️ Database Not Connected. Did you paste the config in admin.js?</p>' : ''}
         </div>
     </div>
     `;
-    document.body.insertAdjacentHTML('beforeend', loginHTML);
+    document.documentElement.insertAdjacentHTML('beforeend', loginHTML);
 
     const check = () => {
         const val = document.getElementById('admin-pass').value;
         if(val === ADMIN_PASSWORD) {
             document.getElementById('login-overlay').remove();
-            // Show Dashboard Content
-            dashboardContent.forEach(el => el.style.display = '');
+            document.body.style.display = 'block'; 
             loadOrders();
         } else {
             document.getElementById('login-error').style.display = 'block';
@@ -91,25 +78,15 @@ async function loadOrders() {
     const container = document.getElementById('orders-container');
     if(!container) return;
     
-    // Safety check for local running
-    if (!db || !auth) {
-        container.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; background: #fff3cd; color: #856404; padding: 20px; border-radius: 8px; border: 1px solid #ffeeba;">
-                <h3>⚠️ Database Not Connected</h3>
-                <p>It looks like you are opening this file locally (file://).<br>
-                For the Admin Dashboard to read orders, this site needs to be hosted on a server or Firebase Hosting.</p>
-            </div>`;
-        return;
-    }
-
     container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;"><i class="fas fa-spinner fa-spin fa-2x"></i><br>Loading...</p>';
 
     try {
         await signInAnonymously(auth);
-        const snapshot = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'orders'));
+        // Using 'kaya_orders' collection to match script.js
+        const snapshot = await getDocs(collection(db, 'kaya_orders'));
 
         if (snapshot.empty) {
-            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">No orders yet.</p>';
+            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">No orders found in database.</p>';
             return;
         }
 
@@ -121,7 +98,10 @@ async function loadOrders() {
 
         container.innerHTML = '';
         orders.forEach(order => {
-            let itemsHtml = order.items.map(i => `<li>${i.name} (${i.price})</li>`).join('');
+            let itemsHtml = '';
+            if(order.items) {
+                itemsHtml = order.items.map(i => `<li>${i.name} (${i.price})</li>`).join('');
+            }
             
             let dateStr = "Unknown Date";
             if(order.timestamp) dateStr = new Date(order.timestamp.seconds * 1000).toLocaleString();
@@ -149,6 +129,7 @@ async function loadOrders() {
         });
 
     } catch (error) {
+        console.error(error);
         container.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
     }
 }
