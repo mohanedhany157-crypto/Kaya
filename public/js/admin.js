@@ -3,9 +3,9 @@ import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/1
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 // --- 1. FIREBASE CONFIGURATION ---
-// 🔴 PASTE YOUR KEYS HERE FROM FIREBASE CONSOLE 🔴
+// 🔴 YOU MUST PASTE YOUR KEYS HERE OR THE ADMIN PAGE WILL FAIL 🔴
 const MANUAL_FIREBASE_CONFIG = {
-    apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+     apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
   projectId: "kaya-store-31083",
   storageBucket: "kaya-store-31083.firebasestorage.app",
@@ -13,6 +13,12 @@ const MANUAL_FIREBASE_CONFIG = {
   appId: "1:935048383330:web:7d7444406aefa975677a3b",
   measurementId: "G-Q05ZZFHSM3"
 };
+
+// --- SAFETY CHECK ---
+if (!MANUAL_FIREBASE_CONFIG.apiKey) {
+    alert("⚠️ STOP! You forgot to paste the Firebase Keys into 'js/admin.js'.\n\n1. Go to Firebase Console\n2. Project Settings -> General -> Your Apps\n3. Copy the config\n4. Paste it inside MANUAL_FIREBASE_CONFIG in this file.");
+    throw new Error("Missing Firebase Config in admin.js");
+}
 
 let db, auth;
 let appId = 'kaya-store-live';
@@ -24,6 +30,7 @@ try {
     db = getFirestore(app);
 } catch (e) {
     console.error("Firebase Connection Error:", e);
+    alert("Firebase Error: " + e.message);
 }
 
 // PASSWORD
@@ -53,7 +60,6 @@ function injectLoginScreen() {
                 border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem;
             ">Login</button>
             <p id="login-error" style="color: red; display: none; margin-top: 10px;">Incorrect Password</p>
-            ${!db ? '<p style="color:orange; font-size:0.8rem; margin-top:10px;">⚠️ Database Not Connected. Did you paste the config in admin.js?</p>' : ''}
         </div>
     </div>
     `;

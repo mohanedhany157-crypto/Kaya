@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (FIREBASE CONNECTED)
+ * JAVASCRIPT FOR KAYA STORE (ROBUST & LOCAL-SAFE)
  * ======================================================
  */
 
@@ -9,9 +9,9 @@ import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/1
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 // --- 1. FIREBASE CONFIGURATION ---
-// 🔴 ACTION REQUIRED: PASTE YOUR FIREBASE CONFIG INSIDE THESE BRACKETS 🔴
+// 🔴 ACTION REQUIRED: PASTE YOUR FIREBASE CONFIG HERE 🔴
 const MANUAL_FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+     apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
   projectId: "kaya-store-31083",
   storageBucket: "kaya-store-31083.firebasestorage.app",
@@ -21,19 +21,22 @@ const MANUAL_FIREBASE_CONFIG = {
 };
 
 let db, auth;
-// We try to connect. If you pasted the config above, it will work!
-try {
-    const app = initializeApp(MANUAL_FIREBASE_CONFIG);
-    auth = getAuth(app);
-    db = getFirestore(app);
-    
-    // Connect Anonymously to allow writing to DB
-    signInAnonymously(auth)
-        .then(() => console.log("🔥 Firebase Connected Successfully"))
-        .catch(e => console.error("Auth Failed:", e));
+let appId = 'kaya-store-live'; 
 
+try {
+    // Check if keys exist before initializing
+    if (!MANUAL_FIREBASE_CONFIG.apiKey && typeof __firebase_config === 'undefined') {
+        console.warn("⚠️ NO FIREBASE KEYS FOUND. Checkout will be in simulation mode.");
+    } else {
+        const configToUse = (typeof __firebase_config !== 'undefined') ? JSON.parse(__firebase_config) : MANUAL_FIREBASE_CONFIG;
+        const app = initializeApp(configToUse);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        
+        signInAnonymously(auth).catch(e => console.error("Auth Failed:", e));
+    }
 } catch (e) {
-    console.error("Firebase Connection Failed. Did you paste the config?", e);
+    console.error("Firebase Init Error:", e);
 }
 
 // --- 2. CART STATE ---
@@ -141,7 +144,7 @@ function injectCartModal() {
                         <!-- PAYPAL CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         
-                        <!-- Manual Button (Always visible if PayPal fails or for testing) -->
+                        <!-- Manual Button (Fallback) -->
                         <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
                             <p style="font-size:0.9rem; color:#666; margin-bottom:10px; text-align:center;">Having trouble with PayPal? Use Manual Transfer.</p>
                             <button type="submit" id="manual-order-btn" class="btn btn-secondary" style="width:100%;">Place Order (Manual Transfer)</button>
