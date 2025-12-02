@@ -1,11 +1,16 @@
+/**
+ * ======================================================
+ * JAVASCRIPT FOR KAYA ADMIN DASHBOARD (FORCED CONFIG)
+ * ======================================================
+ */
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. FIREBASE CONFIGURATION ---
-// 🔴 YOU MUST PASTE YOUR KEYS HERE OR THE ADMIN PAGE WILL FAIL 🔴
-const MANUAL_FIREBASE_CONFIG = {
-     apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+// --- 1. YOUR REAL KEYS (HARDCODED) ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
   projectId: "kaya-store-31083",
   storageBucket: "kaya-store-31083.firebasestorage.app",
@@ -14,24 +19,14 @@ const MANUAL_FIREBASE_CONFIG = {
   measurementId: "G-Q05ZZFHSM3"
 };
 
-// --- SAFETY CHECK ---
-if (!MANUAL_FIREBASE_CONFIG.apiKey) {
-    alert("⚠️ STOP! You forgot to paste the Firebase Keys into 'js/admin.js'.\n\n1. Go to Firebase Console\n2. Project Settings -> General -> Your Apps\n3. Copy the config\n4. Paste it inside MANUAL_FIREBASE_CONFIG in this file.");
-    throw new Error("Missing Firebase Config in admin.js");
-}
+// --- 2. INITIALIZE FIREBASE DIRECTLY ---
+// We removed the try/catch logic to force it to use the keys above.
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-let db, auth;
-let appId = 'kaya-store-live';
-
-// Initialize Firebase
-try {
-    const app = initializeApp(MANUAL_FIREBASE_CONFIG);
-    auth = getAuth(app);
-    db = getFirestore(app);
-} catch (e) {
-    console.error("Firebase Connection Error:", e);
-    alert("Firebase Error: " + e.message);
-}
+// Use your specific collection name
+const COLLECTION_NAME = 'kaya_orders'; 
 
 // PASSWORD
 const ADMIN_PASSWORD = "admin"; 
@@ -88,8 +83,9 @@ async function loadOrders() {
 
     try {
         await signInAnonymously(auth);
-        // Using 'kaya_orders' collection to match script.js
-        const snapshot = await getDocs(collection(db, 'kaya_orders'));
+        
+        // Fetch from 'kaya_orders'
+        const snapshot = await getDocs(collection(db, COLLECTION_NAME));
 
         if (snapshot.empty) {
             container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">No orders found in database.</p>';

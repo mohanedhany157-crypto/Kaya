@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (ROBUST & LOCAL-SAFE)
+ * JAVASCRIPT FOR KAYA STORE (FORCED CONFIG)
  * ======================================================
  */
 
@@ -8,10 +8,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. FIREBASE CONFIGURATION ---
-// 🔴 ACTION REQUIRED: PASTE YOUR FIREBASE CONFIG HERE 🔴
-const MANUAL_FIREBASE_CONFIG = {
-     apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+// --- 1. YOUR REAL KEYS (HARDCODED) ---
+const firebaseConfig = {
+  apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
   projectId: "kaya-store-31083",
   storageBucket: "kaya-store-31083.firebasestorage.app",
@@ -20,29 +19,23 @@ const MANUAL_FIREBASE_CONFIG = {
   measurementId: "G-Q05ZZFHSM3"
 };
 
-let db, auth;
-let appId = 'kaya-store-live'; 
+// --- 2. INITIALIZE FIREBASE DIRECTLY ---
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-try {
-    // Check if keys exist before initializing
-    if (!MANUAL_FIREBASE_CONFIG.apiKey && typeof __firebase_config === 'undefined') {
-        console.warn("⚠️ NO FIREBASE KEYS FOUND. Checkout will be in simulation mode.");
-    } else {
-        const configToUse = (typeof __firebase_config !== 'undefined') ? JSON.parse(__firebase_config) : MANUAL_FIREBASE_CONFIG;
-        const app = initializeApp(configToUse);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        
-        signInAnonymously(auth).catch(e => console.error("Auth Failed:", e));
-    }
-} catch (e) {
-    console.error("Firebase Init Error:", e);
-}
+// Use your specific collection name
+const COLLECTION_NAME = 'kaya_orders'; 
 
-// --- 2. CART STATE ---
+// Connect immediately
+signInAnonymously(auth).then(() => {
+    console.log("Store Connected to Database");
+}).catch(e => console.error("Auth Error:", e));
+
+
+// --- 3. CART LOGIC ---
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
 
-// --- 3. CART FUNCTIONS ---
 function saveCart() {
     localStorage.setItem('kayaCart', JSON.stringify(cart));
     updateCartCount();
@@ -73,7 +66,7 @@ function getCartTotal() {
     return Math.round(total).toFixed(2);
 }
 
-// --- 4. MODAL & UI ---
+// --- 4. MODAL UI ---
 function injectCartModal() {
     if(document.querySelector('.cart-modal-overlay')) return;
 
@@ -81,7 +74,7 @@ function injectCartModal() {
     <div class="cart-modal-overlay">
         <div class="cart-modal">
             
-            <!-- VIEW 1: CART -->
+            <!-- CART VIEW -->
             <div id="cart-view">
                 <div class="cart-header">
                     <h3>Your Cart</h3>
@@ -99,7 +92,7 @@ function injectCartModal() {
                 </div>
             </div>
 
-            <!-- VIEW 2: CHECKOUT FORM -->
+            <!-- CHECKOUT FORM VIEW -->
             <div id="checkout-view" style="display:none; height:100%; flex-direction:column;">
                 <div class="cart-header">
                     <button class="back-to-cart"><i class="fas fa-arrow-left"></i> Back</button>
@@ -144,7 +137,7 @@ function injectCartModal() {
                         <!-- PAYPAL CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         
-                        <!-- Manual Button (Fallback) -->
+                        <!-- Manual Button Fallback -->
                         <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
                             <p style="font-size:0.9rem; color:#666; margin-bottom:10px; text-align:center;">Having trouble with PayPal? Use Manual Transfer.</p>
                             <button type="submit" id="manual-order-btn" class="btn btn-secondary" style="width:100%;">Place Order (Manual Transfer)</button>
@@ -174,7 +167,6 @@ function setupEventListeners() {
         if(e.target === document.querySelector('.cart-modal-overlay')) closeCart();
     });
 
-    // Manual fallback submit
     const form = document.getElementById('order-form');
     if(form) form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -195,7 +187,6 @@ function showCheckout() {
     const container = document.getElementById('paypal-button-container');
     container.innerHTML = ''; 
     
-    // Check if PayPal loaded
     if (window.paypal) {
         window.paypal.Buttons({
             createOrder: function(data, actions) {
@@ -216,18 +207,12 @@ function showCheckout() {
             },
             onError: function(err) {
                 console.error("PayPal Error:", err);
-                alert("PayPal failed to load. Please use Manual Transfer below.");
             }
         }).render('#paypal-button-container');
     }
 }
 
 async function saveOrderToFirebase(paymentDetails) {
-    if (!db) {
-        alert("⚠️ DATABASE NOT CONNECTED!\n\nPlease paste your Firebase Config into script.js (lines 13-19) to save orders.");
-        return;
-    }
-
     const orderData = {
         customer: {
             name: document.getElementById('name').value,
@@ -249,7 +234,7 @@ async function saveOrderToFirebase(paymentDetails) {
     };
 
     try {
-        await addDoc(collection(db, 'kaya_orders'), orderData);
+        await addDoc(collection(db, COLLECTION_NAME), orderData);
         alert(`🎉 Order Placed Successfully!\n\nThank you, ${orderData.customer.name}.\nOrder ID: ${paymentDetails.id}`);
         cart = [];
         saveCart();
@@ -258,11 +243,10 @@ async function saveOrderToFirebase(paymentDetails) {
         document.getElementById('order-form').reset();
     } catch(e) {
         console.error("DB Error", e);
-        // Fallback for permission errors
         if (e.code === 'permission-denied') {
-            alert("Error: Database permission denied. \n\nGo to Firebase Console -> Firestore Database -> Rules -> Change 'allow read, write: if false;' to 'allow read, write: if true;'");
+            alert("Error: Database Permission Denied. Check Firebase Console Rules.");
         } else {
-            alert("Payment successful but failed to save order to database.");
+            alert("Payment successful but failed to save order.");
         }
     }
 }
@@ -307,7 +291,6 @@ function renderCartItems() {
     document.querySelector('.total-price').textContent = 'USD ' + getCartTotal();
 }
 
-// Global Exports
 window.removeFromCart = removeFromCart;
 
 document.addEventListener('DOMContentLoaded', () => {
