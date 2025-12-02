@@ -5,7 +5,7 @@ import { getFirestore, collection, getDocs } from "https://www.gstatic.com/fireb
 // --- 1. FIREBASE CONFIGURATION ---
 // 🔴 PASTE YOUR KEYS HERE FROM FIREBASE CONSOLE 🔴
 const MANUAL_FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+    apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
   projectId: "kaya-store-31083",
   storageBucket: "kaya-store-31083.firebasestorage.app",

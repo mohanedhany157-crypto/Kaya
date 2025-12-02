@@ -11,7 +11,7 @@ import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.g
 // --- 1. FIREBASE CONFIGURATION ---
 // 🔴 ACTION REQUIRED: PASTE YOUR FIREBASE CONFIG INSIDE THESE BRACKETS 🔴
 const MANUAL_FIREBASE_CONFIG = {
-     apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
+  apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
   projectId: "kaya-store-31083",
   storageBucket: "kaya-store-31083.firebasestorage.app",
