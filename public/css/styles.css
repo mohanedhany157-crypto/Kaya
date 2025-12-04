@@ -166,8 +166,24 @@ h2 {
 .product-details .add-to-cart-btn { display: block; width: 100%; padding: 12px; border-radius: 50px; font-size: 1rem; }
 .product-badge { position: absolute; top: 15px; right: 15px; background-color: var(--color-primary-accent); color: white; padding: 5px 10px; border-radius: 50px; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
 
-.value-prop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; padding: 40px 0; margin-top: 40px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-.value-prop-item i { font-size: 2.5rem; color: var(--kaya-a2); margin-bottom: 10px; }
+/* --- UPDATED: VALUE PROP GRID (Transparent & Alternating Colors) --- */
+.value-prop-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; 
+    text-align: center; 
+    padding: 40px 0; 
+    margin-top: 40px; 
+    background: transparent; /* TRANSPARENT NOW */
+    border-radius: 12px; 
+    box-shadow: none; /* REMOVED SHADOW */
+}
+/* Alternating Colors for Icons and Text */
+.value-prop-item:nth-child(1) i, .value-prop-item:nth-child(1) h4 { color: var(--kaya-a1); /* Yellow */ text-shadow: 1px 1px 0 #000; }
+.value-prop-item:nth-child(2) i, .value-prop-item:nth-child(2) h4 { color: var(--kaya-a2); /* Blue */ text-shadow: 1px 1px 0 #000; }
+.value-prop-item:nth-child(3) i, .value-prop-item:nth-child(3) h4 { color: var(--kaya-y); /* Green */ text-shadow: 1px 1px 0 #000; }
+
+.value-prop-item i { font-size: 2.5rem; margin-bottom: 10px; }
 
 /* --- Buttons --- */
 .btn { 
@@ -182,7 +198,7 @@ h2 {
 .btn-secondary { background-color: var(--color-secondary-accent); color: var(--color-text-dark); box-shadow: 0 8px 15px rgba(255, 188, 0, 0.4); }
 .btn:hover { transform: translateY(-4px); }
 
-/* --- Linktree (FLOWING IN SPACE) --- */
+/* --- Linktree --- */
 .linktree { 
     display: flex; 
     flex-direction: column; 
@@ -219,14 +235,13 @@ h2 {
     display: grid; 
     grid-template-columns: 1fr 1fr; 
     gap: 40px; 
-    background: transparent; /* No White Background */
+    background: transparent; 
     padding: 40px; 
     border-radius: var(--border-radius-lg); 
-    /* Removed Shadow to make it float */
 }
 .main-image-container { 
     position: relative; width: 100%; height: 350px; 
-    background-color: #fff4e0; /* Keep image bg so product pops */
+    background-color: #fff4e0; 
     border-radius: 12px; 
     border: 2px solid var(--color-secondary-accent); 
     overflow: hidden; 
@@ -245,7 +260,6 @@ h2 {
 /* Text colors for transparent bg */
 .product-info-content h1 { font-size: 2.5rem; color: white; margin-bottom: 10px; line-height: 1.2; text-shadow: 2px 2px 0 #000; }
 .price-tag { font-size: 2rem; color: var(--color-secondary-accent); font-weight: 800; margin-bottom: 20px; text-shadow: 1px 1px 0 #000; }
-/* Description text will be colored via JS now */
 .product-desc { font-size: 1.1rem; margin-bottom: 30px; line-height: 1.8; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
 
 /* --- Rules Page --- */
@@ -282,14 +296,13 @@ h2 {
 .footer a:hover { color: var(--color-accent-green); }
 
 /* --- Cart Modal (FIXED POPUP) --- */
-/* 1. The Dark Overlay */
 .cart-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Darker for better focus */
+    background-color: rgba(0, 0, 0, 0.7); 
     z-index: 2000;
     display: none;
     justify-content: center;
@@ -297,25 +310,21 @@ h2 {
     backdrop-filter: blur(5px);
 }
 
-/* 2. Show Overlay */
-.cart-modal-overlay.open {
-    display: flex;
-}
+.cart-modal-overlay.open { display: flex; }
 
-/* 3. The Modal Box */
 .cart-modal {
-    background: #FEF6EC; /* Light cream background */
+    background: #FEF6EC;
     width: 90%;
-    max-width: 450px; /* Good width for a cart */
+    max-width: 450px;
     border-radius: 20px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.5);
     position: relative;
-    max-height: 85vh;
+    max-height: 85vh; /* Limit height for modal */
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    border: 3px solid var(--color-primary-accent); /* Orange border */
-    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Nice pop effect */
+    overflow: hidden; /* Hide overflow of the modal itself, let children scroll */
+    border: 3px solid var(--color-primary-accent);
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes popIn {
@@ -323,7 +332,6 @@ h2 {
     to { transform: scale(1); opacity: 1; }
 }
 
-/* Header */
 .cart-header {
     display: flex;
     justify-content: space-between;
@@ -331,18 +339,30 @@ h2 {
     background-color: var(--color-primary-accent);
     padding: 20px 25px;
     color: white;
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
 .cart-header h3 { margin: 0; font-size: 1.4rem; font-family: var(--font-family-title); letter-spacing: 1px; }
 .close-cart, .back-to-cart { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: white; transition: transform 0.2s; }
 .close-cart:hover { transform: rotate(90deg); }
 
-/* Body & Items */
+/* FIX SCROLLING HERE */
 .cart-body {
-    flex: 1;
-    overflow-y: auto;
+    flex: 1; /* Take up remaining space */
+    overflow-y: auto; /* Enable vertical scrolling */
     padding: 25px;
-    background-color: #fff; /* White background for items */
+    background-color: #fff;
+    min-height: 0; /* Critical for nested flex scrolling */
 }
+
+/* Ensure nested checkout view also scrolls */
+#checkout-view {
+    display: flex; 
+    flex-direction: column; 
+    height: 100%; 
+    min-height: 0;
+    overflow: hidden;
+}
+
 .cart-items { margin-bottom: 20px; }
 .cart-item {
     display: flex;
@@ -360,12 +380,12 @@ h2 {
 .remove-item { color: #D44638; cursor: pointer; font-size: 1rem; transition: transform 0.2s; padding: 5px; }
 .remove-item:hover { transform: scale(1.2); }
 
-/* Footer */
 .cart-footer {
     padding: 25px;
     background-color: #fff;
     border-top: 2px solid #f0f0f0;
     text-align: center;
+    flex-shrink: 0; /* Prevent footer from shrinking */
 }
 .cart-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; color: var(--color-text-dark); }
 .cart-total .total-price { color: var(--color-primary-accent); }
@@ -387,7 +407,7 @@ h2 {
     .rules-effects { grid-column: 2 / 3; grid-row: 1 / span 3; }
 }
 @media (max-width: 768px) {
-    .cart-modal { width: 95%; } 
+    .cart-modal { width: 95%; max-height: 90vh; } 
     .menu-toggle { display: block; }
     .nav-menu { display: none; flex-direction: column; width: 100%; position: absolute; top: 60px; left: 0; background-color: var(--color-bg-white); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center; padding: 10px 0; z-index: 999; }
     .nav-menu.active { display: flex; }
