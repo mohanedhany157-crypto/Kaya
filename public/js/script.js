@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (FINAL)
+ * JAVASCRIPT FOR KAYA STORE (FINAL FIX)
  * ======================================================
  */
 
@@ -8,7 +8,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. CONFIG ---
+// --- 1. FIREBASE KEYS ---
 const firebaseConfig = {
   apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
@@ -26,7 +26,7 @@ const COLLECTION_NAME = 'kaya_orders';
 
 signInAnonymously(auth).catch(e => console.error("Auth Error:", e));
 
-// --- 2. SPACE BACKGROUND ANIMATION (THEMED STARS) ---
+// --- 2. SPACE BACKGROUND (KAYA THEMED STARS) ---
 function initSpaceBackground() {
     const canvas = document.getElementById('space-canvas');
     if (!canvas) return;
@@ -34,8 +34,11 @@ function initSpaceBackground() {
     const ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
-    const numStars = 150;
+    const numStars = 400; // MORE STARS
     let mouseX = 0, mouseY = 0;
+    
+    // KAYA BRAND COLORS
+    const kayaColors = ['#FD4D0A', '#FFBC00', '#4D9222', '#0094E8'];
 
     function resize() {
         width = window.innerWidth;
@@ -47,7 +50,7 @@ function initSpaceBackground() {
     resize();
 
     document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX - width / 2) * 0.02; // Gentle parallax
+        mouseX = (e.clientX - width / 2) * 0.02;
         mouseY = (e.clientY - height / 2) * 0.02;
     });
 
@@ -58,14 +61,11 @@ function initSpaceBackground() {
             this.y = (Math.random() - 0.5) * height * 2;
             this.z = Math.random() * width; 
             this.size = Math.random() * 2;
-            // STARS ARE NOW ORANGE, YELLOW OR WHITE
-            const rand = Math.random();
-            if (rand > 0.7) this.color = '#FD4D0A'; // Orange
-            else if (rand > 0.4) this.color = '#FFBC00'; // Yellow
-            else this.color = '#ffffff'; 
+            // Pick Random Brand Color
+            this.color = kayaColors[Math.floor(Math.random() * kayaColors.length)];
         }
         update() {
-            this.z -= 1.5; // Gentle speed
+            this.z -= 2; // Speed
             if (this.z <= 0) this.reset();
         }
         draw() {
@@ -84,7 +84,7 @@ function initSpaceBackground() {
     for (let i = 0; i < numStars; i++) stars.push(new Star());
 
     function animate() {
-        ctx.clearRect(0, 0, width, height); // Transparent clear to see CSS background
+        ctx.clearRect(0, 0, width, height);
         stars.forEach(star => { star.update(); star.draw(); });
         requestAnimationFrame(animate);
     }
@@ -187,7 +187,7 @@ function loadProductDetails(id) {
     });
 }
 
-// --- 5. CART LOGIC (SAME AS BEFORE) ---
+// --- 5. CART LOGIC ---
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
 function saveCart() { localStorage.setItem('kayaCart', JSON.stringify(cart)); updateCartCount(); renderCartItems(); }
 function updateCartCount() {
@@ -285,7 +285,7 @@ function openCart() { renderCartItems(); document.querySelector('.cart-modal-ove
 function closeCart() { document.querySelector('.cart-modal-overlay').classList.remove('open'); }
 function renderCartItems() {
     const container = document.querySelector('.cart-items');
-    if(cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Empty</p>'; document.querySelector('.total-price').textContent = 'USD 0.00'; return; }
+    if(cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">Empty</p>'; document.querySelector('.total-price').textContent = 'USD 0.00'; return; }
     let html = '';
     cart.forEach((item, i) => { html += `<div class="cart-item"><div class="cart-item-info"><h4>${item.name}</h4><span>USD ${item.price}</span></div><i class="fas fa-trash remove-item" onclick="removeFromCart(${i})"></i></div>`; });
     container.innerHTML = html; document.querySelector('.total-price').textContent = 'USD ' + getCartTotal();

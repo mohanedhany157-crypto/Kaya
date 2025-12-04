@@ -18,9 +18,7 @@
 <header class="header">
     <div class="container nav-content">
         <a href="index.html" class="logo-link">
-            <div class="logo">
-                <span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span>
-            </div>
+            <div class="logo"><span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span></div>
         </a>
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
         <nav class="nav-menu">
@@ -49,7 +47,8 @@
     <div class="container">
         <h2 class="title-with-icon"><i class="fas fa-book-open"></i> Official Manual</h2>
         <div class="rules-main-content">
-            <!-- Content Blocks (Same as before) -->
+            
+            <!-- Block 1: Objective & Setup -->
             <div class="pitch-block rules-list">
                 <h3><i class="fas fa-flag-checkered"></i> The Objective</h3>
                 <p style="font-size: 1.2rem; font-weight: 600;">Be the first player to save <span style="color: var(--color-accent-green);">K500</span>!</p>
@@ -57,26 +56,66 @@
                 <h3><i class="fas fa-box-open"></i> Game Setup</h3>
                 <ol>
                     <li><strong>Shuffle:</strong> Shuffle the deck thoroughly.</li>
-                    <li><strong>Deal:</strong> Deal **7 cards** to each player.</li>
-                    <li><strong>Bank Pile:</strong> Place all <strong>Income Cards</strong> face-up in front of you.</li>
-                    <li><strong>Start:</strong> Whoever has the **least money** starts first!</li>
+                    <li><strong>Deal:</strong> Deal <strong>7 cards</strong> to each player.</li>
+                    <li><strong>Bank Pile:</strong> Place all <strong>Income Cards</strong> (Salary, Side Hustle, etc.) face-up in front of you.</li>
+                    <li><strong>Start:</strong> Whoever has the <strong>least money</strong> starts first!</li>
                 </ol>
             </div>
-            <!-- (Rest of rules omitted for brevity, same as before) -->
-             <div class="pitch-block rules-list">
+
+            <!-- Block 2: Turn Sequence -->
+            <div class="pitch-block rules-list">
                 <h3><i class="fas fa-redo"></i> How to Play Your Turn</h3>
                 <div class="step-guide">
-                    <div class="step-item"><div class="step-number">1</div><div class="step-desc"><strong>Draw</strong> one card.</div></div>
-                    <div class="step-item"><div class="step-number">2</div><div class="step-desc"><strong>Pay</strong> any consequence.</div></div>
-                    <div class="step-item"><div class="step-number">3</div><div class="step-desc"><strong>Play</strong> one Action Card.</div></div>
+                    <div class="step-item"><div class="step-number">1</div><div class="step-desc"><strong>Draw</strong> one card from the deck.</div></div>
+                    <div class="step-item"><div class="step-number">2</div><div class="step-desc"><strong>Pay or Deflect</strong> any consequence (Needs, Wants, Attacks).</div></div>
+                    <div class="step-item"><div class="step-number">3</div><div class="step-desc"><strong>Play</strong> one Action Card into the center pile.</div></div>
+                </div>
+            </div>
+
+            <!-- Block 3: Card Types -->
+            <div class="pitch-block rules-effects">
+                <h3><i class="fas fa-layer-group"></i> Card Types Breakdown</h3>
+                <h4 style="color: var(--color-accent-green); margin-top:15px;"><i class="fas fa-money-bill-wave"></i> Income Cards</h4>
+                <ul class="simple-list"><li>Salary, Side Hustle, Business Profit, Scholarship, Interest on Fixed Deposit.</li></ul>
+                
+                <h4 style="color: #FFBC00; margin-top:15px;"><i class="fas fa-exclamation-triangle"></i> Need Cards</h4>
+                <p><em>Essential expenses. Cannot be blocked (except by Bankruptcy).</em></p>
+                <ul class="simple-list"><li>Bills (K50, K100).</li></ul>
+                
+                <h4 style="color: #FD4D0A; margin-top:15px;"><i class="fas fa-shopping-bag"></i> Want Cards</h4>
+                <p><em>Fun expenses you want to avoid!</em></p>
+                <ul class="simple-list"><li>Subscription, Gaming, Credit Card Debt, Theme Park, Online Shopping.</li></ul>
+            </div>
+
+            <!-- Block 4: Action Cards (RESTORED FULL LIST) -->
+            <div class="pitch-block rules-effects">
+                <h3><i class="fas fa-bolt"></i> Action Cards</h3>
+                <ul class="card-effect-list">
+                    <li><strong>Block 🛡️:</strong> Cancel a "Wants" card played against you.</li>
+                    <li><strong>Pay It Forward ⏩:</strong> Pass a "Wants" action to the next player.</li>
+                    <li><strong>Scammer Alert 🕵️‍♂️:</strong> Steal <strong>K50</strong> from any player. <em>(Unblockable except by Bankruptcy!)</em></li>
+                    <li><strong>Market Crash 📉:</strong> The market tanks! Everyone else must pay <strong>K50</strong>.</li>
+                    <li><strong>Investment 💼:</strong> Draw 2 extra cards. Next player pays nothing.</li>
+                    <li><strong>Reverse 🔁:</strong> Reverses direction AND sends the "Wants" card back to sender.</li>
+                    <li><strong>Tax Audit 📋:</strong> Government check! Next player loses <strong>K50</strong>.</li>
+                    <li><strong>Bankruptcy 💸:</strong> The Ultimate Defense. Blocks <strong>ANY</strong> action card, even Scammer!</li>
+                </ul>
+            </div>
+
+            <!-- Block 5: Special Conditions -->
+            <div class="pitch-block rules-list" style="grid-column: 1 / -1; background-color: #fffbf0; border-left-color: var(--color-secondary-accent);">
+                <h3><i class="fas fa-star"></i> Pro Rules & Special Conditions</h3>
+                <div class="special-rules-grid">
+                    <div class="rule-box"><strong>No Action Cards?</strong><p>Draw 2 cards. If still none, your turn is skipped.</p></div>
+                    <div class="rule-box"><strong>Empty Hand?</strong><p>Draw 3 cards (2 + 1) at start of turn.</p></div>
+                    <div class="rule-box"><strong>No Change?</strong><p>Pay with Income Cards without receiving change.</p></div>
+                    <div class="rule-box"><strong>Out of Income?</strong><p>Discard one card from hand if you cannot pay.</p></div>
                 </div>
             </div>
         </div>
         
         <div class="text-center" style="margin-top: 40px;">
-            <button onclick="window.location.href='index.html'" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 40px;">
-                I'm Ready to Win K500!
-            </button>
+            <a href="index.html" class="btn btn-primary">I'm Ready to Win K500!</a>
         </div>
     </div>
 </section>
@@ -84,9 +123,7 @@
 <footer class="footer">
     <div class="container footer-content">
         <div class="footer-logo">
-            <div class="logo">
-                <span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span>
-            </div>
+            <div class="logo"><span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span></div>
             <p>Play, Learn, Grow (Financially).</p>
         </div>
         <div class="footer-links">
@@ -97,13 +134,9 @@
         </div>
         <div class="footer-social">
             <h3>Follow Our Fun!</h3>
-            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
+            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon"><i class="fab fa-instagram"></i> Instagram</a>
         </div>
-        <div class="footer-info">
-            <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
-        </div>
+        <div class="footer-info"><p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved.</p></div>
     </div>
 </footer>
 

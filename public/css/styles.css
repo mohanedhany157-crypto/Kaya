@@ -3,11 +3,11 @@
 
 /* --- Variables --- */
 :root {
-    --color-primary-accent: #FD4D0A; /* Fiery Orange */
-    --color-secondary-accent: #FFBC00; /* Yellow */
-    --color-bg-light: #FEF6EC; /* Eggshell */
+    --color-primary-accent: #FD4D0A;
+    --color-secondary-accent: #FFBC00;
+    --color-bg-light: #FEF6EC;
     --color-bg-white: #ffffff;
-    --color-accent-green: #4D9222; /* Leaf Green */
+    --color-accent-green: #4D9222;
     --color-text-dark: #333;
     --color-text-light: #f4f4f4;
     
@@ -163,6 +163,7 @@ h2 {
 .product-details { padding: 20px; }
 .product-details h3 { font-size: 1.5rem; color: var(--color-accent-green); margin-bottom: 10px; }
 .product-details .price { font-size: 1.8rem; font-weight: 800; color: var(--color-primary-accent); margin-bottom: 15px; }
+.product-details .add-to-cart-btn { display: block; width: 100%; padding: 12px; border-radius: 50px; font-size: 1rem; }
 .product-badge { position: absolute; top: 15px; right: 15px; background-color: var(--color-primary-accent); color: white; padding: 5px 10px; border-radius: 50px; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); }
 
 .value-prop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; padding: 40px 0; margin-top: 40px; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
@@ -295,5 +296,4 @@ h2 {
     .product-grid, .value-prop-grid, .rules-main-content, .product-detail-container { grid-template-columns: 1fr; }
     .form-row { flex-direction: column; gap: 15px; }
     .payment-options { grid-template-columns: 1fr; }
-    .footer-content { grid-template-columns: 1fr; text-align: center; }
 }
