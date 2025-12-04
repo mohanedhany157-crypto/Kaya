@@ -3,135 +3,509 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaya - Official Store</title>
-    <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
-    <!-- <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
+    <title>Kaya Financial Games</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Starry Background Animation */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--opacity); transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff4500;
+        }
+
+        .glass-panel {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(255, 69, 0, 0.3);
+            border-color: #ff4500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff4500 0%, #ff8700 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+        }
+
+        /* Cart Animation */
+        .cart-slide-enter {
+            transform: translateX(100%);
+        }
+        .cart-slide-enter-active {
+            transform: translateX(0);
+            transition: transform 0.3s ease-out;
+        }
+        .cart-slide-exit {
+            transform: translateX(0);
+        }
+        .cart-slide-exit-active {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in;
+        }
+    </style>
 </head>
+<body class="min-h-screen flex flex-col">
 
-<body>
+    <!-- Star Background -->
+    <div id="stars-container"></div>
 
-<canvas id="space-canvas"></canvas>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center transform rotate-3 hover:rotate-0 transition-all duration-300">
+                        <span class="text-2xl font-bold text-white">K</span>
+                    </div>
+                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">KAYA</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#products" class="text-gray-300 hover:text-[#ff4500] transition-colors">Games</a>
+                    <a href="#about" class="text-gray-300 hover:text-[#ff4500] transition-colors">About</a>
+                    <a href="#contact" class="text-gray-300 hover:text-[#ff4500] transition-colors">Contact</a>
+                </div>
 
-<header class="header">
-    <div class="container nav-content">
-        <a href="index.html" class="logo-link">
-            <div class="logo">
-                <span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span>
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleCart()" class="relative p-2 text-gray-300 hover:text-white transition-colors group">
+                        <i data-lucide="shopping-cart" class="w-6 h-6 group-hover:scale-110 transition-transform"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-[#ff4500] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center transform scale-0 transition-transform duration-300">0</span>
+                    </button>
+                    <button class="md:hidden p-2 text-gray-300">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
             </div>
-        </a>
-        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
-        <nav class="nav-menu">
-            <a href="index.html" class="active-link">Store</a>
-            <a href="learn.html">How to Play</a>
-            <a href="links.html">Contact/Links</a>
-        </nav>
-        <div class="cart-wrapper">
-            <i class="fas fa-shopping-cart cart-icon"></i>
-            <span class="cart-badge">0</span>
         </div>
-    </div>
-</header>
+    </nav>
 
-<div class="welcome-banner">
-    <div class="container">
-        <h1 class="big-sign">
-            <span class="sign-text">Shop </span>
-            <span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span><span class="sign-exclamation">!</span>
-        </h1>
-        <p class="tagline-rules">Empower your kids' future with fun financial literacy.</p>
-    </div>
-</div>
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+                Play. Learn. <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#ff4500] to-[#ff8700]">Grow.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 mb-10 max-w-2xl mx-auto">
+                Financial literacy redefined through immersive gameplay. Master the market before you enter it.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#products" class="btn-primary px-8 py-4 rounded-full font-bold text-lg text-white">
+                    Explore Games
+                </a>
+                <button class="px-8 py-4 rounded-full font-bold text-lg text-white border border-white/20 hover:bg-white/10 transition-colors backdrop-blur-sm">
+                    Learn More
+                </button>
+            </div>
+        </div>
+        
+        <!-- Decorative Glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#ff4500] opacity-10 blur-[100px] rounded-full z-0 pointer-events-none"></div>
+    </header>
 
-<section id="store" class="section">
-    <div class="container">
-        <h2 class="title-with-icon"><i class="fas fa-box"></i> Featured Products</h2>
-
-        <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <div class="product-image-container">
-                    <img src="pic/DEC2.jpg" alt="Kaya Game" onerror="this.onerror=null; this.src='https://placehold.co/400x350/FFBC00/333?text=KAYA+CORE+GAME';">
-                    <span class="product-badge">Best Seller</span>
+    <!-- Products Section -->
+    <section id="products" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center"><span class="border-b-4 border-[#ff4500] pb-2">Our Collection</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card glass-panel rounded-2xl p-6 relative group">
+                    <div class="aspect-w-16 aspect-h-12 mb-6 rounded-xl overflow-hidden bg-gray-800 relative">
+                         <!-- Placeholder for product image -->
+                        <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                             <i data-lucide="bar-chart-2" class="w-16 h-16 text-[#ff4500] opacity-50"></i>
+                        </div>
+                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                             <button onclick="addToCart(1)" class="bg-white text-black px-6 py-2 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-200">
+                                Quick Add
+                             </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="text-[#ff4500] text-xs font-bold tracking-wider uppercase">Best Seller</span>
+                            <h3 class="text-xl font-bold mt-1">Market Master</h3>
+                        </div>
+                        <span class="text-xl font-bold text-[#ff8700]">$49.99</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Learn stock trading strategies in a risk-free simulation environment.</p>
+                    <button onclick="addToCart(1)" class="w-full btn-primary py-3 rounded-xl font-bold flex items-center justify-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                        <span>Add to Cart</span>
+                    </button>
                 </div>
-                <div class="product-details">
-                    <h3>KAYA: CARD GAME</h3>
-                    <p class="price">USD 12.99</p>
-                    <button onclick="window.location.href='product.html?id=1'" class="btn btn-primary view-product-btn" style="width: 100%;">
-                        View Details
+
+                <!-- Product 2 -->
+                <div class="product-card glass-panel rounded-2xl p-6 relative group">
+                    <div class="aspect-w-16 aspect-h-12 mb-6 rounded-xl overflow-hidden bg-gray-800 relative">
+                         <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                             <i data-lucide="landmark" class="w-16 h-16 text-[#ff4500] opacity-50"></i>
+                        </div>
+                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                             <button onclick="addToCart(2)" class="bg-white text-black px-6 py-2 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-200">
+                                Quick Add
+                             </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="text-blue-400 text-xs font-bold tracking-wider uppercase">New Arrival</span>
+                            <h3 class="text-xl font-bold mt-1">Crypto Quest</h3>
+                        </div>
+                        <span class="text-xl font-bold text-[#ff8700]">$59.99</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Navigate the volatile world of cryptocurrency and blockchain.</p>
+                    <button onclick="addToCart(2)" class="w-full btn-primary py-3 rounded-xl font-bold flex items-center justify-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                        <span>Add to Cart</span>
+                    </button>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card glass-panel rounded-2xl p-6 relative group">
+                    <div class="aspect-w-16 aspect-h-12 mb-6 rounded-xl overflow-hidden bg-gray-800 relative">
+                         <div class="w-full h-48 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                             <i data-lucide="piggy-bank" class="w-16 h-16 text-[#ff4500] opacity-50"></i>
+                        </div>
+                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                             <button onclick="addToCart(3)" class="bg-white text-black px-6 py-2 rounded-full font-bold transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-200">
+                                Quick Add
+                             </button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="text-green-400 text-xs font-bold tracking-wider uppercase">For Kids</span>
+                            <h3 class="text-xl font-bold mt-1">Tycoon Junior</h3>
+                        </div>
+                        <span class="text-xl font-bold text-[#ff8700]">$34.99</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4">Basic money management and savings concepts for ages 8-12.</p>
+                    <button onclick="addToCart(3)" class="w-full btn-primary py-3 rounded-xl font-bold flex items-center justify-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                        <span>Add to Cart</span>
                     </button>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Product 2 -->
-            <div class="product-card">
-                <div class="product-image-container">
-                    <img src="pic/STICKER.PNG" alt="Kaya Stickers" onerror="this.onerror=null; this.src='https://placehold.co/400x350/4D9222/FFF?text=STICKERS';">
-                    <span class="product-badge" style="background-color: var(--color-accent-green);">Accessory</span>
+    <!-- Features -->
+    <section class="py-20 glass-panel border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-[#ff4500]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#ff4500]">
+                        <i data-lucide="shield-check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Quality Guaranteed</h3>
+                    <p class="text-gray-400 text-sm">Every game is tested by financial experts for educational accuracy.</p>
                 </div>
-                <div class="product-details">
-                    <h3>Stickers</h3>
-                    <p class="price">USD 3.99</p>
-                    <button onclick="window.location.href='product.html?id=2'" class="btn btn-primary view-product-btn" style="width: 100%;">
-                        View Details
-                    </button>
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-[#ff4500]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#ff4500]">
+                        <i data-lucide="truck" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Fast & Reliable Shipping</h3>
+                    <p class="text-gray-400 text-sm">Digital delivery is instant. Physical games ship within 24 hours.</p>
+                </div>
+                <div class="p-6">
+                    <div class="w-16 h-16 bg-[#ff4500]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#ff4500]">
+                        <i data-lucide="smile" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">100% Fun Promise</h3>
+                    <p class="text-gray-400 text-sm">Learning finance doesn't have to be boring. We make it exciting.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 mt-auto border-t border-white/10 bg-black/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                         <span class="text-2xl font-bold text-[#ff4500]">KAYA</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Play, Learn, Grow (financially).</p>
+                </div>
+                <div class="flex space-x-12 text-sm text-gray-400">
+                    <div>
+                        <h4 class="font-bold text-white mb-2">Quick Links</h4>
+                        <ul class="space-y-1">
+                            <li><a href="#" class="hover:text-[#ff4500]">Store Home</a></li>
+                            <li><a href="#" class="hover:text-[#ff4500]">How to Play</a></li>
+                            <li><a href="#" class="hover:text-[#ff4500]">Contact Us</a></li>
+                        </ul>
+                    </div>
+                     <div>
+                        <h4 class="font-bold text-white mb-2">Follow Our Fun!</h4>
+                        <ul class="space-y-1">
+                             <li class="flex items-center space-x-2">
+                                <i data-lucide="instagram" class="w-4 h-4"></i>
+                                <a href="#" class="hover:text-[#ff4500]">Instagram</a>
+                             </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 text-center text-xs text-gray-600">
+                &copy; 2025 Kaya Financial Games. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Overlay (Fixed behavior: Hidden by default) -->
+    <div id="cart-overlay" class="fixed inset-0 z-[60] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
+        
+        <!-- Cart Panel -->
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-[#0f0f0f] border-l border-white/10 shadow-2xl transform transition-transform duration-300 translate-x-full flex flex-col" id="cart-panel">
+            <div class="p-6 border-b border-white/10 flex justify-between items-center bg-[#ff4500]">
+                <h2 class="text-xl font-bold text-white">Your Cart</h2>
+                <button onclick="toggleCart()" class="text-white hover:text-black transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto p-6 space-y-4" id="cart-items">
+                <!-- Cart items will be injected here -->
+                <div class="text-center text-gray-500 mt-20">
+                    <i data-lucide="shopping-cart" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                    <p>Your cart is empty.</p>
                 </div>
             </div>
             
-            <!-- Product 3 -->
-            <div class="product-card">
-                <div class="product-image-container">
-                    <img src="pic/POST CARD.PNG" alt="Kaya Post Card" onerror="this.onerror=null; this.src='https://placehold.co/400x350/0094E8/FFF?text=POST+CARD';">
-                    <span class="product-badge" style="background-color: var(--color-accent-green);">Accessory</span>
+            <div class="p-6 border-t border-white/10 bg-[#141414]">
+                <div class="flex justify-between items-center mb-4 text-lg font-bold">
+                    <span>Total:</span>
+                    <span id="cart-total" class="text-[#ff4500]">USD 0.00</span>
                 </div>
-                <div class="product-details">
-                    <h3>Post Card</h3>
-                    <p class="price">USD 2.99</p>
-                    <button onclick="window.location.href='product.html?id=3'" class="btn btn-primary view-product-btn" style="width: 100%;">
-                        View Details
-                    </button>
-                </div>
+                <button class="w-full btn-primary py-4 rounded-xl font-bold text-white uppercase tracking-wider">
+                    Checkout
+                </button>
             </div>
         </div>
-
-        <div class="value-prop-grid">
-            <div class="value-prop-item"><i class="fas fa-shield-alt"></i><h4>Quality Guaranteed</h4></div>
-            <div class="value-prop-item"><i class="fas fa-truck-fast"></i><h4>Fast & Reliable Shipping</h4></div>
-            <div class="value-prop-item"><i class="fas fa-smile"></i><h4>100% Fun Promise</h4></div>
-        </div>
     </div>
-</section>
 
-<footer class="footer">
-    <div class="container footer-content">
-        <div class="footer-logo">
-            <div class="logo">
-                <span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span>
-            </div>
-            <p>Play, Learn, Grow (Financially).</p>
-        </div>
-        <div class="footer-links">
-            <h3>Quick Links</h3>
-            <a href="index.html">Store Home</a>
-            <a href="learn.html">How to Play</a>
-            <a href="links.html">Contact Us</a>
-        </div>
-        <div class="footer-social">
-            <h3>Follow Our Fun!</h3>
-            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
-        </div>
-        <div class="footer-info">
-            <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
-        </div>
-    </div>
-</footer>
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
 
-<script type="module" src="js/script.js"></script>
+        // 1. STAR GENERATION LOGIC - DOUBLED AGAIN (HUGE AMOUNT)
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 800; // Increased massively based on request
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random positioning
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                
+                // Random size (mostly small, some larger)
+                const size = Math.random() < 0.9 ? Math.random() * 2 + 1 : Math.random() * 3 + 2;
+                
+                // Random animation properties
+                const duration = Math.random() * 3 + 2; // 2s to 5s
+                const delay = Math.random() * 5;
+                const opacity = Math.random() * 0.7 + 0.3; // Min 0.3 opacity
+
+                star.style.left = `${x}%`;
+                star.style.top = `${y}%`;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.setProperty('--delay', `${delay}s`);
+                star.style.setProperty('--opacity', opacity);
+
+                // Add some color variation
+                if (Math.random() > 0.8) {
+                    star.style.backgroundColor = '#ffecd1'; // Warm white
+                } else if (Math.random() > 0.9) {
+                     star.style.backgroundColor = '#d1f4ff'; // Cool white
+                }
+
+                container.appendChild(star);
+            }
+        }
+        createStars();
+
+
+        // 2. CART LOGIC
+        const products = [
+            { id: 1, name: "Market Master", price: 49.99, image: "bar-chart-2" },
+            { id: 2, name: "Crypto Quest", price: 59.99, image: "landmark" },
+            { id: 3, name: "Tycoon Junior", price: 34.99, image: "piggy-bank" }
+        ];
+
+        let cart = [];
+        let isCartOpen = false;
+
+        function toggleCart() {
+            isCartOpen = !isCartOpen;
+            const overlay = document.getElementById('cart-overlay');
+            const panel = document.getElementById('cart-panel');
+            
+            if (isCartOpen) {
+                overlay.classList.remove('hidden');
+                // Small delay to allow display:block to apply before transition
+                setTimeout(() => {
+                    panel.classList.remove('translate-x-full');
+                }, 10);
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            } else {
+                panel.classList.add('translate-x-full');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300); // Wait for transition
+                document.body.style.overflow = '';
+            }
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            
+            // Optional: Auto open cart on add
+            if (!isCartOpen) {
+                toggleCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        function updateCartUI() {
+            const cartContainer = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const cartBadge = document.getElementById('cart-badge');
+
+            // Update Badge
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartBadge.innerText = totalItems;
+            if (totalItems > 0) {
+                cartBadge.classList.remove('scale-0');
+            } else {
+                cartBadge.classList.add('scale-0');
+            }
+
+            // Calculate Total
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            cartTotal.innerText = `USD ${total.toFixed(2)}`;
+
+            // Render Items
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="text-center text-gray-500 mt-20">
+                        <i data-lucide="shopping-cart" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                        <p>Your cart is empty.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            cartContainer.innerHTML = cart.map(item => `
+                <div class="flex items-center space-x-4 bg-white/5 p-3 rounded-lg border border-white/5">
+                    <div class="w-12 h-12 bg-gray-800 rounded-md flex items-center justify-center text-[#ff4500]">
+                         <i data-lucide="${item.image}" class="w-6 h-6"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-sm text-white">${item.name}</h4>
+                        <p class="text-[#ff4500] text-sm">$${item.price}</p>
+                    </div>
+                    <div class="flex items-center bg-black rounded-lg border border-white/10">
+                        <button onclick="updateQuantity(${item.id}, -1)" class="p-1 hover:text-[#ff4500] px-2">-</button>
+                        <span class="text-xs w-4 text-center">${item.quantity}</span>
+                        <button onclick="updateQuantity(${item.id}, 1)" class="p-1 hover:text-[#ff4500] px-2">+</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+    </script>
 </body>
 </html>
