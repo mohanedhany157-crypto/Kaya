@@ -27,35 +27,47 @@ const COLLECTION_NAME = 'kaya_orders';
 
 signInAnonymously(auth).catch(e => console.error("Auth Error:", e));
 
-// --- 3. PRODUCT DATABASE ---
+// --- 3. PRODUCT DATABASE (UPDATED WITH MORE IMAGES) ---
 const PRODUCTS_DB = {
     "1": {
         name: "KAYA: CARD GAME",
         price: 12.99,
         img: "pic/DEC.png",
         desc: "The essential financial literacy game! Learn budgeting, saving, and smart spending in a fun, competitive way. Perfect for families and schools.",
-        // Placeholder images for gallery
-        images: ["pic/DEC.png", "pic/DEC.png", "pic/DEC.png"]
+        images: [
+            "pic/DEC.png", 
+            "pic/DEC.png", // Replace with: pic/DEC_back.png
+            "pic/DEC.png"  // Replace with: pic/DEC_cards.png
+        ]
     },
     "2": {
         name: "Stickers",
         price: 3.99,
         img: "pic/STICKER.PNG",
         desc: "High-quality, fun stickers featuring the KAYA characters. Decorate your laptop, notebook, or game box!",
-        images: ["pic/STICKER.PNG", "pic/STICKER.PNG"]
+        // 🟢 ADDED MORE STICKER PICS HERE
+        images: [
+            "pic/STICKER.PNG",          // Main View
+            "pic/STICKER.PNG",          // Replace with: pic/STICKER_laptop.png
+            "pic/STICKER.PNG"           // Replace with: pic/STICKER_pack.png
+        ]
     },
     "3": {
         name: "Post Card",
         price: 2.99,
         img: "pic/POST CARD.PNG",
         desc: "Send a note to a friend or keep it as a collectible. Beautifully illustrated KAYA artwork.",
-        images: ["pic/POST CARD.PNG", "pic/POST CARD.PNG"]
+        // 🟢 ADDED MORE POSTCARD PICS HERE
+        images: [
+            "pic/POST CARD.PNG",        // Front View
+            "pic/POST CARD.PNG",        // Replace with: pic/POST_back.png
+            "pic/POST CARD.PNG"         // Replace with: pic/POST_writing.png
+        ]
     }
 };
 
 // --- 4. PAGE LOADING LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Shared Logic
     const yearEl = document.getElementById('current-year');
     if(yearEl) yearEl.textContent = new Date().getFullYear();
     
@@ -71,12 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartWrapper = document.querySelector('.cart-wrapper');
     if(cartWrapper) cartWrapper.addEventListener('click', openCart);
 
-    // --- CHECK IF WE ARE ON PRODUCT PAGE ---
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
 
     if (productId && document.getElementById('product-detail-section')) {
-        // We are on product.html
         loadProductDetails(productId);
     }
 });
@@ -88,17 +98,16 @@ function loadProductDetails(id) {
         return;
     }
 
-    // Fill Info
     document.getElementById('p-title').textContent = product.name;
     document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
     document.getElementById('p-desc').textContent = product.desc;
     
-    // Setup Gallery
     const mainImg = document.getElementById('main-image');
     const thumbsContainer = document.getElementById('thumbnail-container');
     
-    mainImg.src = product.img; // Default main
-    
+    mainImg.src = product.img; 
+    thumbsContainer.innerHTML = '';
+
     product.images.forEach((imgSrc, index) => {
         const thumb = document.createElement('img');
         thumb.src = imgSrc;
@@ -113,14 +122,13 @@ function loadProductDetails(id) {
         thumbsContainer.appendChild(thumb);
     });
 
-    // Handle "Add to Cart" on this specific page
     const addBtn = document.getElementById('add-to-cart-btn');
     addBtn.addEventListener('click', () => {
         addToCart(id, product.name, product.price);
     });
 }
 
-// --- 5. CART LOGIC (Shared) ---
+// --- 5. CART LOGIC ---
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
 
 function saveCart() {
