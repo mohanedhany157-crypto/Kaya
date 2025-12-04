@@ -34,7 +34,7 @@ function initSpaceBackground() {
     const ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
-    const numStars = 6000; // INCREASED MORE
+    const numStars = 6000; 
     let mouseX = 0, mouseY = 0;
     
     // KAYA BRAND COLORS
@@ -60,7 +60,8 @@ function initSpaceBackground() {
             this.x = (Math.random() - 0.5) * width * 2;
             this.y = (Math.random() - 0.5) * height * 2;
             this.z = Math.random() * width; 
-            this.size = Math.random() * 3; // INCREASED SIZE
+            // SMALLER STARS: Reduced from 3 to 1.2
+            this.size = Math.random() * 1.2; 
             this.color = kayaColors[Math.floor(Math.random() * kayaColors.length)];
         }
         update() {
@@ -70,7 +71,8 @@ function initSpaceBackground() {
         draw() {
             const x = (this.x - mouseX) * (width / this.z) + width / 2;
             const y = (this.y - mouseY) * (width / this.z) + height / 2;
-            const s = (1 - this.z / width) * this.size * 4; // INCREASED DRAW SIZE
+            // SHARPER DRAW SIZE: Reduced multiplier from 4 to 1.5
+            const s = (1 - this.z / width) * this.size * 1.5; 
             if (x > 0 && x < width && y > 0 && y < height) {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
@@ -83,7 +85,11 @@ function initSpaceBackground() {
     for (let i = 0; i < numStars; i++) stars.push(new Star());
 
     function animate() {
-        ctx.clearRect(0, 0, width, height);
+        // LIGHTER BACKGROUND EXPERIMENT
+        // Instead of clearRect (transparent), we fill with a dark slate blue
+        ctx.fillStyle = '#1B2735'; 
+        ctx.fillRect(0, 0, width, height);
+        
         stars.forEach(star => { star.update(); star.draw(); });
         requestAnimationFrame(animate);
     }
@@ -142,22 +148,9 @@ function loadProductDetails(id) {
     document.getElementById('p-title').textContent = product.name;
     document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
     
-    // --- RANDOM COLOR GENERATOR FOR DESCRIPTION ---
-    // User requested "randomly same colors as kaya" for the black text
-    const descText = product.desc;
-    const words = descText.split(' ');
-    // Kaya Colors Classes: k (Orange), a1 (Yellow), y (Green), a2 (Blue)
-    const colorClasses = ['k', 'a1', 'y', 'a2', 'a2']; // Added blue twice for balance or just random
-    
-    // We rebuild the description paragraph with spans
-    let colorfulDesc = '';
-    words.forEach(word => {
-        // Pick random class
-        const randomClass = colorClasses[Math.floor(Math.random() * colorClasses.length)];
-        colorfulDesc += `<span class="${randomClass}">${word}</span> `;
-    });
-    
-    document.getElementById('p-desc').innerHTML = colorfulDesc;
+    // --- UPDATED: REVERTED TO PLAIN TEXT ---
+    // User requested to stick with black wording and use a box background instead
+    document.getElementById('p-desc').textContent = product.desc;
     
     const mainImg = document.getElementById('main-image');
     const thumbsContainer = document.getElementById('thumbnail-container');
