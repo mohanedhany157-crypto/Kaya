@@ -35,9 +35,10 @@ const PRODUCTS_DB = {
         img: "pic/DEC.png",
         desc: "The essential financial literacy game! Learn budgeting, saving, and smart spending in a fun, competitive way. Perfect for families and schools.",
         images: [
+            "pic/DEC2.jpg", 
             "pic/DEC.png", 
-            "pic/DEC.png", 
-            "pic/DEC.png" 
+            "pic/DEC1.jpg", 
+            "pic/DEC2.jpg" 
         ]
     },
     "2": {
