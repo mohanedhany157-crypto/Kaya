@@ -12,15 +12,11 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
 </head>
 <body>
-
 <canvas id="space-canvas"></canvas>
-
 <header class="header">
     <div class="container nav-content">
         <a href="index.html" class="logo-link">
-            <div class="logo">
-                <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
-            </div>
+            <div class="logo"><span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span></div>
         </a>
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
         <nav class="nav-menu">
@@ -39,7 +35,6 @@
     <div class="container">
         <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Store</a>
         <div class="product-detail-container">
-            <!-- LEFT: Image Gallery -->
             <div class="product-gallery">
                 <div class="main-image-container">
                     <button class="gallery-arrow left" id="prev-img"><i class="fas fa-chevron-left"></i></button>
@@ -48,7 +43,6 @@
                 </div>
                 <div class="thumbnail-list" id="thumbnail-container"></div>
             </div>
-            <!-- RIGHT: Info -->
             <div class="product-info-content">
                 <h1 id="p-title">Loading...</h1>
                 <div class="price-tag" id="p-price">...</div>
@@ -66,12 +60,24 @@
 <footer class="footer">
     <div class="container footer-content">
         <div class="footer-logo">
-            <div class="logo">
-                <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
-            </div>
-            <p>Play, Learn, Grow.</p>
+            <div class="logo"><span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span></div>
+            <p>Play, Learn, Grow (Financially).</p>
         </div>
-        <div class="footer-info"><p>&copy; <span id="current-year"></span> Kaya Financial Games.</p></div>
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <a href="index.html">Store Home</a>
+            <a href="learn.html">How to Play</a>
+            <a href="links.html">Contact Us</a>
+        </div>
+        <div class="footer-social">
+            <h3>Follow Our Fun!</h3>
+            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+        <div class="footer-info">
+            <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
+        </div>
     </div>
 </footer>
 

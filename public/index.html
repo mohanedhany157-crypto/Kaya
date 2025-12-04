@@ -12,10 +12,8 @@
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
     <!-- <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
 </head>
-
 <body>
 
-<!-- SPACE BACKGROUND -->
 <canvas id="space-canvas"></canvas>
 
 <header class="header">
@@ -32,20 +30,26 @@
             <a href="links.html">Contact/Links</a>
         </nav>
         <div class="cart-wrapper">
-            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+            <i class="fas fa-shopping-cart cart-icon"></i>
             <span class="cart-badge">0</span>
         </div>
     </div>
 </header>
 
-<!-- NOTE: Banner Removed as requested -->
+<div class="welcome-banner">
+    <div class="container">
+        <h1 class="big-sign">
+            <span class="sign-text">Shop </span>
+            <span class="sign-k">K</span><span class="sign-a1">A</span><span class="sign-y">Y</span><span class="sign-a2">A</span><span class="sign-exclamation">!</span>
+        </h1>
+        <p class="tagline-rules">Empower your kids' future with fun financial literacy.</p>
+    </div>
+</div>
 
 <section id="store" class="section">
     <div class="container">
         <h2 class="title-with-icon"><i class="fas fa-box"></i> Featured Products</h2>
-
         <div class="product-grid">
-            <!-- Product 1 -->
             <div class="product-card">
                 <div class="product-image-container">
                     <img src="pic/DEC2.jpg" alt="Kaya Game" onerror="this.onerror=null; this.src='https://placehold.co/400x350/FFBC00/333?text=KAYA+CORE+GAME';">
@@ -54,12 +58,9 @@
                 <div class="product-details">
                     <h3>KAYA: CARD GAME</h3>
                     <p class="price">USD 12.99</p>
-                    <!-- LINKS TO PRODUCT PAGE -->
-                    <a href="product.html?id=1" class="btn btn-primary" style="width: 100%;">View Details</a>
+                    <a href="product.html?id=1" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
                 </div>
             </div>
-
-            <!-- Product 2 -->
             <div class="product-card">
                 <div class="product-image-container">
                     <img src="pic/STICKER.PNG" alt="Kaya Stickers" onerror="this.onerror=null; this.src='https://placehold.co/400x350/4D9222/FFF?text=STICKERS';">
@@ -68,11 +69,9 @@
                 <div class="product-details">
                     <h3>Stickers</h3>
                     <p class="price">USD 3.99</p>
-                    <a href="product.html?id=2" class="btn btn-primary" style="width: 100%;">View Details</a>
+                    <a href="product.html?id=2" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
                 </div>
             </div>
-            
-            <!-- Product 3 -->
             <div class="product-card">
                 <div class="product-image-container">
                     <img src="pic/POST CARD.PNG" alt="Kaya Post Card" onerror="this.onerror=null; this.src='https://placehold.co/400x350/0094E8/FFF?text=POST+CARD';">
@@ -81,11 +80,10 @@
                 <div class="product-details">
                     <h3>Post Card</h3>
                     <p class="price">USD 2.99</p>
-                    <a href="product.html?id=3" class="btn btn-primary" style="width: 100%;">View Details</a>
+                    <a href="product.html?id=3" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
                 </div>
             </div>
         </div>
-
         <div class="value-prop-grid">
             <div class="value-prop-item"><i class="fas fa-shield-alt"></i><h4>Quality Guaranteed</h4></div>
             <div class="value-prop-item"><i class="fas fa-truck-fast"></i><h4>Fast & Reliable Shipping</h4></div>

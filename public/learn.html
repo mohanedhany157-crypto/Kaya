@@ -5,12 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaya - How to Play & Official Rules</title>
     <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
-    
-    <!-- EXTERNAL CSS LINKS -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- FIREBASE -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
 </head>
 <body>
+
+<canvas id="space-canvas"></canvas>
 
 <header class="header">
     <div class="container nav-content">
@@ -19,20 +23,14 @@
                 <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
             </div>
         </a>
-        
-        <button class="menu-toggle" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-        </button>
-        
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
         <nav class="nav-menu">
             <a href="index.html">Store</a>
             <a href="learn.html" class="active-link">How to Play</a> 
             <a href="links.html">Contact/Links</a> 
         </nav>
-
-        <!-- Cart Icon Wrapper (Moved OUTSIDE nav-menu for mobile visibility) -->
         <div class="cart-wrapper">
-            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+            <i class="fas fa-shopping-cart cart-icon"></i>
             <span class="cart-badge">0</span>
         </div>
     </div>
@@ -48,25 +46,21 @@
     </div>
 </div>
 
-<!-- Rules Section -->
 <section id="rules" class="section">
     <div class="container">
         <h2 class="title-with-icon"><i class="fas fa-book-open"></i> Official Manual</h2>
-
         <div class="rules-main-content">
-            
             <!-- Block 1: Objective & Setup -->
             <div class="pitch-block rules-list">
                 <h3><i class="fas fa-flag-checkered"></i> The Objective</h3>
                 <p style="font-size: 1.2rem; font-weight: 600;">Be the first player to save <span style="color: var(--color-accent-green);">K500</span>!</p>
                 <p>Alternatively, play until the deck runs out. The player with the highest total savings wins.</p>
-
                 <h3><i class="fas fa-box-open"></i> Game Setup</h3>
                 <ol>
                     <li><strong>Shuffle:</strong> Shuffle the deck thoroughly.</li>
                     <li><strong>Deal:</strong> Deal **7 cards** to each player.</li>
-                    <li><strong>Bank Pile:</strong> Place all <strong>Income Cards</strong> (Salary, Side Hustle, etc.) face-up in front of you. This is your "Bank Pile".</li>
-                    <li><strong>Start:</strong> Whoever has the **least money** in their Bank Pile starts first! Play moves clockwise.</li>
+                    <li><strong>Bank Pile:</strong> Place all <strong>Income Cards</strong> face-up in front of you.</li>
+                    <li><strong>Start:</strong> Whoever has the **least money** starts first!</li>
                 </ol>
             </div>
 
@@ -74,88 +68,29 @@
             <div class="pitch-block rules-list">
                 <h3><i class="fas fa-redo"></i> How to Play Your Turn</h3>
                 <div class="step-guide">
-                    <div class="step-item">
-                        <div class="step-number">1</div>
-                        <div class="step-desc"><strong>Draw</strong> one card from the deck.</div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-number">2</div>
-                        <div class="step-desc"><strong>Pay or Deflect</strong> any consequence from the previous player (e.g., Needs, Wants, or Attacks).</div>
-                    </div>
-                    <div class="step-item">
-                        <div class="step-number">3</div>
-                        <div class="step-desc"><strong>Play</strong> one Action Card from your hand into the center pile.</div>
-                    </div>
+                    <div class="step-item"><div class="step-number">1</div><div class="step-desc"><strong>Draw</strong> one card.</div></div>
+                    <div class="step-item"><div class="step-number">2</div><div class="step-desc"><strong>Pay</strong> any consequence.</div></div>
+                    <div class="step-item"><div class="step-number">3</div><div class="step-desc"><strong>Play</strong> one Action Card.</div></div>
                 </div>
             </div>
 
             <!-- Block 3: Card Types Breakdown -->
             <div class="pitch-block rules-effects">
                 <h3><i class="fas fa-layer-group"></i> Card Types Breakdown</h3>
-                
                 <h4 style="color: var(--color-accent-green); margin-top:15px;"><i class="fas fa-money-bill-wave"></i> Income Cards</h4>
-                <p><em>Adds money to your savings. Place these face-up.</em></p>
-                <ul class="simple-list">
-                    <li>Salary, Side Hustle, Business Profit, Scholarship, Interest on Fixed Deposit.</li>
-                </ul>
-
+                <p><em>Adds money to your savings.</em></p>
+                <ul class="simple-list"><li>Salary, Side Hustle, Business Profit, Scholarship.</li></ul>
                 <h4 style="color: #FFBC00; margin-top:15px;"><i class="fas fa-exclamation-triangle"></i> Need Cards</h4>
-                <p><em>Essential expenses. Cannot be blocked (unless you use Bankruptcy).</em></p>
-                <ul class="simple-list">
-                    <li>Bills (K50, K100).</li>
-                </ul>
-
+                <p><em>Essential expenses. Cannot be blocked.</em></p>
+                <ul class="simple-list"><li>Bills (K50, K100).</li></ul>
                 <h4 style="color: #FD4D0A; margin-top:15px;"><i class="fas fa-shopping-bag"></i> Want Cards</h4>
                 <p><em>Fun expenses you want to avoid paying!</em></p>
-                <ul class="simple-list">
-                    <li>Subscription, Gaming, Credit Card Debt, Theme Park, Online Shopping.</li>
-                </ul>
+                <ul class="simple-list"><li>Subscription, Gaming, Credit Card Debt.</li></ul>
             </div>
-
-            <!-- Block 4: Action Cards (The Fun Stuff) -->
-            <div class="pitch-block rules-effects">
-                <h3><i class="fas fa-bolt"></i> Action Cards & Effects</h3>
-                <ul class="card-effect-list">
-                    <li><strong>Block 🛡️:</strong> Cancel a "Wants" card played against you.</li>
-                    <li><strong>Pay It Forward ⏩:</strong> Pass a "Wants" action to the next player.</li>
-                    <li><strong>Scammer Alert 🕵️‍♂️:</strong> Steal **K50** from any player. <br><em style="font-size:0.9rem; color:red;">(Cannot be blocked, except by Bankruptcy!)</em></li>
-                    <li><strong>Market Crash 📉:</strong> The market tanks! Everyone else must pay **K50**.</li>
-                    <li><strong>Investment 💼:</strong> “you made an investment, draw two cards”.</li>
-                    <li><strong>Reverse 🔁:</strong>  Can reverse turn and wants ONLY.</li>
-                    <li><strong>Tax Audit 📋:</strong> Government check! The next player loses **K50**.</li>
-                    <li><strong>Bankruptcy 💸:</strong> The Ultimate Defense. Blocks **ANY** action card, even Scammer!</li>
-                </ul>
-            </div>
-
-            <!-- Block 5: Special Conditions (Important!) -->
-            <div class="pitch-block rules-list" style="grid-column: 1 / -1; background-color: #fffbf0; border-left-color: var(--color-secondary-accent);">
-                <h3><i class="fas fa-star"></i> Pro Rules & Special Conditions</h3>
-                <div class="special-rules-grid">
-                    <div class="rule-box">
-                        <strong>No Action Cards?</strong>
-                        <p>If you have no action cards to play, draw 1 cards. If you still have none, your turn is skipped.</p>
-                    </div>
-                    <div class="rule-box">
-                        <strong>Empty Hand?</strong>
-                        <p>If you have 0 cards in hand at the start of your turn, draw 3 cards (2 + 1).</p>
-                    </div>
-                    <div class="rule-box">
-                        <strong>No Change?</strong>
-                        <p>If you don’t have change pay full amount of what you have <strong>without</strong> receiving change back.</p>
-                    </div>
-                    <div class="rule-box">
-                        <strong>Out of Income?</strong>
-                        <p>If you cannot pay, you must discard one card from your hand.</p>
-                    </div>
-                </div>
-            </div>
-
         </div>
-        
         <div class="text-center" style="margin-top: 40px;">
             <a href="index.html" class="btn btn-primary">I'm Ready to Win K500!</a>
         </div>
-
     </div>
 </section>
 
@@ -185,6 +120,6 @@
     </div>
 </footer>
 
-<script src="js/script.js"></script>
+<script type="module" src="js/script.js"></script>
 </body>
 </html>

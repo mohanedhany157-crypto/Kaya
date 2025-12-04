@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaya - Connect & Links</title>
     <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
-    
-    <!-- EXTERNAL CSS LINKS -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
 </head>
 <body>
+
+<canvas id="space-canvas"></canvas>
 
 <header class="header">
     <div class="container nav-content">
@@ -19,20 +22,14 @@
                 <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
             </div>
         </a>
-        
-        <button class="menu-toggle" aria-label="Toggle navigation">
-            <i class="fas fa-bars"></i>
-        </button>
-        
+        <button class="menu-toggle"><i class="fas fa-bars"></i></button>
         <nav class="nav-menu">
             <a href="index.html">Store</a>
             <a href="learn.html">How to Play</a> 
             <a href="links.html" class="active-link">Contact/Links</a> 
         </nav>
-
-        <!-- Cart Icon Wrapper (Moved OUTSIDE nav-menu so it is always visible on mobile) -->
         <div class="cart-wrapper">
-            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+            <i class="fas fa-shopping-cart cart-icon"></i>
             <span class="cart-badge">0</span>
         </div>
     </div>
@@ -50,37 +47,24 @@
 
 <section id="contact-page" class="section contact-section">
     <div class="container contact-content">
-        
         <div class="linktree">
-            
-            <!-- KAYA PROFILE PICTURE (Added Here) -->
             <div class="profile-container">
                 <img src="pic/icon.PNG" alt="Kaya Logo" class="profile-pic">
             </div>
-
             <h2 class="title-with-icon" style="margin-bottom: 20px;">Quick Links</h2>
             <p class="section-tagline text-center" style="margin-bottom: 30px;">Follow us, chat with us, or shop the game!</p>
-
-            <!-- Link 1: Store (High Priority) -->
             <a href="index.html" class="link-btn btn-primary" style="background-color: var(--color-primary-accent);">
                 <i class="fas fa-shopping-bag"></i> Buy the Game
             </a>
-
-            <!-- Link 2: Email (Replaced WhatsApp) -->
             <a href="mailto:hellotokaya@gmail.com" class="link-btn email">
                 <i class="fas fa-envelope"></i> Email Us
             </a>
-
-            <!-- Link 3: Instagram -->
             <a href="https://instagram.com/letsplaykaya" target="_blank" class="link-btn instagram">
                 <i class="fab fa-instagram"></i> Follow Us on Instagram
             </a>
-
-            <!-- Link 4: TikTok -->
             <a href="https://www.tiktok.com/@letsplaykaya" target="_blank" class="link-btn tiktok">
                 <i class="fab fa-tiktok"></i> Watch Us on TikTok
             </a>
-
         </div>
     </div>
 </section>
@@ -93,28 +77,24 @@
             </div>
             <p>Play, Learn, Grow (Financially).</p>
         </div>
-        
         <div class="footer-links">
             <h3>Quick Links</h3>
             <a href="index.html">Store Home</a>
             <a href="learn.html">How to Play</a>
             <a href="links.html">Contact Us</a>
         </div>
-
         <div class="footer-social">
             <h3>Follow Our Fun!</h3>
             <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
                 <i class="fab fa-instagram"></i> Instagram
             </a>
         </div>
-
         <div class="footer-info">
             <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
         </div>
     </div>
 </footer>
 
-<!-- EXTERNAL JS LINK -->
-<script src="js/script.js"></script>
+<script type="module" src="js/script.js"></script>
 </body>
 </html>
