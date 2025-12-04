@@ -76,7 +76,12 @@ h2 {
 .logo-a2 { color: #0094E8; } 
 
 /* --- Banner --- */
-.welcome-banner { background-color: #34495E; padding: 20px 0; text-align: center; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+.welcome-banner { 
+    background-color: var(--color-primary-accent); /* Changed from #34495E to Orange Theme */
+    padding: 20px 0; 
+    text-align: center; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); 
+}
 .big-sign {
     font-family: var(--font-family-title);
     font-size: 6vw;
