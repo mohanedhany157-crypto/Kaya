@@ -3,11 +3,11 @@
 
 /* --- Variables --- */
 :root {
-    --color-primary-accent: #FD4D0A;
-    --color-secondary-accent: #FFBC00;
-    --color-bg-light: #FEF6EC;
+    --color-primary-accent: #FD4D0A; /* Fiery Orange */
+    --color-secondary-accent: #FFBC00; /* Yellow */
+    --color-bg-light: #FEF6EC; /* Eggshell */
     --color-bg-white: #ffffff;
-    --color-accent-green: #4D9222;
+    --color-accent-green: #4D9222; /* Leaf Green */
     --color-text-dark: #333;
     --color-text-light: #f4f4f4;
     
@@ -28,7 +28,8 @@
     --color-logo-k: var(--color-primary-accent);
     --color-logo-a1: var(--color-secondary-accent);
     --color-logo-y: var(--color-accent-green);
-    --color-logo-a2: #FD4D0A; 
+    /* FIXED: Set specifically to the requested Blue */
+    --color-logo-a2: #0094E8; 
 }
 
 /* --- Base Styles --- */
@@ -58,7 +59,7 @@ h2 {
 .bg-light { background-color: var(--color-bg-white); }
 .text-center { text-align: center; }
 
-/* --- Logo --- */
+/* --- Logo Styling --- */
 .logo-link { text-decoration: none; color: inherit; z-index: 2; }
 .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; cursor: pointer; }
 .logo span { transition: transform 0.2s; display: inline-block; }
@@ -67,7 +68,7 @@ h2 {
 .logo-k { color: var(--color-logo-k); }
 .logo-a1 { color: var(--color-logo-a1); }
 .logo-y { color: var(--color-logo-y); }
-.logo-a2 { color: #0094E8; } 
+.logo-a2 { color: var(--color-logo-a2); } /* Uses the #0094E8 variable */
 
 /* --- Banner --- */
 .welcome-banner { 
@@ -90,7 +91,7 @@ h2 {
 .sign-k { color: var(--color-logo-k); }
 .sign-a1 { color: var(--color-logo-a1); }
 .sign-y { color: var(--color-logo-y); }
-.sign-a2 { color: var(--color-logo-a2); } 
+.sign-a2 { color: var(--color-logo-a2); } /* Uses the #0094E8 variable */
 
 .sign-exclamation {
     background: linear-gradient(to bottom, var(--color-logo-k) 0%, var(--color-logo-k) 25%, var(--color-logo-a1) 25%, var(--color-logo-a1) 50%, var(--color-logo-y) 50%, var(--color-logo-y) 75%, var(--color-logo-a2) 75%, var(--color-logo-a2) 100%);
@@ -207,6 +208,7 @@ h2 {
 .link-btn { display: flex; align-items: center; justify-content: center; gap: 12px; width: 90%; max-width: 400px; padding: 14px 20px; font-size: 1.1rem; font-weight: 600; border-radius: 50px; color: #fff; text-decoration: none; text-align: center; transition: all 0.3s ease; box-shadow: var(--shadow-pop); }
 .link-btn i { font-size: 1.3rem; }
 .link-btn:hover { transform: translateY(-4px); opacity: 0.95; }
+
 .link-btn.email { background-color: #D44638; } .link-btn.email:hover { background-color: #B23121; }
 .link-btn.whatsapp { background-color: #25D366; } .link-btn.whatsapp:hover { background-color: #1ebe5d; }
 .link-btn.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); } .link-btn.instagram:hover { filter: brightness(1.1); }
