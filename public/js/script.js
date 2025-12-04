@@ -23,17 +23,104 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-// Use your specific collection name
 const COLLECTION_NAME = 'kaya_orders'; 
 
-// Connect immediately
-signInAnonymously(auth).then(() => {
-    console.log("Store Connected to Database");
-}).catch(e => console.error("Auth Error:", e));
+signInAnonymously(auth).catch(e => console.error("Auth Error:", e));
 
+// --- 3. PRODUCT DATABASE ---
+const PRODUCTS_DB = {
+    "1": {
+        name: "KAYA: CARD GAME",
+        price: 12.99,
+        img: "pic/DEC.png",
+        desc: "The essential financial literacy game! Learn budgeting, saving, and smart spending in a fun, competitive way. Perfect for families and schools.",
+        // Placeholder images for gallery
+        images: ["pic/DEC.png", "pic/DEC.png", "pic/DEC.png"]
+    },
+    "2": {
+        name: "Stickers",
+        price: 3.99,
+        img: "pic/STICKER.PNG",
+        desc: "High-quality, fun stickers featuring the KAYA characters. Decorate your laptop, notebook, or game box!",
+        images: ["pic/STICKER.PNG", "pic/STICKER.PNG"]
+    },
+    "3": {
+        name: "Post Card",
+        price: 2.99,
+        img: "pic/POST CARD.PNG",
+        desc: "Send a note to a friend or keep it as a collectible. Beautifully illustrated KAYA artwork.",
+        images: ["pic/POST CARD.PNG", "pic/POST CARD.PNG"]
+    }
+};
 
-// --- 3. CART LOGIC ---
+// --- 4. PAGE LOADING LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Shared Logic
+    const yearEl = document.getElementById('current-year');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+    
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    if(menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+    }
+
+    injectCartModal();
+    updateCartCount();
+    
+    const cartWrapper = document.querySelector('.cart-wrapper');
+    if(cartWrapper) cartWrapper.addEventListener('click', openCart);
+
+    // --- CHECK IF WE ARE ON PRODUCT PAGE ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    if (productId && document.getElementById('product-detail-section')) {
+        // We are on product.html
+        loadProductDetails(productId);
+    }
+});
+
+function loadProductDetails(id) {
+    const product = PRODUCTS_DB[id];
+    if (!product) {
+        document.querySelector('.product-detail-container').innerHTML = "<h2>Product Not Found</h2>";
+        return;
+    }
+
+    // Fill Info
+    document.getElementById('p-title').textContent = product.name;
+    document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
+    document.getElementById('p-desc').textContent = product.desc;
+    
+    // Setup Gallery
+    const mainImg = document.getElementById('main-image');
+    const thumbsContainer = document.getElementById('thumbnail-container');
+    
+    mainImg.src = product.img; // Default main
+    
+    product.images.forEach((imgSrc, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = imgSrc;
+        thumb.className = 'thumbnail';
+        if(index === 0) thumb.classList.add('active');
+        
+        thumb.addEventListener('click', () => {
+            mainImg.src = imgSrc;
+            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+            thumb.classList.add('active');
+        });
+        thumbsContainer.appendChild(thumb);
+    });
+
+    // Handle "Add to Cart" on this specific page
+    const addBtn = document.getElementById('add-to-cart-btn');
+    addBtn.addEventListener('click', () => {
+        addToCart(id, product.name, product.price);
+    });
+}
+
+// --- 5. CART LOGIC (Shared) ---
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
 
 function saveCart() {
@@ -66,33 +153,24 @@ function getCartTotal() {
     return Math.round(total).toFixed(2);
 }
 
-// --- 4. MODAL UI ---
+// --- 6. MODAL UI ---
 function injectCartModal() {
     if(document.querySelector('.cart-modal-overlay')) return;
 
     const modalHTML = `
     <div class="cart-modal-overlay">
         <div class="cart-modal">
-            
-            <!-- CART VIEW -->
             <div id="cart-view">
                 <div class="cart-header">
                     <h3>Your Cart</h3>
                     <button class="close-cart"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="cart-body">
-                    <div class="cart-items"></div>
-                </div>
+                <div class="cart-body"><div class="cart-items"></div></div>
                 <div class="cart-footer">
-                    <div class="cart-total">
-                        <span>Total:</span>
-                        <span class="total-price">USD 0.00</span>
-                    </div>
+                    <div class="cart-total"><span>Total:</span><span class="total-price">USD 0.00</span></div>
                     <button class="btn btn-primary checkout-btn" style="width:100%">Checkout</button>
                 </div>
             </div>
-
-            <!-- CHECKOUT FORM VIEW -->
             <div id="checkout-view" style="display:none; height:100%; flex-direction:column;">
                 <div class="cart-header">
                     <button class="back-to-cart"><i class="fas fa-arrow-left"></i> Back</button>
@@ -102,42 +180,16 @@ function injectCartModal() {
                 <div class="cart-body">
                     <form id="order-form">
                         <h4 class="checkout-section-title"><i class="fas fa-user"></i> Details</h4>
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" id="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <div class="phone-group">
-                                <select id="country-code">
-                                    <option value="+1">+1 (US)</option>
-                                    <option value="+60" selected>+60 (MY)</option>
-                                    <option value="+44">+44 (UK)</option>
-                                </select>
-                                <input type="tel" id="phone" required>
-                            </div>
-                        </div>
-
+                        <div class="form-group"><label>Full Name</label><input type="text" id="name" required></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
+                        <div class="form-group"><label>Phone</label><div class="phone-group">
+                            <select id="country-code"><option value="+1">+1 (US)</option><option value="+60" selected>+60 (MY)</option></select>
+                            <input type="tel" id="phone" required></div></div>
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-map-marker-alt"></i> Address</h4>
-                        <div class="form-row">
-                            <div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street" required></div>
-                            <div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit" required></div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group"><input type="text" id="zip" placeholder="Zip" required></div>
-                            <div class="form-group"><input type="text" id="city" placeholder="City" required></div>
-                        </div>
-
+                        <div class="form-row"><div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street" required></div><div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit" required></div></div>
+                        <div class="form-row"><div class="form-group"><input type="text" id="zip" placeholder="Zip" required></div><div class="form-group"><input type="text" id="city" placeholder="City" required></div></div>
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
-                        
-                        <!-- PAYPAL CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
-                        
-                        <!-- Manual Button Fallback -->
                         <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
                             <p style="font-size:0.9rem; color:#666; margin-bottom:10px; text-align:center;">Having trouble with PayPal? Use Manual Transfer.</p>
                             <button type="submit" id="manual-order-btn" class="btn btn-secondary" style="width:100%;">Place Order (Manual Transfer)</button>
@@ -145,7 +197,6 @@ function injectCartModal() {
                     </form>
                 </div>
             </div>
-
         </div>
     </div>`;
     
@@ -155,15 +206,9 @@ function injectCartModal() {
 
 function setupEventListeners() {
     document.querySelectorAll('.close-cart').forEach(b => b.addEventListener('click', closeCart));
-    
-    const checkoutBtn = document.querySelector('.checkout-btn');
-    if(checkoutBtn) checkoutBtn.addEventListener('click', showCheckout);
-    
-    const backBtn = document.querySelector('.back-to-cart');
-    if(backBtn) backBtn.addEventListener('click', showCartView);
-    
-    const overlay = document.querySelector('.cart-modal-overlay');
-    if(overlay) overlay.addEventListener('click', (e) => {
+    document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
+    document.querySelector('.back-to-cart').addEventListener('click', showCartView);
+    document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => {
         if(e.target === document.querySelector('.cart-modal-overlay')) closeCart();
     });
 
@@ -180,24 +225,17 @@ function setupEventListeners() {
 
 function showCheckout() {
     if(cart.length === 0) return alert("Cart is empty");
-    
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
     
-    const container = document.getElementById('paypal-button-container');
-    container.innerHTML = ''; 
+    document.getElementById('paypal-button-container').innerHTML = ''; 
     
     if (window.paypal) {
         window.paypal.Buttons({
             createOrder: function(data, actions) {
                 const name = document.getElementById('name').value;
-                if(!name) {
-                    alert("Please fill in your Name first!");
-                    return actions.reject();
-                }
-                return actions.order.create({
-                    purchase_units: [{ amount: { value: getCartTotal() } }]
-                });
+                if(!name) { alert("Please fill in your Name first!"); return actions.reject(); }
+                return actions.order.create({ purchase_units: [{ amount: { value: getCartTotal() } }] });
             },
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
@@ -207,6 +245,7 @@ function showCheckout() {
             },
             onError: function(err) {
                 console.error("PayPal Error:", err);
+                alert("PayPal failed to load. Please use Manual Transfer below.");
             }
         }).render('#paypal-button-container');
     }
@@ -292,30 +331,3 @@ function renderCartItems() {
 }
 
 window.removeFromCart = removeFromCart;
-
-document.addEventListener('DOMContentLoaded', () => {
-    const yearEl = document.getElementById('current-year');
-    if(yearEl) yearEl.textContent = new Date().getFullYear();
-    
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    if(menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-    }
-
-    injectCartModal();
-    updateCartCount();
-
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const price = btn.getAttribute('data-price');
-            if(id) addToCart(id, name, price);
-        });
-    });
-
-    const cartWrapper = document.querySelector('.cart-wrapper');
-    if(cartWrapper) cartWrapper.addEventListener('click', openCart);
-});
