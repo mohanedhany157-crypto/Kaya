@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (FINAL FIX)
+ * JAVASCRIPT FOR KAYA STORE (UPDATED)
  * ======================================================
  */
 
@@ -34,7 +34,7 @@ function initSpaceBackground() {
     const ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
-    const numStars = 400; // MORE STARS
+    const numStars = 400; 
     let mouseX = 0, mouseY = 0;
     
     // KAYA BRAND COLORS
@@ -61,7 +61,6 @@ function initSpaceBackground() {
             this.y = (Math.random() - 0.5) * height * 2;
             this.z = Math.random() * width; 
             this.size = Math.random() * 2;
-            // Pick Random Brand Color
             this.color = kayaColors[Math.floor(Math.random() * kayaColors.length)];
         }
         update() {
@@ -142,7 +141,23 @@ function loadProductDetails(id) {
 
     document.getElementById('p-title').textContent = product.name;
     document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
-    document.getElementById('p-desc').textContent = product.desc;
+    
+    // --- RANDOM COLOR GENERATOR FOR DESCRIPTION ---
+    // User requested "randomly same colors as kaya" for the black text
+    const descText = product.desc;
+    const words = descText.split(' ');
+    // Kaya Colors Classes: k (Orange), a1 (Yellow), y (Green), a2 (Blue)
+    const colorClasses = ['k', 'a1', 'y', 'a2', 'a2']; // Added blue twice for balance or just random
+    
+    // We rebuild the description paragraph with spans
+    let colorfulDesc = '';
+    words.forEach(word => {
+        // Pick random class
+        const randomClass = colorClasses[Math.floor(Math.random() * colorClasses.length)];
+        colorfulDesc += `<span class="${randomClass}">${word}</span> `;
+    });
+    
+    document.getElementById('p-desc').innerHTML = colorfulDesc;
     
     const mainImg = document.getElementById('main-image');
     const thumbsContainer = document.getElementById('thumbnail-container');
@@ -204,7 +219,7 @@ function injectCartModal() {
     const modalHTML = `
     <div class="cart-modal-overlay">
         <div class="cart-modal">
-            <div id="cart-view">
+            <div id="cart-view" style="display:flex; flex-direction:column; height:100%;">
                 <div class="cart-header"><h3>Your Cart</h3><button class="close-cart"><i class="fas fa-times"></i></button></div>
                 <div class="cart-body"><div class="cart-items"></div></div>
                 <div class="cart-footer">
