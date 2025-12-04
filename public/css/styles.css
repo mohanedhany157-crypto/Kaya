@@ -54,11 +54,14 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 0 var(--spacing-sm); position: relative; z-index: 1; }
 h1, h2, h3, h4 { font-weight: 700; margin-bottom: var(--spacing-sm); }
-section, .section { flex: 1; padding: var(--spacing-lg) 0; }
+
+/* UPDATED SECTION PADDING: Reduced top padding to remove gap */
+section, .section { flex: 1; padding: 0.5rem 0 var(--spacing-lg) 0; }
 
 h2 {
     font-size: 2.5rem;
@@ -101,7 +104,7 @@ h2 {
 .welcome-banner { 
     /* Blue Background for Banner Only */
     background-color: var(--color-theme-dark); 
-    padding: 20px 0; /* Tight padding to reduce scroll space */
+    padding: 30px 0; /* Tight padding */
     text-align: center; 
     margin-bottom: 20px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -247,7 +250,7 @@ h2 {
     grid-template-columns: 1fr 1fr; 
     gap: 40px; 
     background: transparent; 
-    padding: 20px 0; /* Reduced padding */
+    padding: 0; /* REMOVED PADDING HERE TO REDUCE SPACE */
     border-radius: var(--border-radius-lg); 
 }
 .main-image-container { 
