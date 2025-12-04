@@ -34,7 +34,7 @@ function initSpaceBackground() {
     const ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
-    const numStars = 400; 
+    const numStars = 4000; // INCREASED 10X (from 400 to 4000)
     let mouseX = 0, mouseY = 0;
     
     // KAYA BRAND COLORS
