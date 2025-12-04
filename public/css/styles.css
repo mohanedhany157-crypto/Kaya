@@ -28,11 +28,7 @@
     --color-logo-k: var(--color-primary-accent);
     --color-logo-a1: var(--color-secondary-accent);
     --color-logo-y: var(--color-accent-green);
-    
-    /* UPDATED: Changed this variable to Orange for UI elements (Badges/Icons).
-       The Logo letter 'A' is now handled separately below to keep it Blue.
-    */
-    --color-logo-a2: #FD4D0A; 
+    --color-logo-a2: #0094E8; /* Blue */
 }
 
 /* --- Base Styles --- */
@@ -71,13 +67,11 @@ h2 {
 .logo-k { color: var(--color-logo-k); }
 .logo-a1 { color: var(--color-logo-a1); }
 .logo-y { color: var(--color-logo-y); }
-
-/* TRADEMARK PROTECTION: Hardcoded Blue for the Logo 'A' only */
-.logo-a2 { color: #0094E8; } 
+.logo-a2 { color: var(--color-logo-a2); } 
 
 /* --- Banner --- */
 .welcome-banner { 
-    background-color: var(--color-primary-accent); /* Changed from #34495E to Orange Theme */
+    background-color: #34495E; 
     padding: 20px 0; 
     text-align: center; 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); 
@@ -96,11 +90,10 @@ h2 {
 .sign-k { color: var(--color-logo-k); }
 .sign-a1 { color: var(--color-logo-a1); }
 .sign-y { color: var(--color-logo-y); }
-/* Use hardcoded blue for banner 'A' as well to match logo */
-.sign-a2 { color: #0094E8; } 
+.sign-a2 { color: var(--color-logo-a2); } 
 
 .sign-exclamation {
-    background: linear-gradient(to bottom, var(--color-logo-k) 0%, var(--color-logo-k) 25%, var(--color-logo-a1) 25%, var(--color-logo-a1) 50%, var(--color-logo-y) 50%, var(--color-logo-y) 75%, #0094E8 75%, #0094E8 100%);
+    background: linear-gradient(to bottom, var(--color-logo-k) 0%, var(--color-logo-k) 25%, var(--color-logo-a1) 25%, var(--color-logo-a1) 50%, var(--color-logo-y) 50%, var(--color-logo-y) 75%, var(--color-logo-a2) 75%, var(--color-logo-a2) 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; 
 }
 .tagline-rules { font-size: 1.2rem; color: var(--color-text-dark); font-weight: 600; margin-top: 10px; }
