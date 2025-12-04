@@ -7,11 +7,14 @@
     <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- FIREBASE & PAYPAL -->
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
-    <!-- <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
+    <!-- Uncomment when live: <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
 </head>
+
 <body>
 
 <!-- THE SPACE BACKGROUND -->
@@ -20,16 +23,21 @@
 <header class="header">
     <div class="container nav-content">
         <a href="index.html" class="logo-link">
-            <div class="logo"><span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span></div>
+            <div class="logo">
+                <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+            </div>
         </a>
+
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+
         <nav class="nav-menu">
             <a href="index.html" class="active-link">Store</a>
             <a href="learn.html">How to Play</a>
             <a href="links.html">Contact/Links</a>
         </nav>
+
         <div class="cart-wrapper">
-            <i class="fas fa-shopping-cart cart-icon"></i>
+            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
             <span class="cart-badge">0</span>
         </div>
     </div>
@@ -38,54 +46,86 @@
 <div class="welcome-banner">
     <div class="container">
         <h1 class="big-sign">
-            <span class="sign-text">Shop </span><span class="sign-k">K</span><span class="sign-a1">A</span><span class="sign-y">Y</span><span class="sign-a2">A</span><span class="sign-exclamation">!</span>
+            <span class="sign-text">Shop </span>
+            <span class="sign-k">K</span><span class="sign-a1">A</span><span class="sign-y">Y</span><span class="sign-a2">A</span><span class="sign-exclamation">!</span>
         </h1>
-        <p class="tagline-rules">Empower your kids' future with fun financial literacy.</p>
+        <p class="tagline-rules" style="color: white;">Empower your kids' future with fun financial literacy.</p>
     </div>
 </div>
 
 <section id="store" class="section">
     <div class="container">
         <h2 class="title-with-icon"><i class="fas fa-box"></i> Featured Products</h2>
+
         <div class="product-grid">
+            <!-- Product 1 -->
             <div class="product-card">
                 <div class="product-image-container">
-                    <img src="pic/DEC.png" alt="Kaya Game" onerror="this.onerror=null; this.src='https://placehold.co/400x350/00f3ff/000?text=KAYA';">
+                    <img src="pic/DEC2.jpg" alt="Kaya Game" onerror="this.onerror=null; this.src='https://placehold.co/400x350/FFBC00/333?text=KAYA+CORE+GAME';">
                     <span class="product-badge">Best Seller</span>
                 </div>
                 <div class="product-details">
                     <h3>KAYA: CARD GAME</h3>
                     <p class="price">USD 12.99</p>
-                    <a href="product.html?id=1" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
+                    <button class="btn btn-primary add-to-cart-btn" 
+                        data-id="1" 
+                        data-name="KAYA Core Game" 
+                        data-price="12.99">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
                 </div>
             </div>
+
+            <!-- Product 2 -->
             <div class="product-card">
                 <div class="product-image-container">
-                    <img src="pic/STICKER.PNG" alt="Stickers" onerror="this.onerror=null; this.src='https://placehold.co/400x350/bc13fe/fff?text=STICKERS';">
-                    <span class="product-badge" style="background: linear-gradient(45deg, #bc13fe, #00f3ff);">Accessory</span>
+                    <img src="pic/STICKER.PNG" alt="Kaya Stickers" onerror="this.onerror=null; this.src='https://placehold.co/400x350/4D9222/FFF?text=STICKERS';">
+                    <span class="product-badge" style="background-color: var(--color-accent-green);">Accessory</span>
                 </div>
                 <div class="product-details">
                     <h3>Stickers</h3>
                     <p class="price">USD 3.99</p>
-                    <a href="product.html?id=2" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
+                    <button class="btn btn-primary add-to-cart-btn" 
+                        data-id="2" 
+                        data-name="Stickers" 
+                        data-price="3.99">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
                 </div>
             </div>
+            
+            <!-- Product 3 -->
             <div class="product-card">
                 <div class="product-image-container">
-                    <img src="pic/POST CARD.PNG" alt="Post Card" onerror="this.onerror=null; this.src='https://placehold.co/400x350/00f3ff/000?text=POSTCARD';">
-                    <span class="product-badge" style="background: linear-gradient(45deg, #bc13fe, #00f3ff);">Accessory</span>
+                    <img src="pic/POST CARD.PNG" alt="Kaya Post Card" onerror="this.onerror=null; this.src='https://placehold.co/400x350/0094E8/FFF?text=POST+CARD';">
+                    <span class="product-badge" style="background-color: var(--color-accent-green);">Accessory</span>
                 </div>
                 <div class="product-details">
                     <h3>Post Card</h3>
                     <p class="price">USD 2.99</p>
-                    <a href="product.html?id=3" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
+                    <button class="btn btn-primary add-to-cart-btn" 
+                        data-id="3" 
+                        data-name="Post card" 
+                        data-price="2.99">
+                        <i class="fas fa-cart-plus"></i> Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
+
         <div class="value-prop-grid">
-            <div class="value-prop-item"><i class="fas fa-shield-alt"></i><h4>Quality Guaranteed</h4></div>
-            <div class="value-prop-item"><i class="fas fa-rocket"></i><h4>Fast Galactic Shipping</h4></div>
-            <div class="value-prop-item"><i class="fas fa-smile"></i><h4>100% Fun Promise</h4></div>
+            <div class="value-prop-item">
+                <i class="fas fa-shield-alt"></i>
+                <h4>Quality Guaranteed</h4>
+            </div>
+            <div class="value-prop-item">
+                <i class="fas fa-truck-fast"></i>
+                <h4>Fast & Reliable Shipping</h4>
+            </div>
+            <div class="value-prop-item">
+                <i class="fas fa-smile"></i>
+                <h4>100% Fun Promise</h4>
+            </div>
         </div>
     </div>
 </section>
@@ -93,10 +133,26 @@
 <footer class="footer">
     <div class="container footer-content">
         <div class="footer-logo">
-            <div class="logo"><span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span></div>
-            <p style="color:#aaa;">Play, Learn, Grow (Financially).</p>
+            <div class="logo">
+                <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
+            </div>
+            <p>Play, Learn, Grow (Financially).</p>
         </div>
-        <div class="footer-info"><p>&copy; <span id="current-year"></span> Kaya Financial Games.</p></div>
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <a href="index.html">Store Home</a>
+            <a href="learn.html">How to Play</a>
+            <a href="links.html">Contact Us</a>
+        </div>
+        <div class="footer-social">
+            <h3>Follow Our Fun!</h3>
+            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
+        <div class="footer-info">
+            <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
+        </div>
     </div>
 </footer>
 

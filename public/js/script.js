@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (SPACE THEME EDITION)
+ * JAVASCRIPT FOR KAYA STORE (RESTORED LOGIC + SPACE)
  * ======================================================
  */
 
@@ -8,7 +8,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. FIREBASE KEYS (KEEP YOUR KEYS HERE) ---
+// --- 1. YOUR REAL KEYS ---
 const firebaseConfig = {
   apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
@@ -26,7 +26,7 @@ const COLLECTION_NAME = 'kaya_orders';
 
 signInAnonymously(auth).catch(e => console.error("Auth Error:", e));
 
-// --- 2. SPACE BACKGROUND ANIMATION (NEW) ---
+// --- 2. SPACE BACKGROUND ANIMATION ---
 function initSpaceBackground() {
     const canvas = document.getElementById('space-canvas');
     if (!canvas) return;
@@ -37,7 +37,6 @@ function initSpaceBackground() {
     const numStars = 200;
     let mouseX = 0, mouseY = 0;
 
-    // Resize Logic
     function resize() {
         width = window.innerWidth;
         height = window.innerHeight;
@@ -47,37 +46,28 @@ function initSpaceBackground() {
     window.addEventListener('resize', resize);
     resize();
 
-    // Mouse Tracking for Interaction
     document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX - width / 2) * 0.05; // Parallax strength
+        mouseX = (e.clientX - width / 2) * 0.05;
         mouseY = (e.clientY - height / 2) * 0.05;
     });
 
-    // Star Object
     class Star {
-        constructor() {
-            this.reset();
-        }
+        constructor() { this.reset(); }
         reset() {
             this.x = (Math.random() - 0.5) * width * 2;
             this.y = (Math.random() - 0.5) * height * 2;
-            this.z = Math.random() * width; // Depth
+            this.z = Math.random() * width; 
             this.size = Math.random() * 2;
-            this.color = Math.random() > 0.8 ? '#00f3ff' : (Math.random() > 0.5 ? '#bc13fe' : '#ffffff'); // Theme colors
+            this.color = Math.random() > 0.8 ? '#FD4D0A' : (Math.random() > 0.5 ? '#FFBC00' : '#ffffff'); // Theme Colors
         }
         update() {
-            // Move star towards screen (z decreases)
             this.z -= 2; 
-            
-            // Reset if it passes the screen
             if (this.z <= 0) this.reset();
         }
         draw() {
-            // Perspective Math
             const x = (this.x - mouseX) * (width / this.z) + width / 2;
             const y = (this.y - mouseY) * (width / this.z) + height / 2;
-            const s = (1 - this.z / width) * this.size * 3; // Size based on depth
-
+            const s = (1 - this.z / width) * this.size * 3;
             if (x > 0 && x < width && y > 0 && y < height) {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
@@ -87,126 +77,18 @@ function initSpaceBackground() {
         }
     }
 
-    // Create Stars
     for (let i = 0; i < numStars; i++) stars.push(new Star());
 
-    // Animation Loop
     function animate() {
-        ctx.fillStyle = 'rgba(5, 7, 10, 0.3)'; // Trails effect
+        ctx.fillStyle = 'rgba(26, 30, 46, 0.3)'; 
         ctx.fillRect(0, 0, width, height);
-
-        stars.forEach(star => {
-            star.update();
-            star.draw();
-        });
+        stars.forEach(star => { star.update(); star.draw(); });
         requestAnimationFrame(animate);
     }
     animate();
 }
 
-// --- 3. PRODUCT DB ---
-const PRODUCTS_DB = {
-    "1": {
-        name: "KAYA: CARD GAME", price: 12.99, img: "pic/DEC.png",
-        desc: "The essential financial literacy game! Learn budgeting in a fun, competitive way.",
-        images: ["pic/DEC2.Jpg", "pic/DEC.png", "pic/DEC1.jpg","pic/DEC3.jpg"]
-    },
-    "2": {
-        name: "Stickers", price: 3.99, img: "pic/STICKER.PNG",
-        desc: "High-quality, fun stickers featuring KAYA characters.",
-        images: ["pic/STICKER.PNG", "pic/STICKER.PNG", "pic/STICKER.PNG"]
-    },
-    "3": {
-        name: "Post Card", price: 2.99, img: "pic/POST CARD.PNG",
-        desc: "Send a note to a friend. Beautifully illustrated KAYA artwork.",
-        images: ["pic/POST CARD.PNG", "pic/POST CARD.PNG", "pic/POST CARD.PNG"]
-    }
-};
-
-// --- 4. INIT ---
-document.addEventListener('DOMContentLoaded', () => {
-    const yearEl = document.getElementById('current-year');
-    if(yearEl) yearEl.textContent = new Date().getFullYear();
-    
-    // Start Space Animation
-    initSpaceBackground();
-    
-    // Mobile Menu
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    if(menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-    }
-
-    injectCartModal();
-    updateCartCount();
-    
-    const cartWrapper = document.querySelector('.cart-wrapper');
-    if(cartWrapper) cartWrapper.addEventListener('click', openCart);
-
-    // Check Product Page
-    const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id');
-    if (productId && document.getElementById('product-detail-section')) {
-        loadProductDetails(productId);
-    }
-});
-
-// --- HELPERS (Product Details) ---
-function loadProductDetails(id) {
-    const product = PRODUCTS_DB[id];
-    if (!product) return;
-
-    document.getElementById('p-title').textContent = product.name;
-    document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
-    document.getElementById('p-desc').textContent = product.desc;
-    
-    const mainImg = document.getElementById('main-image');
-    const thumbsContainer = document.getElementById('thumbnail-container');
-    
-    let currentImgs = product.images;
-    let currIdx = 0;
-    mainImg.src = currentImgs[0];
-    thumbsContainer.innerHTML = '';
-
-    // Thumbnails
-    currentImgs.forEach((imgSrc, index) => {
-        const thumb = document.createElement('img');
-        thumb.src = imgSrc;
-        thumb.className = 'thumbnail';
-        if(index === 0) thumb.classList.add('active');
-        thumb.addEventListener('click', () => {
-            mainImg.src = imgSrc;
-            currIdx = index;
-            updateActiveThumb();
-        });
-        thumbsContainer.appendChild(thumb);
-    });
-
-    // Arrows
-    document.getElementById('prev-img').addEventListener('click', () => {
-        currIdx = (currIdx - 1 < 0) ? currentImgs.length - 1 : currIdx - 1;
-        mainImg.src = currentImgs[currIdx];
-        updateActiveThumb();
-    });
-    document.getElementById('next-img').addEventListener('click', () => {
-        currIdx = (currIdx + 1 >= currentImgs.length) ? 0 : currIdx + 1;
-        mainImg.src = currentImgs[currIdx];
-        updateActiveThumb();
-    });
-
-    function updateActiveThumb() {
-        document.querySelectorAll('.thumbnail').forEach((t, i) => {
-            if (i === currIdx) t.classList.add('active'); else t.classList.remove('active');
-        });
-    }
-
-    document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-        addToCart(id, product.name, product.price);
-    });
-}
-
-// --- CART LOGIC (SAME AS BEFORE) ---
+// --- 3. CART LOGIC ---
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
 
 function saveCart() { localStorage.setItem('kayaCart', JSON.stringify(cart)); updateCartCount(); renderCartItems(); }
@@ -218,7 +100,7 @@ function addToCart(id, name, price) { cart.push({ id, name, price }); saveCart()
 function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
 function getCartTotal() { let t = 0; cart.forEach(i => t += parseFloat(i.price)); return Math.round(t).toFixed(2); }
 
-// --- MODAL INJECTION (SAME) ---
+// --- 4. MODAL UI ---
 function injectCartModal() {
     if(document.querySelector('.cart-modal-overlay')) return;
     const modalHTML = `
@@ -261,7 +143,7 @@ function injectCartModal() {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     setupEventListeners();
 }
-// (Remaining helper functions setupEventListeners, showCheckout, saveOrderToFirebase, etc. are the same as before but adapted for dark mode in CSS)
+
 function setupEventListeners() {
     document.querySelectorAll('.close-cart').forEach(b => b.addEventListener('click', closeCart));
     document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
@@ -273,11 +155,11 @@ function setupEventListeners() {
         saveOrderToFirebase({ id: "MANUAL-" + Math.floor(Math.random() * 100000), method: "Manual/Local", payer: { name: { given_name: document.getElementById('name').value } } });
     });
 }
+
 function showCheckout() {
     if(cart.length === 0) return alert("Cart is empty");
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
-    // Render PayPal if available
     document.getElementById('paypal-button-container').innerHTML = ''; 
     if (window.paypal) {
         window.paypal.Buttons({
@@ -287,6 +169,7 @@ function showCheckout() {
     }
 }
 function showCartView() { document.getElementById('checkout-view').style.display = 'none'; document.getElementById('cart-view').style.display = 'flex'; }
+
 async function saveOrderToFirebase(paymentDetails) {
     const orderData = {
         customer: {
@@ -313,3 +196,33 @@ function renderCartItems() {
     container.innerHTML = html; document.querySelector('.total-price').textContent = 'USD ' + getCartTotal();
 }
 window.removeFromCart = removeFromCart;
+
+// --- INIT ---
+document.addEventListener('DOMContentLoaded', () => {
+    const yearEl = document.getElementById('current-year');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+    
+    initSpaceBackground(); // START STARS
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    if(menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+    }
+
+    injectCartModal();
+    updateCartCount();
+
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = btn.getAttribute('data-id');
+            const name = btn.getAttribute('data-name');
+            const price = btn.getAttribute('data-price');
+            if(id) addToCart(id, name, price);
+        });
+    });
+
+    const cartWrapper = document.querySelector('.cart-wrapper');
+    if(cartWrapper) cartWrapper.addEventListener('click', openCart);
+});
