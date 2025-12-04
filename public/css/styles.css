@@ -189,7 +189,6 @@ h2 {
     align-items: center; 
     gap: 20px; 
     margin-top: 30px; 
-    /* Removed background color and padding to let it flow in space */
     background: transparent; 
     padding: 0; 
 }
@@ -201,7 +200,7 @@ h2 {
     font-size: 1.1rem; font-weight: 600; border-radius: 50px; 
     color: white; text-decoration: none; text-align: center; 
     transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    border: 2px solid rgba(255,255,255,0.2); /* Slight border for contrast */
+    border: 2px solid rgba(255,255,255,0.2); 
 }
 .link-btn i { font-size: 1.4rem; }
 .link-btn:hover { transform: translateY(-4px); opacity: 0.95; border-color: white; }
@@ -261,8 +260,49 @@ h2 {
 .footer a { color: #ccc; text-decoration: none; transition: color 0.3s; }
 .footer a:hover { color: var(--color-accent-green); }
 
-/* --- Cart Modal --- */
-.cart-modal { background: #FEF6EC; width: 95%; max-width: 800px; border-radius: var(--border-radius-lg); box-shadow: 0 25px 60px rgba(0,0,0,0.4); position: relative; height: auto; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; border: 3px solid var(--color-secondary-accent); }
+/* --- Cart Modal (FIXED POPUP) --- */
+/* 1. The Dark Overlay (Hidden by Default) */
+.cart-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Dim background */
+    z-index: 2000; /* Sit on top of everything */
+    display: none; /* HIDDEN BY DEFAULT */
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(3px);
+}
+
+/* 2. Show Overlay when 'open' class is added */
+.cart-modal-overlay.open {
+    display: flex;
+}
+
+/* 3. The Modal Box Itself */
+.cart-modal {
+    background: #FEF6EC;
+    width: 90%;
+    max-width: 500px; /* Reduced width for better looking popup */
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    position: relative;
+    max-height: 85vh; /* Don't be taller than the screen */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 3px solid var(--color-secondary-accent);
+    animation: popIn 0.3s ease;
+}
+
+/* Animation to make it pop */
+@keyframes popIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
 .cart-header { display: flex; justify-content: space-between; align-items: center; background-color: var(--color-primary-accent); padding: 15px 25px; color: white; flex-shrink: 0; }
 .cart-header h3 { margin: 0; color: white; font-size: 1.5rem; }
 .close-cart, .back-to-cart { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: white; transition: transform 0.2s; }
@@ -287,8 +327,8 @@ h2 {
     .rules-effects { grid-column: 2 / 3; grid-row: 1 / span 3; }
 }
 @media (max-width: 768px) {
-    .cart-modal { width: 100%; height: 100%; max-height: 100%; border-radius: 0; border: none; }
-    .cart-body { padding-bottom: 80px; }
+    /* On mobile, we can make the cart full width if we want, but keeping it as a modal is usually nicer */
+    .cart-modal { width: 95%; } 
     .menu-toggle { display: block; }
     .nav-menu { display: none; flex-direction: column; width: 100%; position: absolute; top: 60px; left: 0; background-color: var(--color-bg-white); box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); text-align: center; padding: 10px 0; z-index: 999; }
     .nav-menu.active { display: flex; }
