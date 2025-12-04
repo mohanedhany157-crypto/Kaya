@@ -7,17 +7,15 @@
     <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <!-- FIREBASE & PAYPAL -->
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
-    <!-- Uncomment when live: <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
+    <!-- <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
 </head>
 
 <body>
 
-<!-- THE SPACE BACKGROUND -->
+<!-- SPACE BACKGROUND -->
 <canvas id="space-canvas"></canvas>
 
 <header class="header">
@@ -27,15 +25,12 @@
                 <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
             </div>
         </a>
-
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
-
         <nav class="nav-menu">
             <a href="index.html" class="active-link">Store</a>
             <a href="learn.html">How to Play</a>
             <a href="links.html">Contact/Links</a>
         </nav>
-
         <div class="cart-wrapper">
             <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
             <span class="cart-badge">0</span>
@@ -43,15 +38,7 @@
     </div>
 </header>
 
-<div class="welcome-banner">
-    <div class="container">
-        <h1 class="big-sign">
-            <span class="sign-text">Shop </span>
-            <span class="sign-k">K</span><span class="sign-a1">A</span><span class="sign-y">Y</span><span class="sign-a2">A</span><span class="sign-exclamation">!</span>
-        </h1>
-        <p class="tagline-rules" style="color: white;">Empower your kids' future with fun financial literacy.</p>
-    </div>
-</div>
+<!-- NOTE: Banner Removed as requested -->
 
 <section id="store" class="section">
     <div class="container">
@@ -67,12 +54,8 @@
                 <div class="product-details">
                     <h3>KAYA: CARD GAME</h3>
                     <p class="price">USD 12.99</p>
-                    <button class="btn btn-primary add-to-cart-btn" 
-                        data-id="1" 
-                        data-name="KAYA Core Game" 
-                        data-price="12.99">
-                        <i class="fas fa-cart-plus"></i> Add to Cart
-                    </button>
+                    <!-- LINKS TO PRODUCT PAGE -->
+                    <a href="product.html?id=1" class="btn btn-primary" style="width: 100%;">View Details</a>
                 </div>
             </div>
 
@@ -85,12 +68,7 @@
                 <div class="product-details">
                     <h3>Stickers</h3>
                     <p class="price">USD 3.99</p>
-                    <button class="btn btn-primary add-to-cart-btn" 
-                        data-id="2" 
-                        data-name="Stickers" 
-                        data-price="3.99">
-                        <i class="fas fa-cart-plus"></i> Add to Cart
-                    </button>
+                    <a href="product.html?id=2" class="btn btn-primary" style="width: 100%;">View Details</a>
                 </div>
             </div>
             
@@ -103,29 +81,15 @@
                 <div class="product-details">
                     <h3>Post Card</h3>
                     <p class="price">USD 2.99</p>
-                    <button class="btn btn-primary add-to-cart-btn" 
-                        data-id="3" 
-                        data-name="Post card" 
-                        data-price="2.99">
-                        <i class="fas fa-cart-plus"></i> Add to Cart
-                    </button>
+                    <a href="product.html?id=3" class="btn btn-primary" style="width: 100%;">View Details</a>
                 </div>
             </div>
         </div>
 
         <div class="value-prop-grid">
-            <div class="value-prop-item">
-                <i class="fas fa-shield-alt"></i>
-                <h4>Quality Guaranteed</h4>
-            </div>
-            <div class="value-prop-item">
-                <i class="fas fa-truck-fast"></i>
-                <h4>Fast & Reliable Shipping</h4>
-            </div>
-            <div class="value-prop-item">
-                <i class="fas fa-smile"></i>
-                <h4>100% Fun Promise</h4>
-            </div>
+            <div class="value-prop-item"><i class="fas fa-shield-alt"></i><h4>Quality Guaranteed</h4></div>
+            <div class="value-prop-item"><i class="fas fa-truck-fast"></i><h4>Fast & Reliable Shipping</h4></div>
+            <div class="value-prop-item"><i class="fas fa-smile"></i><h4>100% Fun Promise</h4></div>
         </div>
     </div>
 </section>

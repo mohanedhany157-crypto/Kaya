@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (RESTORED LOGIC + SPACE)
+ * JAVASCRIPT FOR KAYA STORE (FINAL)
  * ======================================================
  */
 
@@ -8,7 +8,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebas
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// --- 1. YOUR REAL KEYS ---
+// --- 1. CONFIG ---
 const firebaseConfig = {
   apiKey: "AIzaSyDAFC257zzL0Q0T1crkPaYojnIgZQfYqUA",
   authDomain: "kaya-store-31083.firebaseapp.com",
@@ -26,7 +26,7 @@ const COLLECTION_NAME = 'kaya_orders';
 
 signInAnonymously(auth).catch(e => console.error("Auth Error:", e));
 
-// --- 2. SPACE BACKGROUND ANIMATION ---
+// --- 2. SPACE BACKGROUND ANIMATION (THEMED STARS) ---
 function initSpaceBackground() {
     const canvas = document.getElementById('space-canvas');
     if (!canvas) return;
@@ -34,7 +34,7 @@ function initSpaceBackground() {
     const ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
-    const numStars = 200;
+    const numStars = 150;
     let mouseX = 0, mouseY = 0;
 
     function resize() {
@@ -47,8 +47,8 @@ function initSpaceBackground() {
     resize();
 
     document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX - width / 2) * 0.05;
-        mouseY = (e.clientY - height / 2) * 0.05;
+        mouseX = (e.clientX - width / 2) * 0.02; // Gentle parallax
+        mouseY = (e.clientY - height / 2) * 0.02;
     });
 
     class Star {
@@ -58,16 +58,20 @@ function initSpaceBackground() {
             this.y = (Math.random() - 0.5) * height * 2;
             this.z = Math.random() * width; 
             this.size = Math.random() * 2;
-            this.color = Math.random() > 0.8 ? '#FD4D0A' : (Math.random() > 0.5 ? '#FFBC00' : '#ffffff'); // Theme Colors
+            // STARS ARE NOW ORANGE, YELLOW OR WHITE
+            const rand = Math.random();
+            if (rand > 0.7) this.color = '#FD4D0A'; // Orange
+            else if (rand > 0.4) this.color = '#FFBC00'; // Yellow
+            else this.color = '#ffffff'; 
         }
         update() {
-            this.z -= 2; 
+            this.z -= 1.5; // Gentle speed
             if (this.z <= 0) this.reset();
         }
         draw() {
             const x = (this.x - mouseX) * (width / this.z) + width / 2;
             const y = (this.y - mouseY) * (width / this.z) + height / 2;
-            const s = (1 - this.z / width) * this.size * 3;
+            const s = (1 - this.z / width) * this.size * 2.5;
             if (x > 0 && x < width && y > 0 && y < height) {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
@@ -80,17 +84,111 @@ function initSpaceBackground() {
     for (let i = 0; i < numStars; i++) stars.push(new Star());
 
     function animate() {
-        ctx.fillStyle = 'rgba(26, 30, 46, 0.3)'; 
-        ctx.fillRect(0, 0, width, height);
+        ctx.clearRect(0, 0, width, height); // Transparent clear to see CSS background
         stars.forEach(star => { star.update(); star.draw(); });
         requestAnimationFrame(animate);
     }
     animate();
 }
 
-// --- 3. CART LOGIC ---
-let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
+// --- 3. PRODUCT DATABASE ---
+const PRODUCTS_DB = {
+    "1": {
+        name: "KAYA: CARD GAME", price: 12.99, img: "pic/DEC.png",
+        desc: "The essential financial literacy game! Learn budgeting in a fun, competitive way.",
+        images: ["pic/DEC2.jpg", "pic/DEC.png", "pic/DEC1.jpg","pic/DEC3.jpg"]
+    },
+    "2": {
+        name: "Stickers", price: 3.99, img: "pic/STICKER.PNG",
+        desc: "High-quality, fun stickers featuring KAYA characters.",
+        images: ["pic/STICKER.PNG", "pic/STICKER.PNG", "pic/STICKER.PNG"]
+    },
+    "3": {
+        name: "Post Card", price: 2.99, img: "pic/POST CARD.PNG",
+        desc: "Send a note to a friend. Beautifully illustrated KAYA artwork.",
+        images: ["pic/POST CARD.PNG", "pic/POST CARD.PNG", "pic/POST CARD.PNG"]
+    }
+};
 
+// --- 4. INIT ---
+document.addEventListener('DOMContentLoaded', () => {
+    const yearEl = document.getElementById('current-year');
+    if(yearEl) yearEl.textContent = new Date().getFullYear();
+    
+    initSpaceBackground(); 
+
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    if(menuToggle && navMenu) {
+        menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
+    }
+
+    injectCartModal();
+    updateCartCount();
+    
+    const cartWrapper = document.querySelector('.cart-wrapper');
+    if(cartWrapper) cartWrapper.addEventListener('click', openCart);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    if (productId && document.getElementById('product-detail-section')) {
+        loadProductDetails(productId);
+    }
+});
+
+function loadProductDetails(id) {
+    const product = PRODUCTS_DB[id];
+    if (!product) return;
+
+    document.getElementById('p-title').textContent = product.name;
+    document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
+    document.getElementById('p-desc').textContent = product.desc;
+    
+    const mainImg = document.getElementById('main-image');
+    const thumbsContainer = document.getElementById('thumbnail-container');
+    
+    let currentImgs = product.images;
+    let currIdx = 0;
+    mainImg.src = currentImgs[0];
+    thumbsContainer.innerHTML = '';
+
+    currentImgs.forEach((imgSrc, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = imgSrc;
+        thumb.className = 'thumbnail';
+        if(index === 0) thumb.classList.add('active');
+        thumb.addEventListener('click', () => {
+            mainImg.src = imgSrc;
+            currIdx = index;
+            updateActiveThumb();
+        });
+        thumbsContainer.appendChild(thumb);
+    });
+
+    document.getElementById('prev-img').addEventListener('click', () => {
+        currIdx = (currIdx - 1 < 0) ? currentImgs.length - 1 : currIdx - 1;
+        mainImg.src = currentImgs[currIdx];
+        updateActiveThumb();
+    });
+    document.getElementById('next-img').addEventListener('click', () => {
+        currIdx = (currIdx + 1 >= currentImgs.length) ? 0 : currIdx + 1;
+        mainImg.src = currentImgs[currIdx];
+        updateActiveThumb();
+    });
+
+    function updateActiveThumb() {
+        document.querySelectorAll('.thumbnail').forEach((t, i) => {
+            if (i === currIdx) t.classList.add('active'); else t.classList.remove('active');
+        });
+    }
+
+    document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+        addToCart(id, product.name, product.price);
+    });
+}
+
+// --- 5. CART LOGIC (SAME AS BEFORE) ---
+let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
 function saveCart() { localStorage.setItem('kayaCart', JSON.stringify(cart)); updateCartCount(); renderCartItems(); }
 function updateCartCount() {
     const badge = document.querySelector('.cart-badge');
@@ -100,7 +198,7 @@ function addToCart(id, name, price) { cart.push({ id, name, price }); saveCart()
 function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
 function getCartTotal() { let t = 0; cart.forEach(i => t += parseFloat(i.price)); return Math.round(t).toFixed(2); }
 
-// --- 4. MODAL UI ---
+// --- 6. MODAL UI ---
 function injectCartModal() {
     if(document.querySelector('.cart-modal-overlay')) return;
     const modalHTML = `
@@ -131,8 +229,8 @@ function injectCartModal() {
                         <div class="form-row"><div class="form-group"><input type="text" id="zip" placeholder="Zip" required></div><div class="form-group"><input type="text" id="city" placeholder="City" required></div></div>
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
-                        <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #333; padding-top:15px;">
-                            <p style="font-size:0.9rem; color:#888; margin-bottom:10px; text-align:center;">Having trouble? Use Manual Transfer.</p>
+                        <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #ddd; padding-top:15px;">
+                            <p style="font-size:0.9rem; color:#666; margin-bottom:10px; text-align:center;">Having trouble? Use Manual Transfer.</p>
                             <button type="submit" id="manual-order-btn" class="btn btn-secondary" style="width:100%;">Confirm (Manual)</button>
                         </div>
                     </form>
@@ -143,7 +241,6 @@ function injectCartModal() {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     setupEventListeners();
 }
-
 function setupEventListeners() {
     document.querySelectorAll('.close-cart').forEach(b => b.addEventListener('click', closeCart));
     document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
@@ -155,7 +252,6 @@ function setupEventListeners() {
         saveOrderToFirebase({ id: "MANUAL-" + Math.floor(Math.random() * 100000), method: "Manual/Local", payer: { name: { given_name: document.getElementById('name').value } } });
     });
 }
-
 function showCheckout() {
     if(cart.length === 0) return alert("Cart is empty");
     document.getElementById('cart-view').style.display = 'none';
@@ -169,7 +265,6 @@ function showCheckout() {
     }
 }
 function showCartView() { document.getElementById('checkout-view').style.display = 'none'; document.getElementById('cart-view').style.display = 'flex'; }
-
 async function saveOrderToFirebase(paymentDetails) {
     const orderData = {
         customer: {
@@ -190,39 +285,9 @@ function openCart() { renderCartItems(); document.querySelector('.cart-modal-ove
 function closeCart() { document.querySelector('.cart-modal-overlay').classList.remove('open'); }
 function renderCartItems() {
     const container = document.querySelector('.cart-items');
-    if(cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">Empty</p>'; document.querySelector('.total-price').textContent = 'USD 0.00'; return; }
+    if(cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">Empty</p>'; document.querySelector('.total-price').textContent = 'USD 0.00'; return; }
     let html = '';
     cart.forEach((item, i) => { html += `<div class="cart-item"><div class="cart-item-info"><h4>${item.name}</h4><span>USD ${item.price}</span></div><i class="fas fa-trash remove-item" onclick="removeFromCart(${i})"></i></div>`; });
     container.innerHTML = html; document.querySelector('.total-price').textContent = 'USD ' + getCartTotal();
 }
 window.removeFromCart = removeFromCart;
-
-// --- INIT ---
-document.addEventListener('DOMContentLoaded', () => {
-    const yearEl = document.getElementById('current-year');
-    if(yearEl) yearEl.textContent = new Date().getFullYear();
-    
-    initSpaceBackground(); // START STARS
-
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    if(menuToggle && navMenu) {
-        menuToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-    }
-
-    injectCartModal();
-    updateCartCount();
-
-    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const id = btn.getAttribute('data-id');
-            const name = btn.getAttribute('data-name');
-            const price = btn.getAttribute('data-price');
-            if(id) addToCart(id, name, price);
-        });
-    });
-
-    const cartWrapper = document.querySelector('.cart-wrapper');
-    if(cartWrapper) cartWrapper.addEventListener('click', openCart);
-});
