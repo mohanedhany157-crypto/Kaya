@@ -3,16 +3,20 @@
 
 /* --- Variables --- */
 :root {
-    --color-primary-accent: #FD4D0A;
-    --color-secondary-accent: #FFBC00; 
-    --color-bg-light: #FEF6EC;
+    --color-primary-accent: #FD4D0A; /* Fiery Orange */
+    --color-secondary-accent: #FFBC00; /* Yellow */
+    --color-bg-light: #FEF6EC; /* Eggshell */
     --color-bg-white: #ffffff;
-    --color-accent-green: #4D9222;
+    --color-accent-green: #4D9222; /* Leaf Green */
     --color-text-dark: #333;
     --color-text-light: #f4f4f4;
+    
+    /* Fonts */
     --font-family-title: 'Chelsea Market', cursive;
     --font-family-header: 'Poppins', sans-serif;
     --font-family-paragraph: 'Poppins', sans-serif;
+    
+    /* Spacing */
     --spacing-lg: 4rem;
     --spacing-md: 2rem;
     --spacing-sm: 1rem;
@@ -24,7 +28,11 @@
     --color-logo-k: var(--color-primary-accent);
     --color-logo-a1: var(--color-secondary-accent);
     --color-logo-y: var(--color-accent-green);
-    --color-logo-a2: #0094E8;
+    
+    /* UPDATED: Changed this variable to Orange for UI elements (Badges/Icons).
+       The Logo letter 'A' is now handled separately below to keep it Blue.
+    */
+    --color-logo-a2: #FD4D0A; 
 }
 
 /* --- Base Styles --- */
@@ -54,15 +62,18 @@ h2 {
 .bg-light { background-color: var(--color-bg-white); }
 .text-center { text-align: center; }
 
-/* --- Logo --- */
+/* --- Logo Styling --- */
 .logo-link { text-decoration: none; color: inherit; z-index: 2; }
 .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; cursor: pointer; }
 .logo span { transition: transform 0.2s; display: inline-block; }
 .logo span:hover { transform: translateY(-3px); }
+
 .logo-k { color: var(--color-logo-k); }
 .logo-a1 { color: var(--color-logo-a1); }
 .logo-y { color: var(--color-logo-y); }
-.logo-a2 { color: var(--color-logo-a2); }
+
+/* TRADEMARK PROTECTION: Hardcoded Blue for the Logo 'A' only */
+.logo-a2 { color: #0094E8; } 
 
 /* --- Banner --- */
 .welcome-banner { background-color: #34495E; padding: 20px 0; text-align: center; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
@@ -80,9 +91,11 @@ h2 {
 .sign-k { color: var(--color-logo-k); }
 .sign-a1 { color: var(--color-logo-a1); }
 .sign-y { color: var(--color-logo-y); }
-.sign-a2 { color: var(--color-logo-a2); }
+/* Use hardcoded blue for banner 'A' as well to match logo */
+.sign-a2 { color: #0094E8; } 
+
 .sign-exclamation {
-    background: linear-gradient(to bottom, var(--color-logo-k) 0%, var(--color-logo-k) 25%, var(--color-logo-a1) 25%, var(--color-logo-a1) 50%, var(--color-logo-y) 50%, var(--color-logo-y) 75%, var(--color-logo-a2) 75%, var(--color-logo-a2) 100%);
+    background: linear-gradient(to bottom, var(--color-logo-k) 0%, var(--color-logo-k) 25%, var(--color-logo-a1) 25%, var(--color-logo-a1) 50%, var(--color-logo-y) 50%, var(--color-logo-y) 75%, #0094E8 75%, #0094E8 100%);
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; 
 }
 .tagline-rules { font-size: 1.2rem; color: var(--color-text-dark); font-weight: 600; margin-top: 10px; }
@@ -120,7 +133,7 @@ h2 {
 }
 .cart-badge.show { opacity: 1; }
 
-/* --- CART MODAL STYLES (SCROLL FIXED) --- */
+/* --- CART MODAL STYLES --- */
 .cart-modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -140,8 +153,7 @@ h2 {
     border-radius: var(--border-radius-lg);
     box-shadow: 0 25px 60px rgba(0,0,0,0.4);
     position: relative;
-    /* IMPORTANT FIX FOR SCROLLING */
-    height: 90vh; /* Fixed height on desktop */
+    height: auto;
     max-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -149,7 +161,6 @@ h2 {
     border: 3px solid var(--color-secondary-accent);
 }
 
-/* FIX: Ensure views inside modal can shrink properly */
 #cart-view, #checkout-view {
     display: flex;
     flex-direction: column;
@@ -166,23 +177,21 @@ h2 {
     background-color: var(--color-primary-accent);
     padding: 15px 25px;
     color: white;
-    flex-shrink: 0; /* Ensures header never shrinks */
+    flex-shrink: 0;
 }
 .cart-header h3 { margin: 0; color: white; font-size: 1.5rem; }
 .close-cart, .back-to-cart { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: white; transition: transform 0.2s; }
 .close-cart:hover, .back-to-cart:hover { transform: scale(1.1); }
 .back-to-cart { display: flex; align-items: center; gap: 8px; font-weight: 600; }
 
-/* SCROLLING MAGIC HERE */
 .cart-body { 
     flex: 1; 
-    overflow-y: auto; /* Activates scrollbar */
+    overflow-y: auto; 
     padding: 25px; 
     min-height: 0;
     -webkit-overflow-scrolling: touch;
 }
 
-/* Custom Scrollbar Styling */
 .cart-body::-webkit-scrollbar { width: 8px; }
 .cart-body::-webkit-scrollbar-track { background: #f1f1f1; }
 .cart-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
@@ -212,7 +221,7 @@ h2 {
 .cart-total { display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; color: var(--color-text-dark); }
 .checkout-btn { width: 100%; text-align: center; font-size: 1.1rem; padding: 15px; }
 
-/* --- CHECKOUT FORM STYLES --- */
+/* --- CHECKOUT FORM --- */
 .checkout-section-title {
     font-size: 1.2rem;
     color: var(--color-primary-accent);
@@ -234,18 +243,17 @@ h2 {
     transition: border-color 0.3s;
     background-color: white;
 }
-.form-group input:focus, .form-group select:focus { border-color: var(--color-primary-accent); outline: none; }
+/* Focus color changed to Orange to remove Blue glow */
+.form-group input:focus, .form-group select:focus { border-color: var(--color-primary-accent); outline: none; box-shadow: 0 0 0 3px rgba(253, 77, 10, 0.1); }
 
-/* Side-by-Side Form Layout */
 .form-row { display: flex; gap: 15px; }
 .form-row .form-group { flex: 1; }
 
-/* Phone Input Group */
 .phone-group { display: flex; gap: 10px; }
 .phone-group select { width: 35%; min-width: 100px; }
 .phone-group input { flex: 1; }
 
-/* Payment Options */
+/* Payment Options (Colors Fixed - No Blue) */
 .payment-options {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -279,29 +287,10 @@ h2 {
 }
 .payment-option span { font-weight: 600; font-size: 0.9rem; }
 
-.payment-option .fa-cc-visa { color: #1A1F71; }
-.payment-option .fa-cc-mastercard { color: #EB001B; }
-.payment-option .fa-paypal { color: #003087; }
-
-/* --- CREDIT CARD FORM STYLES --- */
-.credit-card-form {
-    background: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 20px;
-    margin-top: -10px;
-    display: none; /* Hidden unless selected */
-}
-.credit-card-form.active { display: block; }
-
-.card-icons {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-    font-size: 1.5rem;
-    color: #666;
-}
+/* Forced Theme Colors for Icons */
+.payment-option .fa-cc-visa { color: var(--color-primary-accent); }
+.payment-option .fa-cc-mastercard { color: var(--color-primary-accent); }
+.payment-option .fa-paypal { color: var(--color-primary-accent); }
 
 /* --- Buttons --- */
 .btn { display: inline-block; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; transition: transform 0.2s, box-shadow 0.2s; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
