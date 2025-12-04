@@ -34,7 +34,7 @@ function initSpaceBackground() {
     const ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
-    const numStars = 4000; // INCREASED 10X (from 400 to 4000)
+    const numStars = 6000; // INCREASED MORE
     let mouseX = 0, mouseY = 0;
     
     // KAYA BRAND COLORS
@@ -60,7 +60,7 @@ function initSpaceBackground() {
             this.x = (Math.random() - 0.5) * width * 2;
             this.y = (Math.random() - 0.5) * height * 2;
             this.z = Math.random() * width; 
-            this.size = Math.random() * 2;
+            this.size = Math.random() * 3; // INCREASED SIZE
             this.color = kayaColors[Math.floor(Math.random() * kayaColors.length)];
         }
         update() {
@@ -70,7 +70,7 @@ function initSpaceBackground() {
         draw() {
             const x = (this.x - mouseX) * (width / this.z) + width / 2;
             const y = (this.y - mouseY) * (width / this.z) + height / 2;
-            const s = (1 - this.z / width) * this.size * 2.5;
+            const s = (1 - this.z / width) * this.size * 4; // INCREASED DRAW SIZE
             if (x > 0 && x < width && y > 0 && y < height) {
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
