@@ -27,7 +27,7 @@ const COLLECTION_NAME = 'kaya_orders';
 
 signInAnonymously(auth).catch(e => console.error("Auth Error:", e));
 
-// --- 3. PRODUCT DATABASE (UPDATED WITH MORE IMAGES) ---
+// --- 3. PRODUCT DATABASE ---
 const PRODUCTS_DB = {
     "1": {
         name: "KAYA: CARD GAME",
@@ -35,10 +35,9 @@ const PRODUCTS_DB = {
         img: "pic/DEC.png",
         desc: "The essential financial literacy game! Learn budgeting, saving, and smart spending in a fun, competitive way. Perfect for families and schools.",
         images: [
-            "pic/DEC2.jpg",
             "pic/DEC.png", 
-            "pic/DEC1.jpg", // Replace with: pic/DEC_back.png
-            "pic/DEC3.jpg"   // Replace with: pic/DEC_cards.png
+            "pic/DEC.png", 
+            "pic/DEC.png" 
         ]
     },
     "2": {
@@ -46,11 +45,10 @@ const PRODUCTS_DB = {
         price: 3.99,
         img: "pic/STICKER.PNG",
         desc: "High-quality, fun stickers featuring the KAYA characters. Decorate your laptop, notebook, or game box!",
-        // 🟢 ADDED MORE STICKER PICS HERE
         images: [
-            "pic/STICKER.PNG",          // Main View
-            "pic/STICKER.PNG",          // Replace with: pic/STICKER_laptop.png
-            "pic/STICKER.PNG"           // Replace with: pic/STICKER_pack.png
+            "pic/STICKER.PNG", 
+            "pic/STICKER.PNG", 
+            "pic/STICKER.PNG" 
         ]
     },
     "3": {
@@ -58,17 +56,20 @@ const PRODUCTS_DB = {
         price: 2.99,
         img: "pic/POST CARD.PNG",
         desc: "Send a note to a friend or keep it as a collectible. Beautifully illustrated KAYA artwork.",
-        // 🟢 ADDED MORE POSTCARD PICS HERE
         images: [
-            "pic/POST CARD.PNG",        // Front View
-            "pic/POST CARD.PNG",        // Replace with: pic/POST_back.png
-            "pic/POST CARD.PNG"         // Replace with: pic/POST_writing.png
+            "pic/POST CARD.PNG", 
+            "pic/POST CARD.PNG", 
+            "pic/POST CARD.PNG" 
         ]
     }
 };
 
 // --- 4. PAGE LOADING LOGIC ---
+let currentImageIndex = 0;
+let currentProductImages = [];
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Shared Logic
     const yearEl = document.getElementById('current-year');
     if(yearEl) yearEl.textContent = new Date().getFullYear();
     
@@ -84,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartWrapper = document.querySelector('.cart-wrapper');
     if(cartWrapper) cartWrapper.addEventListener('click', openCart);
 
+    // --- CHECK IF WE ARE ON PRODUCT PAGE ---
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
 
@@ -106,26 +108,53 @@ function loadProductDetails(id) {
     const mainImg = document.getElementById('main-image');
     const thumbsContainer = document.getElementById('thumbnail-container');
     
-    mainImg.src = product.img; 
+    // Init Gallery
+    currentProductImages = product.images;
+    currentImageIndex = 0;
+    mainImg.src = currentProductImages[0];
     thumbsContainer.innerHTML = '';
 
-    product.images.forEach((imgSrc, index) => {
+    // Render Thumbnails
+    currentProductImages.forEach((imgSrc, index) => {
         const thumb = document.createElement('img');
         thumb.src = imgSrc;
         thumb.className = 'thumbnail';
         if(index === 0) thumb.classList.add('active');
         
         thumb.addEventListener('click', () => {
-            mainImg.src = imgSrc;
-            document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
+            setMainImage(index);
         });
         thumbsContainer.appendChild(thumb);
+    });
+
+    // Arrows Logic
+    document.getElementById('prev-img').addEventListener('click', () => {
+        let newIndex = currentImageIndex - 1;
+        if (newIndex < 0) newIndex = currentProductImages.length - 1;
+        setMainImage(newIndex);
+    });
+
+    document.getElementById('next-img').addEventListener('click', () => {
+        let newIndex = currentImageIndex + 1;
+        if (newIndex >= currentProductImages.length) newIndex = 0;
+        setMainImage(newIndex);
     });
 
     const addBtn = document.getElementById('add-to-cart-btn');
     addBtn.addEventListener('click', () => {
         addToCart(id, product.name, product.price);
+    });
+}
+
+function setMainImage(index) {
+    const mainImg = document.getElementById('main-image');
+    currentImageIndex = index;
+    mainImg.src = currentProductImages[index];
+
+    // Update Thumbnails
+    document.querySelectorAll('.thumbnail').forEach((t, i) => {
+        if (i === index) t.classList.add('active');
+        else t.classList.remove('active');
     });
 }
 
