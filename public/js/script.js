@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (UPDATED)
+ * JAVASCRIPT FOR KAYA STORE (CLEAN - NO SPACE)
  * ======================================================
  */
 
@@ -26,77 +26,7 @@ const COLLECTION_NAME = 'kaya_orders';
 
 signInAnonymously(auth).catch(e => console.error("Auth Error:", e));
 
-// --- 2. SPACE BACKGROUND (KAYA THEMED STARS) ---
-function initSpaceBackground() {
-    const canvas = document.getElementById('space-canvas');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    let stars = [];
-    const numStars = 6000; 
-    let mouseX = 0, mouseY = 0;
-    
-    // KAYA BRAND COLORS
-    const kayaColors = ['#FD4D0A', '#FFBC00', '#4D9222', '#0094E8'];
-
-    function resize() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX - width / 2) * 0.02;
-        mouseY = (e.clientY - height / 2) * 0.02;
-    });
-
-    class Star {
-        constructor() { this.reset(); }
-        reset() {
-            this.x = (Math.random() - 0.5) * width * 2;
-            this.y = (Math.random() - 0.5) * height * 2;
-            this.z = Math.random() * width; 
-            // SMALLER STARS: Reduced from 3 to 1.2
-            this.size = Math.random() * 1.2; 
-            this.color = kayaColors[Math.floor(Math.random() * kayaColors.length)];
-        }
-        update() {
-            this.z -= 2; // Speed
-            if (this.z <= 0) this.reset();
-        }
-        draw() {
-            const x = (this.x - mouseX) * (width / this.z) + width / 2;
-            const y = (this.y - mouseY) * (width / this.z) + height / 2;
-            // SHARPER DRAW SIZE: Reduced multiplier from 4 to 1.5
-            const s = (1 - this.z / width) * this.size * 1.5; 
-            if (x > 0 && x < width && y > 0 && y < height) {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(x, y, s, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-    }
-
-    for (let i = 0; i < numStars; i++) stars.push(new Star());
-
-    function animate() {
-        // LIGHTER BACKGROUND EXPERIMENT
-        // Instead of clearRect (transparent), we fill with a dark slate blue
-        ctx.fillStyle = '#1B2735'; 
-        ctx.fillRect(0, 0, width, height);
-        
-        stars.forEach(star => { star.update(); star.draw(); });
-        requestAnimationFrame(animate);
-    }
-    animate();
-}
-
-// --- 3. PRODUCT DATABASE ---
+// --- 2. PRODUCT DATABASE ---
 const PRODUCTS_DB = {
     "1": {
         name: "KAYA: CARD GAME", price: 12.99, img: "pic/DEC.png",
@@ -115,13 +45,13 @@ const PRODUCTS_DB = {
     }
 };
 
-// --- 4. INIT ---
+// --- 3. INIT ---
 document.addEventListener('DOMContentLoaded', () => {
     const yearEl = document.getElementById('current-year');
     if(yearEl) yearEl.textContent = new Date().getFullYear();
     
-    initSpaceBackground(); 
-
+    // REMOVED SPACE BACKGROUND INIT
+    
     const menuToggle = document.querySelector('.menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
     if(menuToggle && navMenu) {
@@ -148,8 +78,6 @@ function loadProductDetails(id) {
     document.getElementById('p-title').textContent = product.name;
     document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
     
-    // --- UPDATED: REVERTED TO PLAIN TEXT ---
-    // User requested to stick with black wording and use a box background instead
     document.getElementById('p-desc').textContent = product.desc;
     
     const mainImg = document.getElementById('main-image');
@@ -195,7 +123,7 @@ function loadProductDetails(id) {
     });
 }
 
-// --- 5. CART LOGIC ---
+// --- 4. CART LOGIC ---
 let cart = JSON.parse(localStorage.getItem('kayaCart')) || [];
 function saveCart() { localStorage.setItem('kayaCart', JSON.stringify(cart)); updateCartCount(); renderCartItems(); }
 function updateCartCount() {
@@ -206,7 +134,7 @@ function addToCart(id, name, price) { cart.push({ id, name, price }); saveCart()
 function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
 function getCartTotal() { let t = 0; cart.forEach(i => t += parseFloat(i.price)); return Math.round(t).toFixed(2); }
 
-// --- 6. MODAL UI ---
+// --- 5. MODAL UI ---
 function injectCartModal() {
     if(document.querySelector('.cart-modal-overlay')) return;
     const modalHTML = `
