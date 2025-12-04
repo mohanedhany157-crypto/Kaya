@@ -5,21 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaya - Product Details</title>
     <link rel="icon" type="image/x-icon" href="pic/icon.PNG">
-    
-    <!-- EXTERNAL CSS -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <!-- FIREBASE -->
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
-
-    <!-- PAYPAL SDK -->
-    <!-- Note: If you see 'window host' errors, it's due to the sandbox environment. 
-         The script.js handles the missing PayPal SDK by showing a Manual Transfer button.
-         Uncomment the line below when deploying to a real domain with a valid Client ID. -->
-    <!-- <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
 </head>
 <body>
 
@@ -30,15 +20,12 @@
                 <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
             </div>
         </a>
-        
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
-        
         <nav class="nav-menu">
             <a href="index.html">Store</a>
             <a href="learn.html">How to Play</a>
             <a href="links.html">Contact</a>
         </nav>
-
         <div class="cart-wrapper">
             <i class="fas fa-shopping-cart cart-icon"></i>
             <span class="cart-badge">0</span>
@@ -46,40 +33,24 @@
     </div>
 </header>
 
-<!-- Product Detail Section -->
 <section id="product-detail-section" class="section product-detail-section">
     <div class="container">
-        <!-- Back Button -->
         <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Store</a>
-
         <div class="product-detail-container">
-            
-            <!-- LEFT: Image Gallery -->
             <div class="product-gallery">
                 <img id="main-image" src="" alt="Product Image" class="main-image">
-                <div class="thumbnail-list" id="thumbnail-container">
-                    <!-- Thumbnails injected by JS -->
-                </div>
+                <div class="thumbnail-list" id="thumbnail-container"></div>
             </div>
-
-            <!-- RIGHT: Info & Buttons -->
             <div class="product-info-content">
                 <h1 id="p-title">Loading...</h1>
                 <div class="price-tag" id="p-price">...</div>
-                
-                <p class="product-desc" id="p-desc">
-                    Loading description...
-                </p>
-
-                <!-- Action Area -->
+                <p class="product-desc" id="p-desc">Loading description...</p>
                 <div class="action-buttons">
-                    <!-- Internal Cart Button ONLY -->
                     <button id="add-to-cart-btn" class="btn btn-primary" style="width: 100%; font-size: 1.2rem;">
                         <i class="fas fa-cart-plus"></i> Add to Kaya Cart
                     </button>
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -90,10 +61,22 @@
             <div class="logo">
                 <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
             </div>
-            <p>Play, Learn, Grow.</p>
+            <p>Play, Learn, Grow (Financially).</p>
+        </div>
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <a href="index.html">Store Home</a>
+            <a href="learn.html">How to Play</a>
+            <a href="links.html">Contact Us</a>
+        </div>
+        <div class="footer-social">
+            <h3>Follow Our Fun!</h3>
+            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
         </div>
         <div class="footer-info">
-            <p>&copy; <span id="current-year"></span> Kaya Financial Games.</p>
+            <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
         </div>
     </div>
 </footer>

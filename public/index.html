@@ -8,18 +8,12 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <!-- FIREBASE -->
+    <!-- FIREBASE & PAYPAL -->
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js"></script>
-
-    <!-- PAYPAL SDK -->
-    <!-- Note: If you see 'window host' errors, it's due to the sandbox environment. 
-         The script.js handles the missing PayPal SDK by showing a Manual Transfer button.
-         Uncomment the line below when deploying to a real domain with a valid Client ID. -->
-    <!-- <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
+    <!-- Uncomment when live: <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&components=buttons"></script> -->
 </head>
-
 <body>
 
 <header class="header">
@@ -29,17 +23,14 @@
                 <span class="logo-k">K</span><span class="logo-a1">A</span><span class="logo-y">Y</span><span class="logo-a2">A</span>
             </div>
         </a>
-
         <button class="menu-toggle"><i class="fas fa-bars"></i></button>
-
         <nav class="nav-menu">
             <a href="index.html" class="active-link">Store</a>
             <a href="learn.html">How to Play</a>
             <a href="links.html">Contact/Links</a>
         </nav>
-
         <div class="cart-wrapper">
-            <i class="fas fa-shopping-cart cart-icon" aria-label="Shopping Cart"></i>
+            <i class="fas fa-shopping-cart cart-icon"></i>
             <span class="cart-badge">0</span>
         </div>
     </div>
@@ -58,7 +49,6 @@
 <section id="store" class="section">
     <div class="container">
         <h2 class="title-with-icon"><i class="fas fa-box"></i> Featured Products</h2>
-
         <div class="product-grid">
             <!-- Product 1 -->
             <div class="product-card">
@@ -69,12 +59,9 @@
                 <div class="product-details">
                     <h3>KAYA: CARD GAME</h3>
                     <p class="price">USD 12.99</p>
-                    <a href="product.html?id=1" class="btn btn-primary" style="width: 100%;">
-                        View Details
-                    </a>
+                    <a href="product.html?id=1" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
                 </div>
             </div>
-
             <!-- Product 2 -->
             <div class="product-card">
                 <div class="product-image-container">
@@ -84,12 +71,9 @@
                 <div class="product-details">
                     <h3>Stickers</h3>
                     <p class="price">USD 3.99</p>
-                    <a href="product.html?id=2" class="btn btn-primary" style="width: 100%;">
-                        View Details
-                    </a>
+                    <a href="product.html?id=2" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
                 </div>
             </div>
-            
             <!-- Product 3 -->
             <div class="product-card">
                 <div class="product-image-container">
@@ -99,9 +83,7 @@
                 <div class="product-details">
                     <h3>Post Card</h3>
                     <p class="price">USD 2.99</p>
-                    <a href="product.html?id=3" class="btn btn-primary" style="width: 100%;">
-                        View Details
-                    </a>
+                    <a href="product.html?id=3" class="btn btn-primary view-product-btn" style="width: 100%;">View Details</a>
                 </div>
             </div>
         </div>
@@ -131,8 +113,20 @@
             </div>
             <p>Play, Learn, Grow (Financially).</p>
         </div>
+        <div class="footer-links">
+            <h3>Quick Links</h3>
+            <a href="index.html">Store Home</a>
+            <a href="learn.html">How to Play</a>
+            <a href="links.html">Contact Us</a>
+        </div>
+        <div class="footer-social">
+            <h3>Follow Our Fun!</h3>
+            <a href="https://instagram.com/letsplaykaya" target="_blank" class="social-icon">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+        </div>
         <div class="footer-info">
-            <p>&copy; <span id="current-year"></span> Kaya Financial Games.</p>
+            <p>&copy; <span id="current-year"></span> Kaya Financial Games. All Rights Reserved. </p>
         </div>
     </div>
 </footer>
