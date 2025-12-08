@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (INTERNATIONAL + PAYPAL)
+ * JAVASCRIPT FOR KAYA STORE (INTERNATIONAL + SHIPPING)
  * ======================================================
  */
 
@@ -44,6 +44,16 @@ const PRODUCTS_DB = {
         images: ["pic/POST CARD.PNG", "pic/POST CARD.PNG", "pic/POST CARD.PNG"]
     }
 };
+
+// --- SHIPPING RATES (Converted RM to USD approx) ---
+const SHIPPING_RATES = {
+    "west_my": 1.80,  // ~8 RM (Standard Peninsula)
+    "sabah": 2.25,    // ~10 RM
+    "sarawak": 3.40,  // ~15 RM
+    "intl": 18.00     // ~80 RM
+};
+
+let currentShipping = SHIPPING_RATES["west_my"]; // Default
 
 // --- 3. INIT ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -129,7 +139,18 @@ function updateCartCount() {
 }
 function addToCart(id, name, price) { cart.push({ id, name, price }); saveCart(); openCart(); }
 function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
-function getCartTotal() { let t = 0; cart.forEach(i => t += parseFloat(i.price)); return Math.round(t).toFixed(2); }
+
+// Helper: Item Total Only
+function getItemTotal() { 
+    let t = 0; 
+    cart.forEach(i => t += parseFloat(i.price)); 
+    return t; 
+}
+
+// Helper: Grand Total (Items + Shipping)
+function getGrandTotal() {
+    return (getItemTotal() + currentShipping).toFixed(2);
+}
 
 // --- 5. MODAL UI ---
 function injectCartModal() {
@@ -154,20 +175,23 @@ function injectCartModal() {
                         <h4 class="checkout-section-title"><i class="fas fa-user"></i> Details</h4>
                         <div class="form-group"><label>Full Name</label><input type="text" id="name" required></div>
                         <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
+                        <div class="form-group"><label>Phone</label><input type="tel" id="phone" placeholder="+60 123 456 789" required></div>
+
+                        <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-truck"></i> Shipping</h4>
                         
-                        <!-- FIXED: INTERNATIONAL PHONE INPUT (No Dropdown) -->
+                        <!-- SHIPPING SELECTION -->
                         <div class="form-group">
-                            <label>Phone (e.g., +1 555-0123)</label>
-                            <input type="tel" id="phone" placeholder="+[Country Code] [Number]" required>
+                            <label>Destination</label>
+                            <select id="shipping-region" style="width:100%; padding:12px; border:2px solid #ddd; border-radius:8px;">
+                                <option value="west_my">West Malaysia (Peninsula) - $1.80</option>
+                                <option value="sabah">Sabah - $2.25</option>
+                                <option value="sarawak">Sarawak - $3.40</option>
+                                <option value="intl">International - $18.00</option>
+                            </select>
                         </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-map-marker-alt"></i> Address</h4>
-                        
-                        <!-- ADDED: COUNTRY INPUT -->
-                        <div class="form-group">
-                            <input type="text" id="country" placeholder="Country" required>
-                        </div>
-                        
+                        <div class="form-group"><input type="text" id="country" placeholder="Country" required></div>
                         <div class="form-row">
                             <div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street Address" required></div>
                             <div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit/Apt" required></div>
@@ -177,9 +201,13 @@ function injectCartModal() {
                             <div class="form-group"><input type="text" id="city" placeholder="City" required></div>
                         </div>
                         
+                        <div style="margin-top:20px; border-top:1px dashed #ccc; padding-top:10px; display:flex; justify-content:space-between; font-weight:bold; font-size:1.1rem;">
+                            <span>Total to Pay:</span>
+                            <span id="checkout-total-display">USD 0.00</span>
+                        </div>
+
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
                         
-                        <!-- PAYPAL BUTTON CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         
                         <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #ddd; padding-top:15px;">
@@ -194,47 +222,73 @@ function injectCartModal() {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
     setupEventListeners();
 }
+
 function setupEventListeners() {
     document.querySelectorAll('.close-cart').forEach(b => b.addEventListener('click', closeCart));
     document.querySelector('.checkout-btn').addEventListener('click', showCheckout);
     document.querySelector('.back-to-cart').addEventListener('click', showCartView);
     document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => { if(e.target === document.querySelector('.cart-modal-overlay')) closeCart(); });
+    
+    // LISTENER FOR SHIPPING CHANGE
+    const shippingSelect = document.getElementById('shipping-region');
+    if(shippingSelect) {
+        shippingSelect.addEventListener('change', (e) => {
+            currentShipping = SHIPPING_RATES[e.target.value];
+            updateCheckoutTotal();
+            // Re-render PayPal buttons with new total
+            renderPayPalButtons();
+        });
+    }
+
     const form = document.getElementById('order-form');
     if(form) form.addEventListener('submit', (e) => {
         e.preventDefault();
         saveOrderToFirebase({ id: "MANUAL-" + Math.floor(Math.random() * 100000), method: "Manual/Local", payer: { name: { given_name: document.getElementById('name').value } } });
     });
 }
+
+function updateCheckoutTotal() {
+    const totalEl = document.getElementById('checkout-total-display');
+    if(totalEl) totalEl.textContent = 'USD ' + getGrandTotal();
+}
+
 function showCheckout() {
     if(cart.length === 0) return alert("Cart is empty");
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
     
-    // Clear previous buttons to prevent duplicates
-    document.getElementById('paypal-button-container').innerHTML = ''; 
+    // Reset to default shipping logic
+    currentShipping = SHIPPING_RATES["west_my"];
+    document.getElementById('shipping-region').value = "west_my";
     
+    updateCheckoutTotal();
+    renderPayPalButtons();
+}
+
+function renderPayPalButtons() {
+    document.getElementById('paypal-button-container').innerHTML = ''; 
     if (window.paypal) {
         window.paypal.Buttons({
-            createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getCartTotal() } }] }),
+            createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getGrandTotal() } }] }),
             onApprove: (data, actions) => actions.order.capture().then(details => { 
-                // Add method tag for database
                 details.method = "PayPal"; 
                 saveOrderToFirebase(details); 
             })
         }).render('#paypal-button-container');
     } else {
-        console.error("PayPal SDK not loaded");
-        document.getElementById('paypal-button-container').innerHTML = '<p style="color:red;font-size:0.8rem;">PayPal failed to load. Please check your connection.</p>';
+        document.getElementById('paypal-button-container').innerHTML = '<p style="color:red;font-size:0.8rem;">PayPal SDK not loaded.</p>';
     }
 }
+
 function showCartView() { document.getElementById('checkout-view').style.display = 'none'; document.getElementById('cart-view').style.display = 'flex'; }
+
 async function saveOrderToFirebase(paymentDetails) {
+    const shippingRegion = document.getElementById('shipping-region').options[document.getElementById('shipping-region').selectedIndex].text;
+    
     const orderData = {
         customer: {
             name: document.getElementById('name').value || paymentDetails.payer.name.given_name,
             email: document.getElementById('email').value || paymentDetails.payer.email_address,
-            
-            // CAPTURE NEW FIELDS
             phone: document.getElementById('phone').value,
             address: { 
                 country: document.getElementById('country').value,
@@ -244,14 +298,23 @@ async function saveOrderToFirebase(paymentDetails) {
                 city: document.getElementById('city').value 
             }
         },
-        items: cart, total: getCartTotal(), status: "PAID", paymentId: paymentDetails.id, paymentMethod: paymentDetails.method, timestamp: serverTimestamp()
+        items: cart,
+        shipping: { region: shippingRegion, cost: currentShipping },
+        subtotal: getItemTotal().toFixed(2),
+        grandTotal: getGrandTotal(),
+        status: "PAID", 
+        paymentId: paymentDetails.id, 
+        paymentMethod: paymentDetails.method, 
+        timestamp: serverTimestamp()
     };
+    
     try {
         await addDoc(collection(db, COLLECTION_NAME), orderData);
         alert(`🎉 Order Success! ID: ${paymentDetails.id}`);
         cart = []; saveCart(); closeCart(); showCartView(); document.getElementById('order-form').reset();
     } catch(e) { console.error(e); alert("Payment success, but DB save failed."); }
 }
+
 function openCart() { renderCartItems(); document.querySelector('.cart-modal-overlay').classList.add('open'); showCartView(); }
 function closeCart() { document.querySelector('.cart-modal-overlay').classList.remove('open'); }
 function renderCartItems() {
@@ -259,6 +322,6 @@ function renderCartItems() {
     if(cart.length === 0) { container.innerHTML = '<p style="text-align:center; color:#888; margin-top:20px;">Empty</p>'; document.querySelector('.total-price').textContent = 'USD 0.00'; return; }
     let html = '';
     cart.forEach((item, i) => { html += `<div class="cart-item"><div class="cart-item-info"><h4>${item.name}</h4><span>USD ${item.price}</span></div><i class="fas fa-trash remove-item" onclick="removeFromCart(${i})"></i></div>`; });
-    container.innerHTML = html; document.querySelector('.total-price').textContent = 'USD ' + getCartTotal();
+    container.innerHTML = html; document.querySelector('.total-price').textContent = 'USD ' + getItemTotal().toFixed(2);
 }
 window.removeFromCart = removeFromCart;
