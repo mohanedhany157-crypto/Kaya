@@ -1,12 +1,13 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (BACKEND CONNECTED)
+ * JAVASCRIPT FOR KAYA STORE (CLEAN - NO EMAIL - FIXED)
  * ======================================================
  */
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+// --- FIXED IMPORTS (Using stable version 10.8.0) ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // --- 1. FIREBASE KEYS ---
 const firebaseConfig = {
@@ -201,8 +202,6 @@ function injectCartModal() {
                         </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
-                        
-                        <!-- PAYPAL BUTTON CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                     </form>
                 </div>
@@ -274,8 +273,6 @@ function renderPayPalButtons() {
         window.paypal.Buttons({
             createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getGrandTotal() } }] }),
             onApprove: (data, actions) => actions.order.capture().then(details => { 
-                // Add method tag for database
-                details.method = "PayPal"; 
                 saveOrderToFirebase(details); 
             })
         }).render('#paypal-button-container');
@@ -310,41 +307,15 @@ async function saveOrderToFirebase(paymentDetails) {
         grandTotal: getGrandTotal(),
         status: "PAID", 
         paymentId: paymentDetails.id, 
-        paymentMethod: paymentDetails.method, 
+        paymentMethod: "PayPal", 
         timestamp: serverTimestamp()
     };
     
     try {
         await addDoc(collection(db, COLLECTION_NAME), orderData);
-        
-        // --- CALL YOUR BACKEND ---
-        await sendConfirmationEmail(customerName, customerEmail, paymentDetails.id, getGrandTotal());
-
         cart = []; saveCart(); closeCart(); showCartView(); document.getElementById('order-form').reset();
         alert(`🎉 Order Success! Payment ID: ${paymentDetails.id}`);
-        
     } catch(e) { console.error(e); alert("Payment success, but DB save failed."); }
-}
-
-// --- SEND REAL EMAIL via BACKEND ---
-async function sendConfirmationEmail(name, email, orderId, total) {
-    try {
-        // NOTE: Change 'http://localhost:3000' to your live server URL when you deploy
-        const response = await fetch('http://localhost:3000/api/send-order-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, orderId, total })
-        });
-        
-        const result = await response.json();
-        if (result.success) {
-            console.log("Email request sent to backend.");
-        } else {
-            console.error("Backend failed to send email:", result.error);
-        }
-    } catch (error) {
-        console.error("Network error talking to backend:", error);
-    }
 }
 
 function openCart() { renderCartItems(); document.querySelector('.cart-modal-overlay').classList.add('open'); showCartView(); }
