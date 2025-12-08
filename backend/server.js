@@ -13,7 +13,7 @@ app.use(express.json());
 // --- EMAIL CONFIGURATION ---
 // Replace these with your real details or use a .env file
 const EMAIL_USER = "hellotokaya@gmail.com";
-const EMAIL_PASS = "YOUR_GOOGLE_APP_PASSWORD_HERE"; // NOT your login password!
+const EMAIL_PASS = "brea hynx zbiy lsls"; // NOT your login password!
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
