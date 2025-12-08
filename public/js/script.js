@@ -348,7 +348,7 @@ function sendConfirmationEmail(name, email) {
     };
 
     // REPLACE WITH YOUR SERVICE ID AND TEMPLATE ID
-    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+    emailjs.send('service_09n3fho', 'template_ingc41w', templateParams)
         .then(function(response) {
            console.log('SUCCESS!', response.status, response.text);
         }, function(error) {
