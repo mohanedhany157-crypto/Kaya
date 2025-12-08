@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (INTERNATIONAL)
+ * JAVASCRIPT FOR KAYA STORE (INTERNATIONAL + PAYPAL)
  * ======================================================
  */
 
@@ -155,28 +155,31 @@ function injectCartModal() {
                         <div class="form-group"><label>Full Name</label><input type="text" id="name" required></div>
                         <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
                         
-                        <!-- UPDATED PHONE FIELD FOR INTERNATIONAL USE -->
+                        <!-- FIXED: INTERNATIONAL PHONE INPUT (No Dropdown) -->
                         <div class="form-group">
-                            <label>Phone (with Country Code)</label>
-                            <input type="tel" id="phone" placeholder="+1 555 000 0000" required>
+                            <label>Phone (e.g., +1 555-0123)</label>
+                            <input type="tel" id="phone" placeholder="+[Country Code] [Number]" required>
                         </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-map-marker-alt"></i> Address</h4>
                         
-                        <!-- ADDED COUNTRY FIELD -->
-                        <div class="form-group"><input type="text" id="country" placeholder="Country" required></div>
+                        <!-- ADDED: COUNTRY INPUT -->
+                        <div class="form-group">
+                            <input type="text" id="country" placeholder="Country" required>
+                        </div>
                         
                         <div class="form-row">
-                            <div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street" required></div>
-                            <div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit" required></div>
+                            <div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street Address" required></div>
+                            <div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit/Apt" required></div>
                         </div>
                         <div class="form-row">
-                            <div class="form-group"><input type="text" id="zip" placeholder="Zip" required></div>
+                            <div class="form-group"><input type="text" id="zip" placeholder="Zip/Postal Code" required></div>
                             <div class="form-group"><input type="text" id="city" placeholder="City" required></div>
                         </div>
                         
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
                         
+                        <!-- PAYPAL BUTTON CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         
                         <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #ddd; padding-top:15px;">
@@ -207,12 +210,14 @@ function showCheckout() {
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
     
+    // Clear previous buttons to prevent duplicates
     document.getElementById('paypal-button-container').innerHTML = ''; 
     
     if (window.paypal) {
         window.paypal.Buttons({
             createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getCartTotal() } }] }),
             onApprove: (data, actions) => actions.order.capture().then(details => { 
+                // Add method tag for database
                 details.method = "PayPal"; 
                 saveOrderToFirebase(details); 
             })
