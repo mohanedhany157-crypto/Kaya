@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (CLEAN - NO SPACE)
+ * JAVASCRIPT FOR KAYA STORE (WITH PAYPAL)
  * ======================================================
  */
 
@@ -50,8 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const yearEl = document.getElementById('current-year');
     if(yearEl) yearEl.textContent = new Date().getFullYear();
     
-    // REMOVED SPACE BACKGROUND INIT
-    
     const menuToggle = document.querySelector('.menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
     if(menuToggle && navMenu) {
@@ -77,7 +75,6 @@ function loadProductDetails(id) {
 
     document.getElementById('p-title').textContent = product.name;
     document.getElementById('p-price').textContent = "USD " + product.price.toFixed(2);
-    
     document.getElementById('p-desc').textContent = product.desc;
     
     const mainImg = document.getElementById('main-image');
@@ -164,7 +161,10 @@ function injectCartModal() {
                         <div class="form-row"><div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street" required></div><div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit" required></div></div>
                         <div class="form-row"><div class="form-group"><input type="text" id="zip" placeholder="Zip" required></div><div class="form-group"><input type="text" id="city" placeholder="City" required></div></div>
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
+                        
+                        <!-- PAYPAL BUTTON CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
+                        
                         <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #ddd; padding-top:15px;">
                             <p style="font-size:0.9rem; color:#666; margin-bottom:10px; text-align:center;">Having trouble? Use Manual Transfer.</p>
                             <button type="submit" id="manual-order-btn" class="btn btn-secondary" style="width:100%;">Confirm (Manual)</button>
@@ -192,20 +192,30 @@ function showCheckout() {
     if(cart.length === 0) return alert("Cart is empty");
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
+    
+    // Clear previous buttons to prevent duplicates
     document.getElementById('paypal-button-container').innerHTML = ''; 
+    
     if (window.paypal) {
         window.paypal.Buttons({
             createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getCartTotal() } }] }),
-            onApprove: (data, actions) => actions.order.capture().then(details => { details.method = "PayPal"; saveOrderToFirebase(details); })
+            onApprove: (data, actions) => actions.order.capture().then(details => { 
+                // Add method tag for database
+                details.method = "PayPal"; 
+                saveOrderToFirebase(details); 
+            })
         }).render('#paypal-button-container');
+    } else {
+        console.error("PayPal SDK not loaded");
+        document.getElementById('paypal-button-container').innerHTML = '<p style="color:red;font-size:0.8rem;">PayPal failed to load. Please check your connection.</p>';
     }
 }
 function showCartView() { document.getElementById('checkout-view').style.display = 'none'; document.getElementById('cart-view').style.display = 'flex'; }
 async function saveOrderToFirebase(paymentDetails) {
     const orderData = {
         customer: {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
+            name: document.getElementById('name').value || paymentDetails.payer.name.given_name,
+            email: document.getElementById('email').value || paymentDetails.payer.email_address,
             phone: document.getElementById('country-code').value + document.getElementById('phone').value,
             address: { street: document.getElementById('street').value, unit: document.getElementById('unit').value, zip: document.getElementById('zip').value, city: document.getElementById('city').value }
         },
