@@ -14,7 +14,7 @@ import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.g
     let script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
     script.onload = function() {
-        emailjs.init("service_nw88bdp"); // <--- PASTE YOUR PUBLIC KEY HERE
+        emailjs.init("a-tgwGUaevJn229lb"); // <--- PASTE YOUR PUBLIC KEY HERE
     };
     document.head.appendChild(script);
 })();
@@ -348,7 +348,7 @@ function sendConfirmationEmail(name, email) {
     };
 
     // REPLACE WITH YOUR SERVICE ID AND TEMPLATE ID
-    emailjs.send('service_09n3fho', 'template_ingc41w', templateParams)
+    emailjs.send('service_nw88bdp', 'template_ingc41w', templateParams)
         .then(function(response) {
            console.log('SUCCESS!', response.status, response.text);
         }, function(error) {
