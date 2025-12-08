@@ -25,7 +25,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const COLLECTION_NAME = 'kaya_orders'; 
-const ADMIN_PASSWORD = "admin"; 
+const ADMIN_PASSWORD = "geethahani2025"; 
 
 // START
 injectLoginScreen();

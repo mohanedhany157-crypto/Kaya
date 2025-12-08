@@ -14,7 +14,7 @@ import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.g
     let script = document.createElement('script');
     script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
     script.onload = function() {
-        emailjs.init("a-tgwGUaevJn229lb"); // <--- PASTE YOUR PUBLIC KEY HERE
+        emailjs.init("service_nw88bdp"); // <--- PASTE YOUR PUBLIC KEY HERE
     };
     document.head.appendChild(script);
 })();
