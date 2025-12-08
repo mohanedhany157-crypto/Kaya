@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (INTERNATIONAL + SHIPPING)
+ * JAVASCRIPT FOR KAYA STORE (AUTO-ONLY SHIPPING)
  * ======================================================
  */
 
@@ -175,14 +175,19 @@ function injectCartModal() {
                         <h4 class="checkout-section-title"><i class="fas fa-user"></i> Details</h4>
                         <div class="form-group"><label>Full Name</label><input type="text" id="name" required></div>
                         <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
-                        <div class="form-group"><label>Phone</label><input type="tel" id="phone" placeholder="+60 123 456 789" required></div>
+                        
+                        <!-- FIXED: INTERNATIONAL PHONE INPUT (No Dropdown) -->
+                        <div class="form-group">
+                            <label>Phone (e.g., +1 555-0123)</label>
+                            <input type="tel" id="phone" placeholder="+[Country Code] [Number]" required>
+                        </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-truck"></i> Shipping</h4>
                         
-                        <!-- SHIPPING SELECTION -->
+                        <!-- SHIPPING SELECTION (DISABLED / AUTO-ONLY) -->
                         <div class="form-group">
-                            <label>Destination</label>
-                            <select id="shipping-region" style="width:100%; padding:12px; border:2px solid #ddd; border-radius:8px;">
+                            <label>Destination (Auto-Detected)</label>
+                            <select id="shipping-region" disabled style="width:100%; padding:12px; border:2px solid #ddd; border-radius:8px; background-color: #f5f5f5; cursor: not-allowed; color: #555;">
                                 <option value="west_my">West Malaysia (Peninsula) - $1.80</option>
                                 <option value="sabah">Sabah - $2.25</option>
                                 <option value="sarawak">Sarawak - $3.40</option>
@@ -191,7 +196,12 @@ function injectCartModal() {
                         </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-map-marker-alt"></i> Address</h4>
-                        <div class="form-group"><input type="text" id="country" placeholder="Country" required></div>
+                        
+                        <!-- ADDED: COUNTRY INPUT -->
+                        <div class="form-group">
+                            <input type="text" id="country" placeholder="Country" required>
+                        </div>
+                        
                         <div class="form-row">
                             <div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street Address" required></div>
                             <div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit/Apt" required></div>
@@ -208,6 +218,7 @@ function injectCartModal() {
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
                         
+                        <!-- PAYPAL BUTTON CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                         
                         <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #ddd; padding-top:15px;">
@@ -229,19 +240,12 @@ function setupEventListeners() {
     document.querySelector('.back-to-cart').addEventListener('click', showCartView);
     document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => { if(e.target === document.querySelector('.cart-modal-overlay')) closeCart(); });
     
-    // LISTENER FOR SHIPPING CHANGE (Manual Dropdown)
-    const shippingSelect = document.getElementById('shipping-region');
-    if(shippingSelect) {
-        shippingSelect.addEventListener('change', (e) => {
-            currentShipping = SHIPPING_RATES[e.target.value];
-            updateCheckoutTotal();
-            renderPayPalButtons();
-        });
-    }
+    // SHIPPING DROPDOWN IS NOW DISABLED, NO MANUAL CHANGE LISTENER NEEDED
 
     // --- AUTO-DETECT SHIPPING FROM ADDRESS ---
     const countryInput = document.getElementById('country');
     const zipInput = document.getElementById('zip');
+    const shippingSelect = document.getElementById('shipping-region');
 
     if (countryInput && zipInput && shippingSelect) {
         const detectShipping = () => {
@@ -313,12 +317,14 @@ function renderPayPalButtons() {
         window.paypal.Buttons({
             createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getGrandTotal() } }] }),
             onApprove: (data, actions) => actions.order.capture().then(details => { 
+                // Add method tag for database
                 details.method = "PayPal"; 
                 saveOrderToFirebase(details); 
             })
         }).render('#paypal-button-container');
     } else {
-        document.getElementById('paypal-button-container').innerHTML = '<p style="color:red;font-size:0.8rem;">PayPal SDK not loaded.</p>';
+        console.error("PayPal SDK not loaded");
+        document.getElementById('paypal-button-container').innerHTML = '<p style="color:red;font-size:0.8rem;">PayPal failed to load. Please check your connection.</p>';
     }
 }
 

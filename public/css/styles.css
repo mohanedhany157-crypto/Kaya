@@ -250,7 +250,7 @@ h2 {
     grid-template-columns: 1fr 1fr; 
     gap: 40px; 
     background: transparent; 
-    padding: 0; /* REMOVED PADDING HERE TO REDUCE SPACE */
+    padding: 20px 0; /* Reduced padding */
     border-radius: var(--border-radius-lg); 
 }
 .main-image-container { 
@@ -329,7 +329,7 @@ h2 {
 }
 .cart-modal-overlay.open { display: flex; }
 .cart-modal {
-    background: #FEF6EC; width: 90%; max-width: 450px;
+    background: #FEF6EC; width: 95%; max-width: 600px; /* INCREASED MAX WIDTH */
     border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
     position: relative; max-height: 85vh; display: flex; flex-direction: column;
     overflow: hidden; border: 3px solid var(--color-primary-accent);
