@@ -1,23 +1,12 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (REAL EMAIL + AUTO SHIPPING)
+ * JAVASCRIPT FOR KAYA STORE (BACKEND CONNECTED)
  * ======================================================
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-// --- 0. EMAILJS LIBRARY IMPORT ---
-// We load it dynamically here so you don't need to change HTML
-(function() {
-    let script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
-    script.onload = function() {
-        emailjs.init("a-tgwGUaevJn229lb"); // <--- PASTE YOUR PUBLIC KEY HERE
-    };
-    document.head.appendChild(script);
-})();
 
 // --- 1. FIREBASE KEYS ---
 const firebaseConfig = {
@@ -212,6 +201,8 @@ function injectCartModal() {
                         </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
+                        
+                        <!-- PAYPAL BUTTON CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
                     </form>
                 </div>
@@ -228,6 +219,7 @@ function setupEventListeners() {
     document.querySelector('.back-to-cart').addEventListener('click', showCartView);
     document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => { if(e.target === document.querySelector('.cart-modal-overlay')) closeCart(); });
     
+    // --- AUTO-DETECT SHIPPING FROM ADDRESS ---
     const countryInput = document.getElementById('country');
     const zipInput = document.getElementById('zip');
     const shippingSelect = document.getElementById('shipping-region');
@@ -282,6 +274,7 @@ function renderPayPalButtons() {
         window.paypal.Buttons({
             createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getGrandTotal() } }] }),
             onApprove: (data, actions) => actions.order.capture().then(details => { 
+                // Add method tag for database
                 details.method = "PayPal"; 
                 saveOrderToFirebase(details); 
             })
@@ -324,8 +317,8 @@ async function saveOrderToFirebase(paymentDetails) {
     try {
         await addDoc(collection(db, COLLECTION_NAME), orderData);
         
-        // --- REAL EMAIL SENDING VIA EMAILJS ---
-        sendConfirmationEmail(customerName, customerEmail);
+        // --- CALL YOUR BACKEND ---
+        await sendConfirmationEmail(customerName, customerEmail, paymentDetails.id, getGrandTotal());
 
         cart = []; saveCart(); closeCart(); showCartView(); document.getElementById('order-form').reset();
         alert(`🎉 Order Success! Payment ID: ${paymentDetails.id}`);
@@ -333,27 +326,25 @@ async function saveOrderToFirebase(paymentDetails) {
     } catch(e) { console.error(e); alert("Payment success, but DB save failed."); }
 }
 
-// --- SEND REAL EMAIL FUNCTION ---
-function sendConfirmationEmail(name, email) {
-    // Check if EmailJS is loaded
-    if (typeof emailjs === 'undefined') {
-        console.error("EmailJS not loaded. Cannot send email.");
-        return;
-    }
-
-    const templateParams = {
-        customer_name: name,
-        to_email: email,
-        // You can add more parameters here that match your template
-    };
-
-    // REPLACE WITH YOUR SERVICE ID AND TEMPLATE ID
-    emailjs.send('service_nw88bdp', 'template_ingc41w', templateParams)
-        .then(function(response) {
-           console.log('SUCCESS!', response.status, response.text);
-        }, function(error) {
-           console.log('FAILED...', error);
+// --- SEND REAL EMAIL via BACKEND ---
+async function sendConfirmationEmail(name, email, orderId, total) {
+    try {
+        // NOTE: Change 'http://localhost:3000' to your live server URL when you deploy
+        const response = await fetch('http://localhost:3000/api/send-order-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, orderId, total })
         });
+        
+        const result = await response.json();
+        if (result.success) {
+            console.log("Email request sent to backend.");
+        } else {
+            console.error("Backend failed to send email:", result.error);
+        }
+    } catch (error) {
+        console.error("Network error talking to backend:", error);
+    }
 }
 
 function openCart() { renderCartItems(); document.querySelector('.cart-modal-overlay').classList.add('open'); showCartView(); }
