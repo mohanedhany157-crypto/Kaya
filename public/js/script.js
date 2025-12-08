@@ -1,12 +1,23 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (AUTO-ONLY SHIPPING)
+ * JAVASCRIPT FOR KAYA STORE (REAL EMAIL + AUTO SHIPPING)
  * ======================================================
  */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// --- 0. EMAILJS LIBRARY IMPORT ---
+// We load it dynamically here so you don't need to change HTML
+(function() {
+    let script = document.createElement('script');
+    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+    script.onload = function() {
+        emailjs.init("a-tgwGUaevJn229lb"); // <--- PASTE YOUR PUBLIC KEY HERE
+    };
+    document.head.appendChild(script);
+})();
 
 // --- 1. FIREBASE KEYS ---
 const firebaseConfig = {
@@ -45,15 +56,15 @@ const PRODUCTS_DB = {
     }
 };
 
-// --- SHIPPING RATES (Converted RM to USD approx) ---
+// --- SHIPPING RATES ---
 const SHIPPING_RATES = {
-    "west_my": 1.80,  // ~8 RM (Standard Peninsula)
-    "sabah": 2.25,    // ~10 RM
-    "sarawak": 3.40,  // ~15 RM
-    "intl": 18.00     // ~80 RM
+    "west_my": 1.80,
+    "sabah": 2.25,
+    "sarawak": 3.40,
+    "intl": 18.00
 };
 
-let currentShipping = SHIPPING_RATES["west_my"]; // Default
+let currentShipping = SHIPPING_RATES["west_my"]; 
 
 // --- 3. INIT ---
 document.addEventListener('DOMContentLoaded', () => {
@@ -139,15 +150,11 @@ function updateCartCount() {
 }
 function addToCart(id, name, price) { cart.push({ id, name, price }); saveCart(); openCart(); }
 function removeFromCart(index) { cart.splice(index, 1); saveCart(); }
-
-// Helper: Item Total Only
 function getItemTotal() { 
     let t = 0; 
     cart.forEach(i => t += parseFloat(i.price)); 
     return t; 
 }
-
-// Helper: Grand Total (Items + Shipping)
 function getGrandTotal() {
     return (getItemTotal() + currentShipping).toFixed(2);
 }
@@ -175,16 +182,9 @@ function injectCartModal() {
                         <h4 class="checkout-section-title"><i class="fas fa-user"></i> Details</h4>
                         <div class="form-group"><label>Full Name</label><input type="text" id="name" required></div>
                         <div class="form-group"><label>Email</label><input type="email" id="email" required></div>
-                        
-                        <!-- FIXED: INTERNATIONAL PHONE INPUT (No Dropdown) -->
-                        <div class="form-group">
-                            <label>Phone (e.g., +1 555-0123)</label>
-                            <input type="tel" id="phone" placeholder="+[Country Code] [Number]" required>
-                        </div>
+                        <div class="form-group"><label>Phone</label><input type="tel" id="phone" placeholder="+[Country] [Number]" required></div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-truck"></i> Shipping</h4>
-                        
-                        <!-- SHIPPING SELECTION (DISABLED / AUTO-ONLY) -->
                         <div class="form-group">
                             <label>Destination (Auto-Detected)</label>
                             <select id="shipping-region" disabled style="width:100%; padding:12px; border:2px solid #ddd; border-radius:8px; background-color: #f5f5f5; cursor: not-allowed; color: #555;">
@@ -196,12 +196,7 @@ function injectCartModal() {
                         </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-map-marker-alt"></i> Address</h4>
-                        
-                        <!-- ADDED: COUNTRY INPUT -->
-                        <div class="form-group">
-                            <input type="text" id="country" placeholder="Country" required>
-                        </div>
-                        
+                        <div class="form-group"><input type="text" id="country" placeholder="Country" required></div>
                         <div class="form-row">
                             <div class="form-group" style="flex:2"><input type="text" id="street" placeholder="Street Address" required></div>
                             <div class="form-group" style="flex:1"><input type="text" id="unit" placeholder="Unit/Apt" required></div>
@@ -217,14 +212,7 @@ function injectCartModal() {
                         </div>
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
-                        
-                        <!-- PAYPAL BUTTON CONTAINER -->
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
-                        
-                        <div id="manual-payment-section" style="margin-top:15px; border-top:1px solid #ddd; padding-top:15px;">
-                            <p style="font-size:0.9rem; color:#666; margin-bottom:10px; text-align:center;">Having trouble? Use Manual Transfer.</p>
-                            <button type="submit" id="manual-order-btn" class="btn btn-secondary" style="width:100%;">Confirm (Manual)</button>
-                        </div>
                     </form>
                 </div>
             </div>
@@ -240,9 +228,6 @@ function setupEventListeners() {
     document.querySelector('.back-to-cart').addEventListener('click', showCartView);
     document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => { if(e.target === document.querySelector('.cart-modal-overlay')) closeCart(); });
     
-    // SHIPPING DROPDOWN IS NOW DISABLED, NO MANUAL CHANGE LISTENER NEEDED
-
-    // --- AUTO-DETECT SHIPPING FROM ADDRESS ---
     const countryInput = document.getElementById('country');
     const zipInput = document.getElementById('zip');
     const shippingSelect = document.getElementById('shipping-region');
@@ -251,46 +236,29 @@ function setupEventListeners() {
         const detectShipping = () => {
             const country = countryInput.value.toLowerCase().trim();
             const zip = zipInput.value.trim();
-            let detectedRegion = "intl"; // Default to International
+            let detectedRegion = "intl"; 
 
-            // Check for Malaysia
             if (country === "malaysia" || country === "my" || country.includes("malaysia")) {
-                detectedRegion = "west_my"; // Default to West Malaysia
-
-                // Check Zip Codes for East Malaysia
-                // Sabah/Labuan: ~87xxx - 91xxx
-                // Sarawak: ~93xxx - 98xxx
+                detectedRegion = "west_my"; 
                 if (zip.length >= 2) {
                     const prefix = parseInt(zip.substring(0, 2));
                     if (!isNaN(prefix)) {
-                        if (prefix >= 87 && prefix <= 91) {
-                            detectedRegion = "sabah";
-                        } else if (prefix >= 93 && prefix <= 98) {
-                            detectedRegion = "sarawak";
-                        }
+                        if (prefix >= 87 && prefix <= 91) detectedRegion = "sabah";
+                        else if (prefix >= 93 && prefix <= 98) detectedRegion = "sarawak";
                     }
                 }
             }
 
-            // Update dropdown if different
             if (shippingSelect.value !== detectedRegion) {
                 shippingSelect.value = detectedRegion;
-                // Trigger update
                 currentShipping = SHIPPING_RATES[detectedRegion];
                 updateCheckoutTotal();
                 renderPayPalButtons();
             }
         };
-
         countryInput.addEventListener('input', detectShipping);
         zipInput.addEventListener('input', detectShipping);
     }
-
-    const form = document.getElementById('order-form');
-    if(form) form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        saveOrderToFirebase({ id: "MANUAL-" + Math.floor(Math.random() * 100000), method: "Manual/Local", payer: { name: { given_name: document.getElementById('name').value } } });
-    });
 }
 
 function updateCheckoutTotal() {
@@ -302,11 +270,8 @@ function showCheckout() {
     if(cart.length === 0) return alert("Cart is empty");
     document.getElementById('cart-view').style.display = 'none';
     document.getElementById('checkout-view').style.display = 'flex';
-    
-    // Reset to default shipping logic
     currentShipping = SHIPPING_RATES["west_my"];
     document.getElementById('shipping-region').value = "west_my";
-    
     updateCheckoutTotal();
     renderPayPalButtons();
 }
@@ -317,14 +282,12 @@ function renderPayPalButtons() {
         window.paypal.Buttons({
             createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: getGrandTotal() } }] }),
             onApprove: (data, actions) => actions.order.capture().then(details => { 
-                // Add method tag for database
                 details.method = "PayPal"; 
                 saveOrderToFirebase(details); 
             })
         }).render('#paypal-button-container');
     } else {
-        console.error("PayPal SDK not loaded");
-        document.getElementById('paypal-button-container').innerHTML = '<p style="color:red;font-size:0.8rem;">PayPal failed to load. Please check your connection.</p>';
+        document.getElementById('paypal-button-container').innerHTML = '<p style="color:red;font-size:0.8rem;">PayPal SDK not loaded.</p>';
     }
 }
 
@@ -332,11 +295,13 @@ function showCartView() { document.getElementById('checkout-view').style.display
 
 async function saveOrderToFirebase(paymentDetails) {
     const shippingRegion = document.getElementById('shipping-region').options[document.getElementById('shipping-region').selectedIndex].text;
-    
+    const customerEmail = document.getElementById('email').value || paymentDetails.payer.email_address;
+    const customerName = document.getElementById('name').value || paymentDetails.payer.name.given_name;
+
     const orderData = {
         customer: {
-            name: document.getElementById('name').value || paymentDetails.payer.name.given_name,
-            email: document.getElementById('email').value || paymentDetails.payer.email_address,
+            name: customerName,
+            email: customerEmail,
             phone: document.getElementById('phone').value,
             address: { 
                 country: document.getElementById('country').value,
@@ -358,9 +323,37 @@ async function saveOrderToFirebase(paymentDetails) {
     
     try {
         await addDoc(collection(db, COLLECTION_NAME), orderData);
-        alert(`🎉 Order Success! ID: ${paymentDetails.id}`);
+        
+        // --- REAL EMAIL SENDING VIA EMAILJS ---
+        sendConfirmationEmail(customerName, customerEmail);
+
         cart = []; saveCart(); closeCart(); showCartView(); document.getElementById('order-form').reset();
+        alert(`🎉 Order Success! Payment ID: ${paymentDetails.id}`);
+        
     } catch(e) { console.error(e); alert("Payment success, but DB save failed."); }
+}
+
+// --- SEND REAL EMAIL FUNCTION ---
+function sendConfirmationEmail(name, email) {
+    // Check if EmailJS is loaded
+    if (typeof emailjs === 'undefined') {
+        console.error("EmailJS not loaded. Cannot send email.");
+        return;
+    }
+
+    const templateParams = {
+        customer_name: name,
+        to_email: email,
+        // You can add more parameters here that match your template
+    };
+
+    // REPLACE WITH YOUR SERVICE ID AND TEMPLATE ID
+    emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+        .then(function(response) {
+           console.log('SUCCESS!', response.status, response.text);
+        }, function(error) {
+           console.log('FAILED...', error);
+        });
 }
 
 function openCart() { renderCartItems(); document.querySelector('.cart-modal-overlay').classList.add('open'); showCartView(); }
