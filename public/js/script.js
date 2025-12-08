@@ -229,15 +229,57 @@ function setupEventListeners() {
     document.querySelector('.back-to-cart').addEventListener('click', showCartView);
     document.querySelector('.cart-modal-overlay').addEventListener('click', (e) => { if(e.target === document.querySelector('.cart-modal-overlay')) closeCart(); });
     
-    // LISTENER FOR SHIPPING CHANGE
+    // LISTENER FOR SHIPPING CHANGE (Manual Dropdown)
     const shippingSelect = document.getElementById('shipping-region');
     if(shippingSelect) {
         shippingSelect.addEventListener('change', (e) => {
             currentShipping = SHIPPING_RATES[e.target.value];
             updateCheckoutTotal();
-            // Re-render PayPal buttons with new total
             renderPayPalButtons();
         });
+    }
+
+    // --- AUTO-DETECT SHIPPING FROM ADDRESS ---
+    const countryInput = document.getElementById('country');
+    const zipInput = document.getElementById('zip');
+
+    if (countryInput && zipInput && shippingSelect) {
+        const detectShipping = () => {
+            const country = countryInput.value.toLowerCase().trim();
+            const zip = zipInput.value.trim();
+            let detectedRegion = "intl"; // Default to International
+
+            // Check for Malaysia
+            if (country === "malaysia" || country === "my" || country.includes("malaysia")) {
+                detectedRegion = "west_my"; // Default to West Malaysia
+
+                // Check Zip Codes for East Malaysia
+                // Sabah/Labuan: ~87xxx - 91xxx
+                // Sarawak: ~93xxx - 98xxx
+                if (zip.length >= 2) {
+                    const prefix = parseInt(zip.substring(0, 2));
+                    if (!isNaN(prefix)) {
+                        if (prefix >= 87 && prefix <= 91) {
+                            detectedRegion = "sabah";
+                        } else if (prefix >= 93 && prefix <= 98) {
+                            detectedRegion = "sarawak";
+                        }
+                    }
+                }
+            }
+
+            // Update dropdown if different
+            if (shippingSelect.value !== detectedRegion) {
+                shippingSelect.value = detectedRegion;
+                // Trigger update
+                currentShipping = SHIPPING_RATES[detectedRegion];
+                updateCheckoutTotal();
+                renderPayPalButtons();
+            }
+        };
+
+        countryInput.addEventListener('input', detectShipping);
+        zipInput.addEventListener('input', detectShipping);
     }
 
     const form = document.getElementById('order-form');
