@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (CLEAN - NO EMAIL - FIXED)
+ * JAVASCRIPT FOR KAYA STORE (PRE-ORDER LOGIC ADDED)
  * ======================================================
  */
 
@@ -126,9 +126,30 @@ function loadProductDetails(id) {
         });
     }
 
-    document.getElementById('add-to-cart-btn').addEventListener('click', () => {
-        addToCart(id, product.name, product.price);
-    });
+    // --- PRE-ORDER LOGIC HERE ---
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    
+    // Remove old listeners to prevent duplicates
+    const newBtn = addToCartBtn.cloneNode(true);
+    addToCartBtn.parentNode.replaceChild(newBtn, addToCartBtn);
+
+    if (id === "1") {
+        // CASE: CARD GAME (PRE-ORDER)
+        newBtn.innerHTML = '<i class="fas fa-clock"></i> Pre-order Now';
+        newBtn.style.backgroundColor = "#FD4D0A"; // Keep Orange
+        
+        newBtn.addEventListener('click', () => {
+            // We append (Pre-order) to the name so it shows in the cart clearly
+            addToCart(id, product.name + " (Pre-order)", product.price);
+        });
+    } else {
+        // CASE: OTHER ITEMS (NORMAL)
+        newBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Kaya Cart';
+        
+        newBtn.addEventListener('click', () => {
+            addToCart(id, product.name, product.price);
+        });
+    }
 }
 
 // --- 4. CART LOGIC ---
