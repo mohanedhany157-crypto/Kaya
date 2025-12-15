@@ -37,12 +37,12 @@ const PRODUCTS_DB = {
     "2": {
         name: "Stickers", price: 3.99, img: "pic/STICKER.PNG",
         desc: "High-quality, fun stickers featuring KAYA characters.",
-        images: ["pic/STICKER.PNG", "pic/STICKER.PNG", "pic/STICKER.PNG"]
+        images: ["pic/STICKER1.JPG", "pic/STICKER.PNG"]
     },
     "3": {
         name: "Post Card", price: 2.99, img: "pic/POST CARD.PNG",
         desc: "Send a note to a friend. Beautifully illustrated KAYA artwork.",
-        images: ["pic/POST CARD.PNG", "pic/POST CARD.PNG", "pic/POST CARD.PNG"]
+        images: ["pic/POST CARD.PNG", "pic/POST CARD4.JPG"]
     }
 };
 
