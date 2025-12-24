@@ -370,16 +370,35 @@ async function saveOrderToFirebase(paymentDetails) {
 
 // --- NEW SUCCESS MODAL FUNCTION ---
 function showSuccessModal(orderId) {
+    // CSS Keyframes for Rocket Animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes rocket-fly {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            10% { transform: translateY(2px) rotate(-1deg); }
+            20% { transform: translateY(-2px) rotate(1deg); }
+            30% { transform: translateY(2px) rotate(0deg); }
+            40% { transform: translateY(-5px); opacity: 1; }
+            100% { transform: translateY(-600px); opacity: 0; }
+        }
+        .rocket-anim {
+            display: inline-block;
+            animation: rocket-fly 1.5s ease-in forwards;
+            animation-delay: 0.5s; /* Wait a beat before launching */
+        }
+    `;
+    document.head.appendChild(style);
+
     // Create the modal overlay HTML
     const successHTML = `
     <div id="success-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
-        <div style="background:#FEF6EC; padding:40px; border-radius:24px; text-align:center; max-width:500px; width:90%; border:4px solid #FD4D0A; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation: popIn 0.4s ease-out;">
-            <div style="font-size:4.5rem; margin-bottom:15px; text-shadow: 0 4px 10px rgba(0,0,0,0.2);">🚀</div>
-            <h2 style="color:#FD4D0A; font-family:'Chelsea Market', cursive; margin-bottom:15px; font-size:2.2rem;">Mission Confirmed!</h2>
+        <div style="background:#FEF6EC; padding:40px; border-radius:24px; text-align:center; max-width:500px; width:90%; border:4px solid #FD4D0A; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation: popIn 0.4s ease-out; position: relative; overflow: hidden;">
+            <div class="rocket-anim" style="font-size:4.5rem; margin-bottom:15px; text-shadow: 0 4px 10px rgba(0,0,0,0.2);">🚀</div>
+            <h2 style="color:#FD4D0A; font-family:'Chelsea Market', cursive; margin-bottom:15px; font-size:2.2rem;">Order Confirmed!</h2>
             <div style="width: 50px; height: 4px; background: #FFBC00; margin: 0 auto 20px auto; border-radius: 2px;"></div>
             <p style="font-size:1.15rem; color:#333; margin-bottom:20px; line-height:1.6;">
                 <strong>Thank you for your order!</strong><br>
-                We have received your details. Our team is preparing your package for launch and will ship it to you as soon as possible!
+                We have received your details. Our team is preparing your package and will ship it on the <strong>31st of Jan</strong>!
             </p>
             <div style="background: white; padding: 10px; border-radius: 8px; border: 1px dashed #ccc; margin-bottom: 25px; display: inline-block;">
                 <p style="font-size:0.9rem; color:#555; margin:0;"><strong>Order ID:</strong> <span style="font-family:monospace; font-size: 1rem; color: #333;">${orderId}</span></p>
