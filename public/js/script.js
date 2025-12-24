@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (PRE-ORDER LOGIC ADDED)
+ * JAVASCRIPT FOR KAYA STORE (PRE-ORDER + SUCCESS POPUP + TEST BTN)
  * ======================================================
  */
 
@@ -37,12 +37,12 @@ const PRODUCTS_DB = {
     "2": {
         name: "Stickers", price: 3.99, img: "pic/STICKER.PNG",
         desc: "High-quality, fun stickers featuring KAYA characters.",
-        images: ["pic/STICKER1.jpg", "pic/STICKER.PNG"]
+        images: ["pic/STICKER.PNG", "pic/STICKER.PNG", "pic/STICKER.PNG"]
     },
     "3": {
         name: "Post Card", price: 2.99, img: "pic/POST CARD.PNG",
         desc: "Send a note to a friend. Beautifully illustrated KAYA artwork.",
-        images: ["pic/POST CARD.PNG", "pic/POST CARD4.jpg"]
+        images: ["pic/POST CARD.PNG", "pic/POST CARD.PNG", "pic/POST CARD.PNG"]
     }
 };
 
@@ -139,7 +139,6 @@ function loadProductDetails(id) {
         newBtn.style.backgroundColor = "#FD4D0A"; // Keep Orange
         
         newBtn.addEventListener('click', () => {
-            // We append (Pre-order) to the name so it shows in the cart clearly
             addToCart(id, product.name + " (Pre-order)", product.price);
         });
     } else {
@@ -224,6 +223,12 @@ function injectCartModal() {
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
+                        
+                        <!-- TEST BUTTON -->
+                        <button type="button" id="test-order-btn" style="width:100%; margin-top:20px; padding:12px; background-color:#333; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">
+                            🛠️ TEST ORDER (No Payment)
+                        </button>
+
                     </form>
                 </div>
             </div>
@@ -270,6 +275,23 @@ function setupEventListeners() {
         };
         countryInput.addEventListener('input', detectShipping);
         zipInput.addEventListener('input', detectShipping);
+    }
+
+    // --- TEST BUTTON LISTENER ---
+    const testBtn = document.getElementById('test-order-btn');
+    if(testBtn) {
+        testBtn.addEventListener('click', () => {
+            // Mock Data for Testing
+            const dummyPayment = {
+                id: "TEST-" + Math.floor(Math.random() * 100000),
+                method: "TEST_BUTTON",
+                payer: {
+                    name: { given_name: "Test User" },
+                    email_address: "test@example.com"
+                }
+            };
+            saveOrderToFirebase(dummyPayment);
+        });
     }
 }
 
@@ -328,15 +350,50 @@ async function saveOrderToFirebase(paymentDetails) {
         grandTotal: getGrandTotal(),
         status: "PAID", 
         paymentId: paymentDetails.id, 
-        paymentMethod: "PayPal", 
+        paymentMethod: paymentDetails.method === "TEST_BUTTON" ? "Test (No Payment)" : "PayPal", 
         timestamp: serverTimestamp()
     };
     
     try {
         await addDoc(collection(db, COLLECTION_NAME), orderData);
-        cart = []; saveCart(); closeCart(); showCartView(); document.getElementById('order-form').reset();
-        alert(`🎉 Order Success! Payment ID: ${paymentDetails.id}`);
+        cart = []; 
+        saveCart(); 
+        closeCart(); 
+        showCartView(); 
+        document.getElementById('order-form').reset();
+        
+        // --- CALL NEW SUCCESS MODAL ---
+        showSuccessModal(paymentDetails.id);
+        
     } catch(e) { console.error(e); alert("Payment success, but DB save failed."); }
+}
+
+// --- NEW SUCCESS MODAL FUNCTION ---
+function showSuccessModal(orderId) {
+    // Create the modal overlay HTML
+    const successHTML = `
+    <div id="success-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
+        <div style="background:#FEF6EC; padding:40px; border-radius:24px; text-align:center; max-width:500px; width:90%; border:4px solid #FD4D0A; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation: popIn 0.4s ease-out;">
+            <div style="font-size:4.5rem; margin-bottom:15px; text-shadow: 0 4px 10px rgba(0,0,0,0.2);">🚀</div>
+            <h2 style="color:#FD4D0A; font-family:'Chelsea Market', cursive; margin-bottom:15px; font-size:2.2rem;">Mission Confirmed!</h2>
+            <div style="width: 50px; height: 4px; background: #FFBC00; margin: 0 auto 20px auto; border-radius: 2px;"></div>
+            <p style="font-size:1.15rem; color:#333; margin-bottom:20px; line-height:1.6;">
+                <strong>Thank you for your order!</strong><br>
+                We have received your details. Our team is preparing your package for launch and will ship it to you as soon as possible!
+            </p>
+            <div style="background: white; padding: 10px; border-radius: 8px; border: 1px dashed #ccc; margin-bottom: 25px; display: inline-block;">
+                <p style="font-size:0.9rem; color:#555; margin:0;"><strong>Order ID:</strong> <span style="font-family:monospace; font-size: 1rem; color: #333;">${orderId}</span></p>
+            </div>
+            <br>
+            <button onclick="document.getElementById('success-overlay').remove()" class="btn" style="padding:14px 35px; font-size:1.1rem; border:none; border-radius:50px; background:#FD4D0A; color:white; cursor:pointer; font-weight: 700; box-shadow: 0 5px 15px rgba(253, 77, 10, 0.4); transition: transform 0.2s;">
+                Back to Store
+            </button>
+        </div>
+    </div>
+    `;
+    
+    // Inject into body
+    document.body.insertAdjacentHTML('beforeend', successHTML);
 }
 
 function openCart() { renderCartItems(); document.querySelector('.cart-modal-overlay').classList.add('open'); showCartView(); }
