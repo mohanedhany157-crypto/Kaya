@@ -370,30 +370,49 @@ async function saveOrderToFirebase(paymentDetails) {
 
 // --- NEW SUCCESS MODAL FUNCTION ---
 function showSuccessModal(orderId) {
-    // CSS Keyframes for Rocket Animation
+    // CSS Keyframes for Full Screen Rocket Animation
     const style = document.createElement('style');
     style.innerHTML = `
-        @keyframes rocket-fly {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            10% { transform: translateY(2px) rotate(-1deg); }
-            20% { transform: translateY(-2px) rotate(1deg); }
-            30% { transform: translateY(2px) rotate(0deg); }
-            40% { transform: translateY(-5px); opacity: 1; }
-            100% { transform: translateY(-600px); opacity: 0; }
+        @keyframes rocket-launch-fullscreen {
+            0% { transform: translate(-50%, 110vh) scale(1); opacity: 1; }
+            20% { transform: translate(-50%, 50vh) scale(1.5); } 
+            100% { transform: translate(-50%, -150vh) scale(1); opacity: 1; }
         }
-        .rocket-anim {
-            display: inline-block;
-            animation: rocket-fly 1.5s ease-in forwards;
-            animation-delay: 0.5s; /* Wait a beat before launching */
+        @keyframes modal-fade-in {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .fullscreen-rocket {
+            position: fixed;
+            left: 50%;
+            bottom: 0;
+            font-size: 10rem;
+            z-index: 10000;
+            pointer-events: none;
+            /* Start below screen centered horizontally */
+            transform: translate(-50%, 110vh);
+            animation: rocket-launch-fullscreen 3s ease-in-out forwards;
+        }
+        .success-backdrop {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+            opacity: 0; /* Start hidden */
+            animation: modal-fade-in 0.6s ease-out forwards;
+            animation-delay: 1.2s; /* Wait for rocket to fly up a bit */
         }
     `;
     document.head.appendChild(style);
 
-    // Create the modal overlay HTML
+    // Create the HTML elements
     const successHTML = `
-    <div id="success-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; display:flex; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
-        <div style="background:#FEF6EC; padding:40px; border-radius:24px; text-align:center; max-width:500px; width:90%; border:4px solid #FD4D0A; box-shadow:0 25px 60px rgba(0,0,0,0.5); animation: popIn 0.4s ease-out; position: relative; overflow: hidden;">
-            <div class="rocket-anim" style="font-size:4.5rem; margin-bottom:15px; text-shadow: 0 4px 10px rgba(0,0,0,0.2);">🚀</div>
+    <!-- The Flying Rocket -->
+    <div class="fullscreen-rocket">🚀</div>
+
+    <!-- The Modal (appears after delay) -->
+    <div id="success-overlay" class="success-backdrop">
+        <div style="background:#FEF6EC; padding:40px; border-radius:24px; text-align:center; max-width:500px; width:90%; border:4px solid #FD4D0A; box-shadow:0 25px 60px rgba(0,0,0,0.5);">
             <h2 style="color:#FD4D0A; font-family:'Chelsea Market', cursive; margin-bottom:15px; font-size:2.2rem;">Order Confirmed!</h2>
             <div style="width: 50px; height: 4px; background: #FFBC00; margin: 0 auto 20px auto; border-radius: 2px;"></div>
             <p style="font-size:1.15rem; color:#333; margin-bottom:20px; line-height:1.6;">
@@ -404,7 +423,7 @@ function showSuccessModal(orderId) {
                 <p style="font-size:0.9rem; color:#555; margin:0;"><strong>Order ID:</strong> <span style="font-family:monospace; font-size: 1rem; color: #333;">${orderId}</span></p>
             </div>
             <br>
-            <button onclick="document.getElementById('success-overlay').remove()" class="btn" style="padding:14px 35px; font-size:1.1rem; border:none; border-radius:50px; background:#FD4D0A; color:white; cursor:pointer; font-weight: 700; box-shadow: 0 5px 15px rgba(253, 77, 10, 0.4); transition: transform 0.2s;">
+            <button onclick="document.getElementById('success-overlay').remove(); document.querySelector('.fullscreen-rocket').remove();" class="btn" style="padding:14px 35px; font-size:1.1rem; border:none; border-radius:50px; background:#FD4D0A; color:white; cursor:pointer; font-weight: 700; box-shadow: 0 5px 15px rgba(253, 77, 10, 0.4); transition: transform 0.2s;">
                 Back to Store
             </button>
         </div>
