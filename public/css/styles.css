@@ -389,4 +389,14 @@ h2 {
         background: white; padding: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
         z-index: 999; display: flex; justify-content: center;
     }
+    
+    /* RESTORED RULE BOX STYLING FOR LEARN.HTML */
+    .rule-box {
+        border: 2px solid var(--color-secondary-accent);
+        border-radius: 8px;
+        background-color: white;
+        padding: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        margin-bottom: 15px;
+    }
 }
