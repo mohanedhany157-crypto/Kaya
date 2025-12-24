@@ -78,6 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productId && document.getElementById('product-detail-section')) {
         loadProductDetails(productId);
     }
+
+    // START COUNTDOWN
+    startCountdown();
 });
 
 function loadProductDetails(id) {
@@ -433,6 +436,35 @@ function showSuccessModal(orderId) {
     
     // Inject into body
     document.body.insertAdjacentHTML('beforeend', successHTML);
+}
+
+// --- COUNTDOWN TIMER ---
+function startCountdown() {
+    const timerEl = document.getElementById('timer');
+    if (!timerEl) return;
+
+    // Launch date: Jan 31, 2026 (or next upcoming Jan 31)
+    // Assuming you want next upcoming Jan 31.
+    // If today is Dec 2025, next is Jan 2026.
+    const launchDate = new Date("Jan 31, 2026 00:00:00").getTime(); 
+
+    const update = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = launchDate - now;
+
+        if (distance < 0) {
+            clearInterval(update);
+            timerEl.innerHTML = "LAUNCHED!";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        timerEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
 }
 
 function openCart() { renderCartItems(); document.querySelector('.cart-modal-overlay').classList.add('open'); showCartView(); }

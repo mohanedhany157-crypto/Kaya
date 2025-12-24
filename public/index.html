@@ -9,10 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <!-- PAYPAL SDK -->
-    <!-- Switched to client-id=sb (Sandbox) and added defer to fix environment errors. -->
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&enable-funding=venmo" defer></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&disable-funding=credit,card" defer></script>
     
-    <!-- Updated Firebase to 10.8.0 to match script.js and ensure stability -->
     <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"></script>
@@ -47,6 +45,11 @@
             <span class="k">K</span><span class="a1">A</span><span class="y">Y</span><span class="a2">A</span><span class="sign-exclamation">!</span>
         </h1>
         <p class="tagline-rules">Empower your kids' future with fun financial literacy.</p>
+        
+        <!-- COUNTDOWN TIMER -->
+        <div id="launch-countdown" style="margin-top: 15px; font-weight: 700; color: #fff; background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 50px; display: inline-block; font-size: 1.1rem; backdrop-filter: blur(5px);">
+            🚀 Launching in: <span id="timer" style="color: #FFBC00;">00d 00h 00m 00s</span>
+        </div>
     </div>
 </div>
 
