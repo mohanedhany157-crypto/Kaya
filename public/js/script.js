@@ -1,6 +1,6 @@
 /**
  * ======================================================
- * JAVASCRIPT FOR KAYA STORE (PRE-ORDER + SUCCESS POPUP + TEST BTN)
+ * JAVASCRIPT FOR KAYA STORE (PRE-ORDER + SUCCESS POPUP)
  * ======================================================
  */
 
@@ -78,9 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (productId && document.getElementById('product-detail-section')) {
         loadProductDetails(productId);
     }
-
-    // START COUNTDOWN
-    startCountdown();
 });
 
 function loadProductDetails(id) {
@@ -226,12 +223,6 @@ function injectCartModal() {
 
                         <h4 class="checkout-section-title" style="margin-top:20px;"><i class="fas fa-credit-card"></i> Payment</h4>
                         <div id="paypal-button-container" style="margin-top: 10px;"></div>
-                        
-                        <!-- TEST BUTTON -->
-                        <button type="button" id="test-order-btn" style="width:100%; margin-top:20px; padding:12px; background-color:#333; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">
-                            🛠️ TEST ORDER (No Payment)
-                        </button>
-
                     </form>
                 </div>
             </div>
@@ -278,23 +269,6 @@ function setupEventListeners() {
         };
         countryInput.addEventListener('input', detectShipping);
         zipInput.addEventListener('input', detectShipping);
-    }
-
-    // --- TEST BUTTON LISTENER ---
-    const testBtn = document.getElementById('test-order-btn');
-    if(testBtn) {
-        testBtn.addEventListener('click', () => {
-            // Mock Data for Testing
-            const dummyPayment = {
-                id: "TEST-" + Math.floor(Math.random() * 100000),
-                method: "TEST_BUTTON",
-                payer: {
-                    name: { given_name: "Test User" },
-                    email_address: "test@example.com"
-                }
-            };
-            saveOrderToFirebase(dummyPayment);
-        });
     }
 }
 
@@ -353,7 +327,7 @@ async function saveOrderToFirebase(paymentDetails) {
         grandTotal: getGrandTotal(),
         status: "PAID", 
         paymentId: paymentDetails.id, 
-        paymentMethod: paymentDetails.method === "TEST_BUTTON" ? "Test (No Payment)" : "PayPal", 
+        paymentMethod: "PayPal", 
         timestamp: serverTimestamp()
     };
     
@@ -436,35 +410,6 @@ function showSuccessModal(orderId) {
     
     // Inject into body
     document.body.insertAdjacentHTML('beforeend', successHTML);
-}
-
-// --- COUNTDOWN TIMER ---
-function startCountdown() {
-    const timerEl = document.getElementById('timer');
-    if (!timerEl) return;
-
-    // Launch date: Jan 31, 2026 (or next upcoming Jan 31)
-    // Assuming you want next upcoming Jan 31.
-    // If today is Dec 2025, next is Jan 2026.
-    const launchDate = new Date("Jan 31, 2026 00:00:00").getTime(); 
-
-    const update = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = launchDate - now;
-
-        if (distance < 0) {
-            clearInterval(update);
-            timerEl.innerHTML = "LAUNCHED!";
-            return;
-        }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        timerEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-    }, 1000);
 }
 
 function openCart() { renderCartItems(); document.querySelector('.cart-modal-overlay').classList.add('open'); showCartView(); }
