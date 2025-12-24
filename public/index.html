@@ -8,8 +8,11 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
-    <!-- PAYPAL SDK ADDED HERE -->
-    <script src="https://www.paypal.com/sdk/js?client-id=BAAE6jtP301Pn4Vu19It0nkOUGp_umoZG1vWOdcXXLTmk_cMtSKeE-MhJTA0-TORWOvnq0COy4Y8H49jmo&currency=USD"></script>
+    <!-- PAYPAL SDK -->
+    <!-- Using client-id=test for compatibility. 
+         Note: "Can not read window host" errors in preview are due to the sandbox environment 
+         and will disappear on a real domain. -->
+    <script src="https://www.paypal.com/sdk/js?client-id=test&currency=USD&disable-funding=credit,card"></script>
     
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js"></script>
@@ -48,58 +51,79 @@
     </div>
 </div>
 
-<section id="store" class="section">
+<!-- === SECTION 1: THE MAIN GAME (PRE-ORDER) === -->
+<section id="preorder-section" class="section">
     <div class="container">
-        <h2 class="title-with-icon"><i class="fas fa-box"></i> Featured Products</h2>
+        <!-- Special Title for the Game -->
+        <h2 class="title-with-icon" style="color: var(--color-primary-accent); margin-bottom: 2rem;">
+            <i class="fas fa-rocket"></i> Pre-order The Game
+        </h2>
 
-        <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <div class="product-image-container">
+        <!-- We create a smaller centered grid for the main item -->
+        <div class="product-grid" style="grid-template-columns: 1fr; max-width: 500px; margin: 0 auto;">
+            <!-- Product 1: KAYA CARD GAME -->
+            <div class="product-card" style="border: 4px solid var(--color-primary-accent); transform: scale(1.02);">
+                <div class="product-image-container" style="height: 300px;">
                     <img src="pic/DEC2.jpg" alt="Kaya Game" onerror="this.onerror=null; this.src='https://placehold.co/400x350/FFBC00/333?text=KAYA+CORE+GAME';">
-                    <span class="product-badge">Best Seller</span>
+                    <span class="product-badge" style="background-color: var(--color-primary-accent); padding: 5px 15px; font-size: 0.9rem;">Pre-order Now</span>
                 </div>
                 <div class="product-details">
-                    <h3>KAYA: CARD GAME</h3>
-                    <p class="price">USD 12.99</p>
-                    <button onclick="window.location.href='product.html?id=1'" class="btn btn-primary view-product-btn" style="width: 100%;">
-                        View Details
+                    <h3 style="font-size: 1.8rem;">KAYA: CARD GAME</h3>
+                    <p class="price" style="font-size: 2rem;">USD 12.99</p>
+                    <p style="margin-bottom: 15px; color: #666; font-size: 0.9rem;"><em>Be the first to master the game!</em></p>
+                    
+                    <!-- Pre-order Button -->
+                    <button onclick="window.location.href='product.html?id=1'" class="btn btn-primary view-product-btn" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                        <i class="fas fa-clock"></i> Pre-order Now
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
+</section>
 
-            <!-- Product 2 -->
+<!-- === SECTION 2: ACCESSORIES === -->
+<section id="accessories-section" class="section" style="padding-top: 0; background-color: rgba(0,0,0,0.02);">
+    <div class="container">
+        <div style="height: 2px; background-color: #ddd; width: 50%; margin: 0 auto 3rem auto;"></div> <!-- Divider Line -->
+        
+        <h2 class="title-with-icon" style="color: var(--color-accent-green); font-size: 2rem;">
+            <i class="fas fa-shapes"></i> Accessories & Extras
+        </h2>
+
+        <div class="product-grid">
+            <!-- Product 2: Stickers -->
             <div class="product-card">
                 <div class="product-image-container">
-                    <img src="pic/STICKER1.jpg" alt="Kaya Stickers" onerror="this.onerror=null; this.src='https://placehold.co/400x350/4D9222/FFF?text=STICKERS';">
-                    <span class="product-badge" style="background-color: var(--color-accent-green);">Accessory</span>
+                    <img src="pic/STICKER.PNG" alt="Kaya Stickers" onerror="this.onerror=null; this.src='https://placehold.co/400x350/4D9222/FFF?text=STICKERS';">
+                    <span class="product-badge" style="background-color: var(--color-accent-green);">In Stock</span>
                 </div>
                 <div class="product-details">
                     <h3>Stickers</h3>
                     <p class="price">USD 3.99</p>
-                    <button onclick="window.location.href='product.html?id=2'" class="btn btn-primary view-product-btn" style="width: 100%;">
+                    <button onclick="window.location.href='product.html?id=2'" class="btn btn-primary view-product-btn" style="width: 100%; background-color: var(--color-accent-green);">
                         View Details
                     </button>
                 </div>
             </div>
             
-            <!-- Product 3 -->
+            <!-- Product 3: Post Card -->
             <div class="product-card">
                 <div class="product-image-container">
                     <img src="pic/POST CARD.PNG" alt="Kaya Post Card" onerror="this.onerror=null; this.src='https://placehold.co/400x350/0094E8/FFF?text=POST+CARD';">
-                    <span class="product-badge" style="background-color: var(--color-accent-green);">Accessory</span>
+                    <span class="product-badge" style="background-color: var(--color-accent-green);">In Stock</span>
                 </div>
                 <div class="product-details">
                     <h3>Post Card</h3>
                     <p class="price">USD 2.99</p>
-                    <button onclick="window.location.href='product.html?id=3'" class="btn btn-primary view-product-btn" style="width: 100%;">
+                    <button onclick="window.location.href='product.html?id=3'" class="btn btn-primary view-product-btn" style="width: 100%; background-color: var(--color-accent-green);">
                         View Details
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="value-prop-grid">
+        <div class="value-prop-grid" style="margin-top: 60px;">
             <div class="value-prop-item"><i class="fas fa-shield-alt"></i><h4>Quality Guaranteed</h4></div>
             <div class="value-prop-item"><i class="fas fa-truck-fast"></i><h4>Fast & Reliable Shipping</h4></div>
             <div class="value-prop-item"><i class="fas fa-smile"></i><h4>100% Fun Promise</h4></div>
