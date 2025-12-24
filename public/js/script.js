@@ -368,61 +368,74 @@ async function saveOrderToFirebase(paymentDetails) {
     } catch(e) { console.error(e); alert("Payment success, but DB save failed."); }
 }
 
-// --- NEW SUCCESS MODAL FUNCTION (MASCOT) ---
+// --- NEW SUCCESS MODAL FUNCTION (BIGGER & SLOWER) ---
 function showSuccessModal(orderId) {
-    // CSS Keyframes for Winking Mascot Animation
+    // CSS Keyframes for "Animated" Entrance
     const style = document.createElement('style');
     style.innerHTML = `
-        @keyframes mascot-pop {
-            0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
-            60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+        /* 1. Enter Small and Rotated */
+        @keyframes mascot-appear-slow {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            50% { transform: scale(1.1) rotate(10deg); opacity: 1; }
+            70% { transform: scale(0.95) rotate(-5deg); }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
+        
+        /* 2. Gentle Floating Loop to keep it alive */
+        @keyframes mascot-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
         @keyframes modal-fade-in {
-            0% { opacity: 0; transform: scale(0.8); }
+            0% { opacity: 0; transform: scale(0.9); }
             100% { opacity: 1; transform: scale(1); }
         }
+        
         .mascot-img {
-            width: 120px;
-            height: 120px;
+            width: 180px; /* BIGGER */
+            height: 180px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #FD4D0A;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border: 5px solid #FD4D0A;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin-bottom: 20px;
-            animation: mascot-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            /* SLOWER ANIMATION: 1.2s to enter, then float forever */
+            animation: mascot-appear-slow 1.2s ease-out forwards, mascot-float 3s ease-in-out infinite 1.2s;
         }
+        
         .success-backdrop {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 9999;
             display: flex; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
-            opacity: 0; /* Start hidden */
-            animation: modal-fade-in 0.4s ease-out forwards;
+            backdrop-filter: blur(8px);
+            opacity: 0; 
+            animation: modal-fade-in 0.5s ease-out forwards;
         }
     `;
     document.head.appendChild(style);
 
     // Create the HTML elements
     const successHTML = `
-    <!-- The Modal -->
     <div id="success-overlay" class="success-backdrop">
-        <div style="background:#FEF6EC; padding:40px; border-radius:24px; text-align:center; max-width:500px; width:90%; border:4px solid #FD4D0A; box-shadow:0 25px 60px rgba(0,0,0,0.5);">
+        <div style="background:#FEF6EC; padding:50px 40px; border-radius:30px; text-align:center; max-width:550px; width:90%; border:5px solid #FD4D0A; box-shadow:0 30px 70px rgba(0,0,0,0.6);">
             
             <!-- MASCOT IMAGE -->
             <img src="pic/icon.PNG" alt="Kaya Mascot" class="mascot-img">
 
-            <h2 style="color:#FD4D0A; font-family:'Chelsea Market', cursive; margin-bottom:15px; font-size:2.2rem;">Order Confirmed!</h2>
-            <div style="width: 50px; height: 4px; background: #FFBC00; margin: 0 auto 20px auto; border-radius: 2px;"></div>
-            <p style="font-size:1.15rem; color:#333; margin-bottom:20px; line-height:1.6;">
-                <strong>Thank you for your order!</strong><br>
+            <h2 style="color:#FD4D0A; font-family:'Chelsea Market', cursive; margin-bottom:15px; font-size:2.5rem;">Order Confirmed!</h2>
+            <div style="width: 60px; height: 5px; background: #FFBC00; margin: 0 auto 25px auto; border-radius: 3px;"></div>
+            
+            <p style="font-size:1.2rem; color:#333; margin-bottom:25px; line-height:1.6;">
+                <strong>Thank you for ordering!</strong><br>
                 We have received your details. Our team is preparing your package and will ship it on the <strong>31st of Jan</strong>!
             </p>
-            <div style="background: white; padding: 10px; border-radius: 8px; border: 1px dashed #ccc; margin-bottom: 25px; display: inline-block;">
-                <p style="font-size:0.9rem; color:#555; margin:0;"><strong>Order ID:</strong> <span style="font-family:monospace; font-size: 1rem; color: #333;">${orderId}</span></p>
+            
+            <div style="background: white; padding: 12px 20px; border-radius: 10px; border: 2px dashed #ccc; margin-bottom: 30px; display: inline-block;">
+                <p style="font-size:0.95rem; color:#555; margin:0;"><strong>Order ID:</strong> <span style="font-family:monospace; font-size: 1.1rem; color: #333; font-weight:bold;">${orderId}</span></p>
             </div>
             <br>
-            <button onclick="document.getElementById('success-overlay').remove();" class="btn" style="padding:14px 35px; font-size:1.1rem; border:none; border-radius:50px; background:#FD4D0A; color:white; cursor:pointer; font-weight: 700; box-shadow: 0 5px 15px rgba(253, 77, 10, 0.4); transition: transform 0.2s;">
+            <button onclick="document.getElementById('success-overlay').remove();" class="btn" style="padding:15px 40px; font-size:1.2rem; border:none; border-radius:50px; background:#FD4D0A; color:white; cursor:pointer; font-weight: 800; box-shadow: 0 8px 20px rgba(253, 77, 10, 0.3); transition: transform 0.2s;">
                 Back to Store
             </button>
         </div>
