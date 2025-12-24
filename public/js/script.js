@@ -373,10 +373,32 @@ function showSuccessModal(orderId) {
     // CSS Keyframes for Full Screen Rocket Animation
     const style = document.createElement('style');
     style.innerHTML = `
-        @keyframes rocket-launch-fullscreen {
-            0% { transform: translate(-50%, 110vh) scale(1); opacity: 1; }
-            20% { transform: translate(-50%, 50vh) scale(1.5); } 
-            100% { transform: translate(-50%, -150vh) scale(1); opacity: 1; }
+        @keyframes rocket-circle-exit {
+            0% {
+                transform: translate(-50%, 120vh) rotate(-45deg); /* Start below */
+                opacity: 1;
+            }
+            15% {
+                transform: translate(-50%, 80vh) rotate(-45deg); /* Enter */
+            }
+            /* Start Circle: Bottom -> Left -> Top -> Right -> Bottom */
+            30% {
+                transform: translate(-80vw, 50vh) rotate(-90deg); /* Left */
+            }
+            45% {
+                transform: translate(-50%, 10vh) rotate(45deg); /* Top */
+            }
+            60% {
+                transform: translate(30vw, 50vh) rotate(135deg); /* Right */
+            }
+            75% {
+                transform: translate(-50%, 80vh) rotate(225deg); /* Bottom again */
+            }
+            /* Exit */
+            100% {
+                transform: translate(120vw, -120vh) rotate(45deg); /* Exit Top Right */
+                opacity: 0;
+            }
         }
         @keyframes modal-fade-in {
             0% { opacity: 0; transform: scale(0.8); }
@@ -390,8 +412,8 @@ function showSuccessModal(orderId) {
             z-index: 10000;
             pointer-events: none;
             /* Start below screen centered horizontally */
-            transform: translate(-50%, 110vh);
-            animation: rocket-launch-fullscreen 3s ease-in-out forwards;
+            transform: translate(-50%, 120vh);
+            animation: rocket-circle-exit 4s ease-in-out forwards;
         }
         .success-backdrop {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -400,7 +422,7 @@ function showSuccessModal(orderId) {
             backdrop-filter: blur(5px);
             opacity: 0; /* Start hidden */
             animation: modal-fade-in 0.6s ease-out forwards;
-            animation-delay: 1.2s; /* Wait for rocket to fly up a bit */
+            animation-delay: 2.5s; /* Wait for rocket circle to finish mostly */
         }
     `;
     document.head.appendChild(style);
